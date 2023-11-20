@@ -1,0 +1,29 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Crewmate {
+    id  Int @id @default(autoincrement())
+    name String
+    color Color
+}
+
+enum Color {
+    RED
+    BLUE
+    GREEN
+    PINK
+    ORANGE
+    YELLOW
+    BLACK
+    WHITE
+    PURPLE
+    BROWN
+    CYAN
+    LIME
+}
