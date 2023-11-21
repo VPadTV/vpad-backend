@@ -10,7 +10,7 @@ export function expressMiddlewareAdapter(fn: (request: MiddlewareData) => Promis
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const data = await fn({
-        authorization: req.headers.authorization,
+        authorization: req.headers.authorization as string,
         params: req.params
       })
       req.params = {

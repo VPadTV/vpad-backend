@@ -1,7 +1,9 @@
 import { App } from './app'
 import { cors } from '@infra/middlewares/cors'
 import * as dotenv from 'dotenv'
-dotenv.config()
+dotenv.config({
+  path: '.local.env'
+})
 
 const startApplication = async () => {
   try {

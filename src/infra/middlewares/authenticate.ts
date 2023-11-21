@@ -15,7 +15,7 @@ export const authenticate = async ({
     const bearerToken = authorization.replace('Bearer ', '')
 
     const token = JwtGateway.decode(bearerToken)
-    if (!token || !token.sub)
+    if (!token || !token.sub || !token.exp)
         throw Errors.INVALID_TOKEN()
 
     const id = token.sub.split('#')[0]

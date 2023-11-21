@@ -11,7 +11,7 @@
     "migrate": "prisma migrate dev && prisma generate",
     "lint": "eslint . --ext js,ts --fix",
     "prettify": "prettier --write ./src/**/*.ts",
-    "check-types": "tsc --noEmit"
+    "check": "tsc --noEmit"
   },
   "dependencies": {
     "@prisma/client": "5.6.0",
