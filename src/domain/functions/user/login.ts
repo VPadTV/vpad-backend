@@ -1,6 +1,6 @@
 import { Errors } from "@domain/helpers"
 import { JwtGateway } from "@infra/gateways"
-import { Database } from "@infra/gateways/database"
+import { DatabaseClient } from "@infra/gateways/database"
 import { User } from "@prisma/client"
 import bcrypt from "bcrypt"
 
@@ -14,9 +14,8 @@ export type UserLoginResponse = {
     token: string
 }
 
-export async function userLogin(req: UserLoginRequest): Promise<UserLoginResponse> {
-    const db = Database.get()
-    let user: User
+export async function userLogin(req: UserLoginRequest, db: DatabaseClient): Promise<UserLoginResponse> {
+    let user: User | null
     if (req.email)
         user = await db.user.findFirst({
             where: { email: req.email }
@@ -30,6 +29,7 @@ export async function userLogin(req: UserLoginRequest): Promise<UserLoginRespons
     
     if (!user)
         throw Errors.NOT_FOUND()
+    
     if (!await bcrypt.compare(req.password, user.password))
         throw Errors.INCORRECT_PASSWORD()
 

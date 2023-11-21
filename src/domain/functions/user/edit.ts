@@ -1,6 +1,7 @@
 import { Errors } from "@domain/helpers"
 import { emailRegex, nameRegex, passwordRegex } from "@domain/helpers/regex"
-import { Database } from "@infra/gateways/database"
+import { DatabaseClient } from "@infra/gateways/database"
+import { FileStorage } from "@infra/gateways/storage"
 import bcrypt from "bcrypt"
 
 export type UserEditRequest = {
@@ -16,8 +17,7 @@ export type UserEditResponse = {
     id: string
 }
 
-export async function userEdit(req: UserEditRequest): Promise<UserEditResponse> {
-    const db = Database.get()
+export async function userEdit(req: UserEditRequest, db: DatabaseClient, storage: FileStorage): Promise<UserEditResponse> {
     if (req.username && !nameRegex().test(req.username)) {
         throw Errors.INVALID_NAME()
     }
@@ -34,9 +34,9 @@ export async function userEdit(req: UserEditRequest): Promise<UserEditResponse> 
             throw Errors.INVALID_PASSWORD()
         }
     }
-    let profilePhotoUrl: string | null
+    let profilePhotoUrl: string | undefined = undefined
     if (req.profilePhotoBase64) {
-        profilePhotoUrl = "profilePhotoTestUrl"
+        profilePhotoUrl = await storage.upload(req.profilePhotoBase64)
     }
 
     const user = await db.user.update(
@@ -47,8 +47,8 @@ export async function userEdit(req: UserEditRequest): Promise<UserEditResponse> 
                 nickname: req.nickname,
                 email: req.email,
                 password: req.password && await bcrypt.hash(req.password, 10),
-                profilePhotoUrl
+                profilePhotoUrl: profilePhotoUrl
             }
-        },)
+        })
     return { id: user.id }
 }

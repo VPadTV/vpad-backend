@@ -14,12 +14,12 @@ export class FileStorage {
         return FileStorage.instance
     }
 
-    private async upload(fileBase64: string): Promise<string> {
+    public async upload(fileBase64: string): Promise<string> {
         console.log(`Uploading ${fileBase64}`)
         return 'debugUrl'
     }
 
-    private async delete(url: string): Promise<void> {
+    public async delete(url: string): Promise<void> {
         console.log(`Deleting ${url}`)
     }
 }

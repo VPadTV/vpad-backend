@@ -1,8 +1,8 @@
 export class HttpError extends Error {
-    code: number = 500
+    code: number
     constructor(message: string, code?: number) {
         super(message)
-        this.code = code
+        this.code = code ?? 500
     }
 }
 

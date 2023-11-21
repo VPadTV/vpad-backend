@@ -22,7 +22,7 @@ export abstract class JwtGateway {
   public static newToken(user: User) {
     return this.sign({
       sub: user.id.toString() + '#' + user.username,
-      secretKey: process.env.SECRET
+      secretKey: process.env.SECRET as string
     })
   }
 

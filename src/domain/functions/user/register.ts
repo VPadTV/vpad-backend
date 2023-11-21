@@ -1,6 +1,6 @@
 import { Errors } from "@domain/helpers"
 import { emailRegex, nameRegex, passwordRegex } from "@domain/helpers/regex"
-import { Database } from "@infra/gateways/database"
+import { DatabaseClient } from "@infra/gateways/database"
 import bcrypt from "bcrypt"
 
 export type UserRegisterRequest = {
@@ -14,9 +14,7 @@ export type UserRegisterResponse = {
     id: string
 }
 
-export async function userRegister(req: UserRegisterRequest): Promise<UserRegisterResponse> {
-    const db = Database.get()
-
+export async function userRegister(req: UserRegisterRequest, db: DatabaseClient): Promise<UserRegisterResponse> {
     if (!emailRegex().test(req.email)) {
         throw Errors.INVALID_EMAIL()
     }

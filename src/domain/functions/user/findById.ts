@@ -1,5 +1,5 @@
 import { Errors } from "@domain/helpers"
-import { Database } from "@infra/gateways/database"
+import { DatabaseClient } from "@infra/gateways/database"
 
 export type UserGetByIdRequest = {
     id: string
@@ -9,14 +9,13 @@ export type UserGetByIdResponse = {
     username: string
     nickname: string
     email: string
-    profilePhotoUrl: string
-    about?: string
-    contact?: string
+    profilePhotoUrl: string | null
+    about: string | null
+    contact: string | null
     admin: boolean
 }
 
-export async function userFindById(req: UserGetByIdRequest): Promise<UserGetByIdResponse> {
-    const db = Database.get()
+export async function userFindById(req: UserGetByIdRequest, db: DatabaseClient): Promise<UserGetByIdResponse> {
     const user = await db.user.findFirst({ where: { id: req.id } })
     if (!user) {
         throw Errors.NOT_FOUND()
@@ -25,9 +24,9 @@ export async function userFindById(req: UserGetByIdRequest): Promise<UserGetById
         username: user.username,
         nickname: user.nickname,
         email: user.email,
-        profilePhotoUrl: user.profilePhotoUrl,
-        about: user.about,
-        contact: user.contact,
+        profilePhotoUrl: user.profilePhotoUrl ?? null,
+        about: user.about ?? null,
+        contact: user.contact ?? null,
         admin: user.admin
     }
 }

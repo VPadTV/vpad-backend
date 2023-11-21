@@ -1,9 +1,11 @@
 import { PrismaClient } from '@prisma/client'
 
-export abstract class Database {
-  static client: PrismaClient
+export type DatabaseClient = PrismaClient
 
-  static get(): PrismaClient {
+export abstract class Database {
+  static client: DatabaseClient
+
+  static get(): DatabaseClient {
     if (!Database.client)
       Database.client = new PrismaClient()
     return Database.client
