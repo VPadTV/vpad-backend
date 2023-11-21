@@ -25,7 +25,7 @@ export async function userLogin(req: UserLoginRequest, db: DatabaseClient): Prom
             where: { username: req.username }
         })
     else
-        throw Errors.MUST_INCLUDE_EMAIL_OR_USERNAME
+        throw Errors.MUST_INCLUDE_EMAIL_OR_USERNAME()
     
     if (!user)
         throw Errors.NOT_FOUND()
