@@ -1,4 +1,4 @@
-import { ErrorMessage } from '@domain/helpers'
+import { HttpError } from '@domain/helpers'
 import { Response, Request, NextFunction } from 'express'
 
 export type MiddlewareData = {
@@ -20,11 +20,9 @@ export function expressMiddlewareAdapter(fn: (request: MiddlewareData) => Promis
       next()
     } catch (error) {
       console.error(`<MiddlewareError>: ${error?.message}`)
-      if (ErrorMessage[error?.message]) {
-          const errorData = ErrorMessage[error?.message]
-          return res.status(errorData.statusCode).json({ error: errorData.key })
-      }
-      return res.status(500).json({ error })
+      if (error instanceof HttpError)
+          return res.status(error.code).json({ error: error.message })
+      return res.status(500).json({ error: error.message })
     }
   }
 }

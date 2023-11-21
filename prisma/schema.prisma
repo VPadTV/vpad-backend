@@ -9,8 +9,9 @@ generator client {
 
 model User {
     id  Int @id @default(autoincrement())
-    name String
-    email String
+    username String @unique
+    nickname String
+    email String @unique
     profilePhotoUrl String?
 
     password String

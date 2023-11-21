@@ -1,23 +1,25 @@
-import { ErrorMessage } from "@domain/helpers"
+import { Errors } from "@domain/helpers"
 import { Database } from "@infra/gateways/database"
 
-export type GetUserByIdRequest = {
+export type UserGetByIdRequest = {
     id: number
 }
 
-export type GetUserByIdResponse = {
-    name: string
+export type UserGetByIdResponse = {
+    username: string
+    nickname: string
     email: string
 }
 
-export async function getUserById(req: GetUserByIdRequest): Promise<GetUserByIdResponse> {
+export async function userFindById(req: UserGetByIdRequest): Promise<UserGetByIdResponse> {
     const db = Database.get()
     const user = await db.user.findFirst({ where: { id: req.id } })
     if (!user) {
-        throw new Error(ErrorMessage.NOT_FOUND.key)
+        throw Errors.NOT_FOUND()
     }
     return {
-        name: user.name,
+        username: user.username,
+        nickname: user.nickname,
         email: user.email,
     }
 }

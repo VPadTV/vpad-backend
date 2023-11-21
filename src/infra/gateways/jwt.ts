@@ -1,3 +1,4 @@
+import { User } from '@prisma/client'
 import Jwt, { Secret } from 'jsonwebtoken'
 
 export type SignInput = {
@@ -18,9 +19,9 @@ export abstract class JwtGateway {
     return decoded
   }
 
-  public static newToken(id: number, name: string) {
+  public static newToken(user: User) {
     return this.sign({
-      sub: id.toString() + name,
+      sub: user.id.toString() + '#' + user.username,
       secretKey: process.env.SECRET
     })
   }

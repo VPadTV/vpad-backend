@@ -1,4 +1,4 @@
-import { ErrorMessage, HttpResponse } from '@domain/helpers'
+import { HttpError, HttpResponse } from '@domain/helpers'
 import { Response, Request } from 'express'
 
 export function expressRouterAdapter<T, U extends HttpResponse>(fn: (request: T) => Promise<U>) {
@@ -12,12 +12,11 @@ export function expressRouterAdapter<T, U extends HttpResponse>(fn: (request: T)
         ...req.query,
         ...res.locals,
       })
-      return res.status(statusCode).json({ ...data, token: req.params?.token })
+      return res.status(statusCode).json({ ...data, token: data.token ?? req.params?.token })
     } catch (error) {
       console.error(`<RouteError>: ${error?.message}`)
-      if (ErrorMessage[error?.message]) {
-          const errorData = ErrorMessage[error?.message]
-          return res.status(errorData.statusCode).json({ error: errorData.key })
+      if (error instanceof HttpError) {
+          return res.status(error.code).json({ error: error.message })
       }
       return res.status(500).json({ error })
     }
