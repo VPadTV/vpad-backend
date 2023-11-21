@@ -6,7 +6,8 @@
   "scripts": {
     "start": "",
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only ./src/main/server.dev.ts",
-    "test": "jest --no-cache --coverage --silent --passWithNoTests --detectOpenHandles --forceExit --runInBand",
+    "test": "jest --no-cache --coverage --silent --forceExit --runInBand --detectOpenHandles",
+    "test-watch": "jest --no-cache --silent=false --runInBand --watch --no-coverage",
     "migrate": "prisma migrate dev && prisma generate",
     "lint": "eslint . --ext js,ts --fix",
     "prettify": "prettier --write ./src/**/*.ts",

@@ -16,6 +16,7 @@ export class FileStorage {
 
     public async upload(fileBase64: string): Promise<string> {
         console.log(`Uploading ${fileBase64}`)
+        console.log(this.client)
         return 'debugUrl'
     }
 

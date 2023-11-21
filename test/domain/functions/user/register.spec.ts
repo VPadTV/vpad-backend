@@ -16,7 +16,7 @@ const mockUser = {
 beforeEach(() => {
 })
 
-describe('user edit', () => {
+describe('user register', () => {
     it('should register normally :)', async () => {
         prismaMock.user.create.mockResolvedValue(mockUser)
         await expect(userRegister({

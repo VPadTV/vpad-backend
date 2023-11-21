@@ -8,6 +8,10 @@ module.exports = {
   coverageProvider: 'babel',
   coverageDirectory: 'coverage',
   coveragePathIgnorePatterns: ['coverage', 'node_modules'],
+  collectCoverageFrom: [
+    'src/domain/functions/**/*',
+    'src/infra/gateways/jwt.ts',
+  ],
   coverageReporters: ['json', 'text', 'lcov', 'clover'],
   coverageThreshold: {
     global: {
@@ -19,8 +23,10 @@ module.exports = {
   },
   moduleDirectories: ['node_modules'],
   moduleFileExtensions: ['js', 'json', 'ts', 'node'],
+  coveragePathIgnorePatterns: [
+    '<rootDir>/src/domain/helpers'
+  ],
   testPathIgnorePatterns: ['/node_modules/'],
-  modulePathIgnorePatterns: ["<rootDir>/src/domain/helpers"],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>',
   }),
