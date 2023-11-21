@@ -11,12 +11,6 @@ import { UserEditRequest, userEdit } from "@domain/functions/user/edit";
 export class UserRoute implements IRoute {
     prefix = '/user'
     register(router: Router): void {
-        router.get('/get/:id',
-        expressMiddlewareAdapter(authenticate),
-        expressRouterAdapter(async (request: UserGetByIdRequest) => {
-            return ok(await userFindById(request))
-        }))
-
         router.post('/register',
         expressRouterAdapter(async (request: UserRegisterRequest) => {
             return ok(await userRegister(request))
@@ -26,8 +20,15 @@ export class UserRoute implements IRoute {
         expressRouterAdapter(async (request: UserLoginRequest) => {
             return ok(await userLogin(request))
         }))
+        
+        router.get('/get/:id',
+        expressMiddlewareAdapter(authenticate),
+        expressRouterAdapter(async (request: UserGetByIdRequest) => {
+            return ok(await userFindById(request))
+        }))
 
         router.put('/edit/:id',
+        expressMiddlewareAdapter(authenticate),
         expressRouterAdapter(async (request: UserEditRequest) => {
             return ok(await userEdit(request))
         }))

@@ -27,6 +27,7 @@ export async function userLogin(req: UserLoginRequest): Promise<UserLoginRespons
         })
     else
         throw Errors.MUST_INCLUDE_EMAIL_OR_USERNAME
+    
     if (!user)
         throw Errors.NOT_FOUND()
     if (!await bcrypt.compare(req.password, user.password))

@@ -1,10 +1,10 @@
 import { Errors } from "@domain/helpers"
-import { emailRegex, passwordRegex } from "@domain/helpers/regex"
+import { emailRegex, nameRegex, passwordRegex } from "@domain/helpers/regex"
 import { Database } from "@infra/gateways/database"
 import bcrypt from "bcrypt"
 
 export type UserEditRequest = {
-    id: number
+    id: string
     username?: string
     nickname?: string
     email?: string
@@ -13,11 +13,17 @@ export type UserEditRequest = {
 }
 
 export type UserEditResponse = {
-    id: number
+    id: string
 }
 
 export async function userEdit(req: UserEditRequest): Promise<UserEditResponse> {
     const db = Database.get()
+    if (req.username && !nameRegex().test(req.username)) {
+        throw Errors.INVALID_NAME()
+    }
+    if (req.nickname && !nameRegex().test(req.nickname)) {
+        throw Errors.INVALID_NAME()
+    }
     if (req.email) {
         if (!emailRegex().test(req.email)) {
             throw Errors.INVALID_EMAIL()
@@ -35,7 +41,7 @@ export async function userEdit(req: UserEditRequest): Promise<UserEditResponse> 
 
     const user = await db.user.update(
         {
-            where: { id: +req.id },
+            where: { id: req.id },
             data: {
                 username: req.username,
                 nickname: req.nickname,

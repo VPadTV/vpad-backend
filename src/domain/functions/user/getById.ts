@@ -2,13 +2,17 @@ import { Errors } from "@domain/helpers"
 import { Database } from "@infra/gateways/database"
 
 export type UserGetByIdRequest = {
-    id: number
+    id: string
 }
 
 export type UserGetByIdResponse = {
     username: string
     nickname: string
     email: string
+    profilePhotoUrl: string
+    about?: string
+    contact?: string
+    admin: boolean
 }
 
 export async function userFindById(req: UserGetByIdRequest): Promise<UserGetByIdResponse> {
@@ -21,5 +25,9 @@ export async function userFindById(req: UserGetByIdRequest): Promise<UserGetById
         username: user.username,
         nickname: user.nickname,
         email: user.email,
+        profilePhotoUrl: user.profilePhotoUrl,
+        about: user.about,
+        contact: user.contact,
+        admin: user.admin
     }
 }

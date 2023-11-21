@@ -13,10 +13,12 @@ export const notFound = (message: string): HttpError => new HttpError(message, 4
 export const imATeapot = (message: string): HttpError => new HttpError(message, 418)
 
 export const Errors = {
+    MISSING_TOKEN: () => unauthorized("Missing token"),
     UNAUTHORIZED: () => unauthorized("Unauthorized"),
+    EXPIRED_TOKEN: () => unauthorized("Expired token"),
     FORBIDDEN: () => forbidden("Forbidden"),
-    NOT_FOUND: () => unauthorized("Not Found"),
-    IM_A_TEAPOT: () => unauthorized("I'm a tea pot!"),
+    NOT_FOUND: () => notFound("Not Found"),
+    IM_A_TEAPOT: () => imATeapot("I'm a teapot!"),
     
     INVALID_TOKEN: () => badRequest("Invalid token"),
     INVALID_NAME: () => badRequest("Invalid name"),

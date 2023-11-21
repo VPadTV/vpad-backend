@@ -8,11 +8,58 @@ generator client {
 }
 
 model User {
-    id  Int @id @default(autoincrement())
+    id String @id @default(cuid())
     username String @unique
     nickname String
     email String @unique
     profilePhotoUrl String?
-
     password String
+    about String?
+    contact String?
+
+    admin Boolean @default(false)
+
+    comments Comment[]
+    votes Votes[] @relation(name: "userVotes")
+
+    posts Post[]
+}
+
+model Comment {
+  id String @id @default(cuid())
+  text String
+
+  user User @relation(fields: [userId], references: [id])
+  userId String
+
+  post Post @relation(fields: [postId], references: [id])
+  postId String @unique
+
+  parent Comment @relation(name: "chain", fields: [parentId], references: [id])
+  parentId String @unique
+  children Comment[] @relation(name: "chain")
+}
+
+model Post {
+  id String @id @default(cuid())
+  text String
+  mediaUrl String?
+
+  user User @relation(fields: [userId], references: [id])
+  userId String
+
+  comments Comment[]
+  votes Votes[] @relation(name: "postVotes")
+}
+
+model Votes {
+  id String @id @default(cuid())
+
+  vote Int @db.SmallInt
+
+  user User @relation(name: "userVotes", fields: [userId], references: [id])
+  userId String
+
+  post Post @relation(name: "postVotes", fields: [postId], references: [id])
+  postId String 
 }
