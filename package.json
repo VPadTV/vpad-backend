@@ -14,8 +14,10 @@
   },
   "dependencies": {
     "@prisma/client": "5.6.0",
+    "@types/bcrypt": "^5.0.2",
     "@types/typescript": "^2.0.0",
     "aws-sdk": "^2.1323.0",
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",

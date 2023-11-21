@@ -9,12 +9,17 @@ export type MiddlewareData = {
 export function expressMiddlewareAdapter(fn: (request: MiddlewareData) => Promise<any>) {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await fn({
+      const data = await fn({
         authorization: req.headers.authorization,
         params: req.params
       })
+      req.params = {
+        ...req.params,
+        ...data
+      }
       next()
     } catch (error) {
+      console.error(`<MiddlewareError>: ${error?.message}`)
       if (ErrorMessage[error?.message]) {
           const errorData = ErrorMessage[error?.message]
           return res.status(errorData.statusCode).json({ error: errorData.key })

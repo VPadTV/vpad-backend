@@ -7,23 +7,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Crewmate {
+model User {
     id  Int @id @default(autoincrement())
     name String
-    color Color
-}
+    email String
+    profilePhotoUrl String?
 
-enum Color {
-    RED
-    BLUE
-    GREEN
-    PINK
-    ORANGE
-    YELLOW
-    BLACK
-    WHITE
-    PURPLE
-    BROWN
-    CYAN
-    LIME
+    password String
 }

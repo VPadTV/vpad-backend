@@ -1,13 +1,13 @@
 import express from 'express'
 import { IRoute } from './route';
-import { ExampleRoute } from '@controllers/example';
+import { UserRoute } from '@controllers/user';
 
 export class App {
   public app: express.Application
 
   static makeRoutes(): IRoute[] {
     return [
-      new ExampleRoute(),
+      new UserRoute(),
     ]
   }
 

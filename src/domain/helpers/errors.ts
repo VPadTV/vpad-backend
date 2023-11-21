@@ -34,6 +34,7 @@ export const ErrorMessage = {
     NOT_FOUND: unauthorized('NOT_FOUND'),
     IM_A_TEAPOT: unauthorized('IM_A_TEAPOT'),
     
+    INVALID_TOKEN: badRequest('INVALID_TOKEN'),
     INVALID_NAME: badRequest('INVALID_NAME'),
-    INVALID_TOKEN: badRequest('INVALID_TOKEN')
+    INCORRECT_PASSWORD: badRequest('INCORRECT_PASSWORD'),
 }
