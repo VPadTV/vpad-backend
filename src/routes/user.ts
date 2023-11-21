@@ -10,7 +10,6 @@ import { UserEditRequest, userEdit } from "@domain/functions/user/edit";
 import { Database, FileStorage } from "@infra/gateways";
 
 export class UserRoute implements IRoute {
-    prefix = '/user'
     register(router: Router): void {
         router.post('/register',
         expressRouterAdapter(async (request: UserRegisterRequest) => {

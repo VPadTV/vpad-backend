@@ -9,7 +9,8 @@ export type AuthenticateMiddlewareResponse = {
 }
 
 export const authenticate = async ({
-    authorization
+    authorization,
+    params
 }: MiddlewareData): Promise<AuthenticateMiddlewareResponse> => {
     if (!authorization) throw Errors.MISSING_TOKEN()
     const bearerToken = authorization.replace('Bearer ', '')
@@ -24,6 +25,8 @@ export const authenticate = async ({
     const user = await db.user.findFirst({ where: { id: id } })
 
     if (!user) throw Errors.UNAUTHORIZED()
+    const queryId = params?.userId ?? params?.id
+    if (queryId && user.id !== queryId) throw Errors.UNAUTHORIZED()
     
     const now = Date.now()
     if (now > token.exp) {
