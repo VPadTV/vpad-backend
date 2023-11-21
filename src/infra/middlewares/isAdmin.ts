@@ -2,15 +2,14 @@ import { Errors } from '@domain/helpers'
 import { MiddlewareData } from '@infra/adapters'
 import { JwtGateway, Database } from '@infra/gateways'
 
-export type AuthenticateMiddlewareResponse = {
+export type IsAdminMiddlewareResponse = {
     id: string
     token?: string
 }
 
-export const authenticate = async ({
-    authorization,
-    params
-}: MiddlewareData): Promise<AuthenticateMiddlewareResponse> => {
+export const isAdmin = async ({
+    authorization
+}: MiddlewareData): Promise<IsAdminMiddlewareResponse> => {
     if (!authorization) throw Errors.MISSING_TOKEN()
     const bearerToken = authorization.replace('Bearer ', '')
 
@@ -24,9 +23,8 @@ export const authenticate = async ({
     const user = await db.user.findFirst({ where: { id: id } })
 
     if (!user) throw Errors.UNAUTHORIZED()
-
-    const queryId = params?.userId ?? params?.id
-    if (queryId && user.id !== queryId) throw Errors.FORBIDDEN()
+    
+    if (!user.admin) throw Errors.FORBIDDEN()
     
     const now = Date.now()
     if (now > token.exp) {

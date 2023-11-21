@@ -29,6 +29,15 @@ export async function userLogin(req: UserLoginRequest, db: DatabaseClient): Prom
     
     if (!user)
         throw Errors.NOT_FOUND()
+
+    if (user.banned) {
+        if (!user.banTimeout || user.banTimeout.valueOf() < Date.now())
+            throw Errors.BANNED()
+        db.user.update({
+            where: { id: user.id },
+            data: { banned: false, banTimeout: null }
+        })
+    }
     
     if (!await bcrypt.compare(req.password, user.password))
         throw Errors.INCORRECT_PASSWORD()
