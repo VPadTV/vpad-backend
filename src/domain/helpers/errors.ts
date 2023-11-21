@@ -13,18 +13,18 @@ export const notFound = (message: string): HttpError => new HttpError(message, 4
 export const imATeapot = (message: string): HttpError => new HttpError(message, 418)
 
 export const Errors = {
-    MISSING_TOKEN: () => unauthorized("Missing token"),
+    MISSING_TOKEN: () => unauthorized("Missing Token"),
     UNAUTHORIZED: () => unauthorized("Unauthorized"),
-    EXPIRED_TOKEN: () => unauthorized("Expired token"),
+    EXPIRED_TOKEN: () => unauthorized("Expired Token"),
     FORBIDDEN: () => forbidden("Forbidden"),
     NOT_FOUND: () => notFound("Not Found"),
-    IM_A_TEAPOT: () => imATeapot("I'm a teapot!"),
+    IM_A_TEAPOT: () => imATeapot("I'm A Teapot!"),
     
-    INVALID_TOKEN: () => badRequest("Invalid token"),
-    INVALID_NAME: () => badRequest("Invalid name"),
-    INVALID_EMAIL: () => badRequest("Invalid email"),
-    INVALID_PASSWORD: () => badRequest("Invalid password"),
-    INCORRECT_PASSWORD: () => badRequest("Incorrect password"),
-    MUST_INCLUDE_EMAIL_OR_USERNAME: () => badRequest("Must include email or username"),
+    INVALID_TOKEN: () => badRequest("Invalid Token"),
+    INVALID_NAME: () => badRequest("Invalid Name"),
+    INVALID_EMAIL: () => badRequest("Invalid Email"),
+    INVALID_PASSWORD: () => badRequest("Invalid Password"),
+    INCORRECT_PASSWORD: () => badRequest("Incorrect Password"),
+    MUST_INCLUDE_EMAIL_OR_USERNAME: () => badRequest("Must Include Email Or Username"),
     BANNED: () => forbidden("Banned"),
 }

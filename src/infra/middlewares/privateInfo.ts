@@ -2,13 +2,15 @@ import { Errors } from '@domain/helpers'
 import { MiddlewareData } from '@infra/adapters'
 import { JwtGateway, Database } from '@infra/gateways'
 
-export type AuthenticateMiddlewareResponse = {
+export type PrivateInfoMiddlewareResponse = {
+    id: string
     token?: string
 }
 
-export const authenticate = async ({
-    authorization
-}: MiddlewareData): Promise<AuthenticateMiddlewareResponse> => {
+export const privateInfo = async ({
+    authorization,
+    params
+}: MiddlewareData): Promise<PrivateInfoMiddlewareResponse> => {
     if (!authorization) throw Errors.MISSING_TOKEN()
     const bearerToken = authorization.replace('Bearer ', '')
 
@@ -22,6 +24,9 @@ export const authenticate = async ({
     const user = await db.user.findFirst({ where: { id: id } })
 
     if (!user) throw Errors.UNAUTHORIZED()
+
+    const queryId = params?.userId ?? params?.id
+    if (queryId && user.id !== queryId) throw Errors.FORBIDDEN()
     
     const now = Date.now()
     if (now > token.exp) {
@@ -31,8 +36,10 @@ export const authenticate = async ({
     else if (token.exp - now < 24*60*60*1000) {
         // if it expires in less than a day
         return {
+            id,
             token: JwtGateway.newToken(user)
         }
     }
-    return {}
+
+    return { id }
 }

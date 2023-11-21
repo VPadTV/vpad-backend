@@ -1,11 +1,11 @@
 {
   "name": "TODO-backend",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
     "start": "",
-    "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only ./src/main/server.dev.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only ./src/main/server.dev.ts --watch-files './docs/swagger.yaml'",
     "test": "jest --no-cache --coverage --silent --forceExit --runInBand --detectOpenHandles",
     "test-watch": "jest --no-cache --silent=false --runInBand --watch --no-coverage",
     "migrate": "prisma migrate dev && prisma generate",
@@ -28,9 +28,10 @@
     "passport-local": "^1.0.0",
     "pg": "^8.9.0",
     "prisma": "^5.6.0",
-    "swagger-ui-express": "^4.6.3",
+    "swagger-ui-express": "^5.0.0",
     "ts-jest": "^29.1.1",
-    "typescript": "^5.3.2"
+    "typescript": "^5.3.2",
+    "yaml": "^2.3.4"
   },
   "devDependencies": {
     "@types/express": "^4.17.17",

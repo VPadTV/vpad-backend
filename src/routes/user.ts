@@ -8,6 +8,7 @@ import { UserLoginRequest, userLogin } from "@domain/functions/user/login";
 import { UserRegisterRequest, userRegister } from "@domain/functions/user/register";
 import { UserEditRequest, userEdit } from "@domain/functions/user/edit";
 import { Database, FileStorage } from "@infra/gateways";
+import { privateInfo } from "@infra/middlewares/privateInfo";
 
 export class UserRoute implements IRoute {
     register(router: Router): void {
@@ -21,14 +22,14 @@ export class UserRoute implements IRoute {
             return ok(await userLogin(request, Database.get()))
         }))
         
-        router.get('/get/:id',
+        router.get('/:id',
         expressMiddlewareAdapter(authenticate),
         expressRouterAdapter(async (request: UserGetByIdRequest) => {
             return ok(await userFindById(request, Database.get()))
         }))
 
         router.put('/edit/:id',
-        expressMiddlewareAdapter(authenticate),
+        expressMiddlewareAdapter(privateInfo),
         expressRouterAdapter(async (request: UserEditRequest) => {
             return ok(await userEdit(request, Database.get(), FileStorage.get()))
         }))

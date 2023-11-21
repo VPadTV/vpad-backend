@@ -1,0 +1,143 @@
+openapi: 3.0.0
+info:
+  title: Indie Streaming App API
+  version: 0.0.1
+servers:
+  - url: http://localhost:3000
+    description: Local server
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    UserNoId:
+      type: object
+      properties:
+        username:
+          type: string
+          example: myUsername
+        nickname:
+          type: string
+          example: myNickname
+        email:
+          type: string
+          example: email@domain.com
+        profilePhotoUrl:
+          type: string
+          example: some://download.link
+        about:
+          type: string
+          example: i love pens
+        contact:
+          type: string
+          example: some phone number or something, idk
+        admin:
+          type: boolean
+          example: false
+    400:
+      description: Bad Request
+      type: object
+      properties:
+        error:
+          type: string
+          example:
+            Bad Request, Invalid Token, Invalid Email, Invalid Password, Incorrect Password, ...
+    401:
+      description: Unauthorized
+      type: object
+      properties:
+        error:
+          type: string
+          example: Unauthorized, Missing Token, Expired Token, ...
+    403:
+      description: Forbidden
+      type: object
+      properties:
+        error:
+          type: string
+          example: Fobridden
+    404:
+      description: Not Found
+      type: object
+      properties:
+        error:
+          type: string
+          example: Not Found
+paths:
+    /user/{id}:
+      get:
+        security:
+          - bearerAuth: []
+        tags:
+          - User
+        summary: Returns user data from id, must be logged in
+        parameters:
+          - name: id
+            in: path
+            required: true
+            schema:
+              type: string
+        responses:
+          200:
+            description: User data, optional refreshed token
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/UserNoId'
+          400:
+            description: Bad Request
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/400'
+          401:
+            description: Unauthorized
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/401'
+          404:
+            description: Provided ID did not resolve to any user
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/404'
+      put:
+        security:
+          - bearerAuth: []
+        tags:
+          - User
+        summary: Updates User from id
+        parameters:
+          - name: id
+            in: path
+            required: true
+            schema:
+              type: string
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserNoId'
+        responses:
+          200:
+            description: User ID, optional refreshed token
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: someidlol
+                    token:
+                      type: string
+                      example: blablajwttoken
+          404:
+            description: Provided ID did not resolve to any user
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/404'
