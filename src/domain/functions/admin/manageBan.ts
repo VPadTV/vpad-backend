@@ -15,7 +15,7 @@ export type AdminManageBanResponse = {
     banTimeout?: Date | null
 }
 
-export async function manageBan(req: AdminManageBanRequest, db: DatabaseClient): Promise<AdminManageBanResponse> {
+export async function adminManageBan(req: AdminManageBanRequest, db: DatabaseClient): Promise<AdminManageBanResponse> {
     const user = await db.user.update({
         where: { id: req.userId },
         data: {

@@ -17,10 +17,10 @@ components:
       properties:
         username:
           type: string
-          example: myUsername
+          example: funnyusername
         nickname:
           type: string
-          example: myNickname
+          example: funnynickname
         email:
           type: string
           example: email@domain.com
@@ -66,78 +66,184 @@ components:
           type: string
           example: Not Found
 paths:
-    /user/{id}:
-      get:
-        security:
-          - bearerAuth: []
-        tags:
-          - User
-        summary: Returns user data from id, must be logged in
-        parameters:
-          - name: id
-            in: path
-            required: true
-            schema:
-              type: string
-        responses:
-          200:
-            description: User data, optional refreshed token
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/UserNoId'
-          400:
-            description: Bad Request
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/400'
-          401:
-            description: Unauthorized
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/401'
-          404:
-            description: Provided ID did not resolve to any user
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/404'
-      put:
-        security:
-          - bearerAuth: []
-        tags:
-          - User
-        summary: Updates User from id
-        parameters:
-          - name: id
-            in: path
-            required: true
-            schema:
-              type: string
-        requestBody:
+  /user/{id}:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - User
+      summary: Returns user data from id, must be logged in
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: User data, optional refreshed token
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserNoId'
-        responses:
-          200:
-            description: User ID, optional refreshed token
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      example: someidlol
-                    token:
-                      type: string
-                      example: blablajwttoken
-          404:
-            description: Provided ID did not resolve to any user
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/404'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        404:
+          description: Provided ID did not resolve to any user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - User
+      summary: Updates User from id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: someidlol
+                token:
+                  type: string
+                  example: blablajwttoken
+      responses:
+        200:
+          description: User ID, optional refreshed token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: someidlol
+                  token:
+                    type: string
+                    example: blablajwttoken
+        404:
+          description: Provided ID did not resolve to any user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+  /user/login:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - User
+      summary: Logins using email or username and password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: myUsername
+                email:
+                  type: string
+                  example: email@domain.com
+                password:
+                  type: string
+                  example: myfunnypassword
+      responses:
+        200:
+          description: User ID and token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: someidlol
+                  token:
+                    type: string
+                    example: blablajwttoken
+        400:
+          description: Missing username and email or incorrect password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        403:
+          description: User is banned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        404:
+          description: Provided data did not resolve to any user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+  /user/register:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - User
+      summary: Registers a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: myUsername
+                email:
+                  type: string
+                  example: email@domain.com
+                password:
+                  type: string
+                  example: myfunnypassword
+                about:
+                  type: string
+                  example: some about section
+      responses:
+        200:
+          description: User ID and token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: someidlol
+                  token:
+                    type: string
+                    example: blablajwttoken
+        400:
+          description: Invalid name, email or password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'

@@ -3,7 +3,7 @@ import { IRoute } from "@main/route";
 import { Router } from "express";
 import { ok } from "@domain/helpers";
 import { isLoggedIn } from "@infra/middlewares/authenticate";
-import { UserGetByIdRequest, userFindById } from "@domain/functions/user/findById";
+import { UserGetByIdRequest, userGet } from "@domain/functions/user/get";
 import { UserLoginRequest, userLogin } from "@domain/functions/user/login";
 import { UserRegisterRequest, userRegister } from "@domain/functions/user/register";
 import { UserEditRequest, userEdit } from "@domain/functions/user/edit";
@@ -25,7 +25,7 @@ export class UserRoute implements IRoute {
         router.get('/:id',
         expressMiddlewareAdapter(isLoggedIn),
         expressRouterAdapter(async (request: UserGetByIdRequest) => {
-            return ok(await userFindById(request, Database.get()))
+            return ok(await userGet(request, Database.get()))
         }))
 
         router.put('/:id',

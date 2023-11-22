@@ -11,6 +11,7 @@ export type UserLoginRequest = {
 }
 
 export type UserLoginResponse = {
+    id: string
     token: string
 }
 
@@ -44,5 +45,5 @@ export async function userLogin(req: UserLoginRequest, db: DatabaseClient): Prom
 
     const token = JwtGateway.newToken(user)
 
-    return { token }
+    return { id: user.id, token }
 }

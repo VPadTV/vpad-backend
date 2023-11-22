@@ -15,7 +15,7 @@ export type UserGetByIdResponse = {
     admin: boolean
 }
 
-export async function userFindById(req: UserGetByIdRequest, db: DatabaseClient): Promise<UserGetByIdResponse> {
+export async function userGet(req: UserGetByIdRequest, db: DatabaseClient): Promise<UserGetByIdResponse> {
     const user = await db.user.findFirst({ where: { id: req.id } })
     if (!user) {
         throw Errors.NOT_FOUND()

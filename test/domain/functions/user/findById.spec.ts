@@ -1,4 +1,4 @@
-import { userFindById } from "@domain/functions/user/findById"
+import { userGet } from "@domain/functions/user/get"
 import { Errors } from "@domain/helpers"
 import { User } from "@prisma/client"
 import { prismaMock } from "@test/prismaMock"
@@ -21,7 +21,7 @@ beforeEach(() => {
 describe('user find by id', () => {
     it('should find normally :)', async () => {
         prismaMock.user.findFirst.mockResolvedValue(mockUser)
-        await expect(userFindById({
+        await expect(userGet({
             id: "default"
         }, prismaMock)).resolves.toStrictEqual({
             email: "sussy@baka.com",
@@ -35,7 +35,7 @@ describe('user find by id', () => {
     })
     it('should fail to find', async () => {
         prismaMock.user.findFirst.mockResolvedValue(null)
-        await expect(userFindById({
+        await expect(userGet({
             id: "default"
         }, prismaMock)).rejects.toThrow(Errors.NOT_FOUND())
     })

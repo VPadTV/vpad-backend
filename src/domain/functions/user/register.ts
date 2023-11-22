@@ -15,14 +15,14 @@ export type UserRegisterResponse = {
 }
 
 export async function userRegister(req: UserRegisterRequest, db: DatabaseClient): Promise<UserRegisterResponse> {
+    if (!nameRegex().test(req.name)) {
+        throw Errors.INVALID_NAME()
+    }
     if (!emailRegex().test(req.email)) {
         throw Errors.INVALID_EMAIL()
     }
     if (!passwordRegex().test(req.password)) {
         throw Errors.INVALID_PASSWORD()
-    }
-    if (!nameRegex().test(req.name)) {
-        throw Errors.INVALID_NAME()
     }
 
     const user = await db.user.create({

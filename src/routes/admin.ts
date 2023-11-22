@@ -3,7 +3,7 @@ import { IRoute } from "@main/route";
 import { Router } from "express";
 import { ok } from "@domain/helpers";
 import { Database } from "@infra/gateways";
-import { AdminManageBanRequest, manageBan } from "@domain/functions/admin/manageBan";
+import { AdminManageBanRequest, adminManageBan } from "@domain/functions/admin/manageBan";
 import { isLoggedIn } from "@infra/middlewares/authenticate";
 import { isAdmin } from "@infra/middlewares/isAdmin";
 
@@ -14,7 +14,7 @@ export class AdminRoute implements IRoute {
         router.post('/ban/manage',
         expressMiddlewareAdapter(isLoggedIn),
         expressRouterAdapter(async (request: AdminManageBanRequest) => {
-            return ok(await manageBan(request, Database.get()))
+            return ok(await adminManageBan(request, Database.get()))
         }))
     }
 }

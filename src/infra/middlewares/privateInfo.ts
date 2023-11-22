@@ -7,5 +7,4 @@ tokenMiddleware(data, async (user) => {
     const { params } = data;
     const queryId = params?.userId ?? params?.id
     if (queryId && user.id !== queryId) throw Errors.FORBIDDEN()
-    return { id: user.id }
 })

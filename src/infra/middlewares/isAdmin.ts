@@ -5,5 +5,4 @@ import { tokenMiddleware } from './wrappers/hasToken'
 export const isAdmin = async (data: MiddlewareData) =>
 tokenMiddleware(data, async (user) => {
     if (!user.admin) throw Errors.FORBIDDEN()
-    return { id: user.id }
 })

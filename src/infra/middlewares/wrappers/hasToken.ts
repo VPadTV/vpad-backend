@@ -3,9 +3,7 @@ import { MiddlewareData } from '@infra/adapters'
 import { JwtGateway, Database } from '@infra/gateways'
 import { User } from '@prisma/client'
 
-export type TokenMiddlewareResponse = {[key: string]: any}
-
-export const tokenMiddleware = async (data: MiddlewareData, func: (user: User) => Promise<TokenMiddlewareResponse>) => {
+export const tokenMiddleware = async (data: MiddlewareData, func: (user: User) => Promise<void>) => {
     const { authorization } = data;
     if (!authorization) throw Errors.MISSING_TOKEN()
     const bearerToken = authorization.replace('Bearer ', '')
@@ -29,5 +27,7 @@ export const tokenMiddleware = async (data: MiddlewareData, func: (user: User) =
     if (token.exp - now < 24*60*60*1000)
         return { ...middlewareResponse, token: JwtGateway.newToken(user) }
 
-    return func(user);
+    await func(user)
+
+    return { user }
 }
