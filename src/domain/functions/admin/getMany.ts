@@ -10,7 +10,7 @@ export type AdminGetManyRequest = {
 
 export type AdminGetManyResponse = Paginate<SimpleUser>
 
-export async function userGet(req: AdminGetManyRequest, db: DatabaseClient): Promise<AdminGetManyResponse> {
+export async function adminGetMany(req: AdminGetManyRequest, db: DatabaseClient): Promise<AdminGetManyResponse> {
   const offset = (req.page - 1) * req.size
   const [users, total] = await db.$transaction([
     db.user.findMany({

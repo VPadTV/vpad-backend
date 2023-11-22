@@ -2,7 +2,7 @@ import { expressMiddlewareAdapter, expressRouterAdapter } from "@infra/adapters"
 import { IRoute } from "@main/route";
 import { Router } from "express";
 import { ok } from "@domain/helpers";
-import { isLoggedIn } from "@infra/middlewares/authenticate";
+import { isLoggedIn } from "@infra/middlewares/isLoggedIn";
 import { UserGetRequest, userGet } from "@domain/functions/user/get";
 import { UserLoginRequest, userLogin } from "@domain/functions/user/login";
 import { UserRegisterRequest, userRegister } from "@domain/functions/user/register";

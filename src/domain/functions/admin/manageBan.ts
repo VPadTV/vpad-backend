@@ -2,13 +2,10 @@ import { Errors } from "@domain/helpers"
 import { DatabaseClient } from "@infra/gateways/database"
 
 export type AdminManageBanRequest = {
-  userId: string
-} & ({
-  banned: true
-  banTimeout?: string | null
-} | {
-  banned: false
-})
+  id: string
+} & (
+    { banned: true, banTimeout?: string | null } |
+    { banned: false })
 
 export type AdminManageBanResponse = {
   id: string
@@ -20,7 +17,7 @@ export async function adminManageBan(req: AdminManageBanRequest, db: DatabaseCli
   if (req.banned !== true && req.banned !== false) throw Errors.BAD_REQUEST()
 
   const user = await db.user.update({
-    where: { id: req.userId },
+    where: { id: req.id },
     data: {
       banned: req.banned,
       banTimeout: req.banned ? (req.banTimeout ?? null) : null
