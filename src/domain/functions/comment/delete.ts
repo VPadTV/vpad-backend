@@ -10,15 +10,11 @@ export type CommentDeleteRequest = {
 export type CommentDeleteResponse = {}
 
 export async function commentDelete(req: CommentDeleteRequest, db: DatabaseClient): Promise<CommentDeleteResponse> {
-  await db.$transaction(async (tx) => {
-    const comment = await tx.comment.findFirst({ where: { id: req.id } })
-
-    if (!comment) throw Errors.NOT_FOUND()
-
-    await tx.comment.delete({
-      where: { id: req.id },
-    })
+  const comment = await db.comment.delete({
+    where: { id: req.id },
   })
+
+  if (!comment) throw Errors.NOT_FOUND()
 
   return {}
 }

@@ -15,6 +15,7 @@ export type PostEditResponse = {}
 export async function postEdit(req: PostEditRequest, db: DatabaseClient, storage: FileStorage): Promise<PostEditResponse> {
   let mediaUrl: string | undefined
   const post = await db.post.findFirst({ where: { id: req.id } })
+
   if (!post) throw Errors.NOT_FOUND()
 
   // FIXME: if update fails, old video is still deleted
