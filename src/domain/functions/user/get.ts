@@ -1,11 +1,11 @@
 import { Errors } from "@domain/helpers"
 import { DatabaseClient } from "@infra/gateways/database"
 
-export type UserGetByIdRequest = {
+export type UserGetRequest = {
   id: string
 }
 
-export type UserGetByIdResponse = {
+export type UserGetResponse = {
   username: string
   nickname: string
   email: string
@@ -15,7 +15,7 @@ export type UserGetByIdResponse = {
   admin: boolean
 }
 
-export async function userGet(req: UserGetByIdRequest, db: DatabaseClient): Promise<UserGetByIdResponse> {
+export async function userGet(req: UserGetRequest, db: DatabaseClient): Promise<UserGetResponse> {
   const user = await db.user.findFirst({ where: { id: req.id } })
   if (!user) {
     throw Errors.NOT_FOUND()

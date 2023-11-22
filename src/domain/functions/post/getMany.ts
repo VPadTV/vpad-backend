@@ -12,6 +12,7 @@ export type PostGetManyRequest = {
 }
 
 export type PostGetManyResponse = Paginate<{
+  id: string
   text: string
   thumbUrl?: string
   meta: {
@@ -53,6 +54,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
         userId: req.authorId ?? undefined
       },
       select: {
+        id: true,
         text: true,
         thumbUrl: true,
         user: true,
@@ -74,6 +76,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
   if (!posts || posts.length === 0) throw Errors.NOT_FOUND()
 
   return paginate(total, req.page, offset, req.size, posts.map(post => ({
+    id: post.id,
     text: post.text,
     thumbUrl: post.thumbUrl ?? undefined,
     meta: {
