@@ -6,6 +6,7 @@ export type PostCreateRequest = {
     user: User
     text: string
     mediaBase64: string
+    thumbBase64?: string
 }
 
 export type PostCreateResponse = {
@@ -14,11 +15,17 @@ export type PostCreateResponse = {
 
 export async function postCreate(req: PostCreateRequest, db: DatabaseClient, storage: FileStorage): Promise<PostCreateResponse> {
     const mediaUrl = await storage.upload(req.mediaBase64)
+    let thumbUrl: string | undefined
+    if (req.thumbBase64)
+        thumbUrl = await storage.upload(req.mediaBase64)
+    else
+        thumbUrl = "generate thumbnail" // TODO
     const post = await db.post.create({
         data: {
             userId: req.user.id,
             text: req.text,
             mediaUrl,
+            thumbUrl,
         }
     })
     return { id: post.id }
