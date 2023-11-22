@@ -11,22 +11,15 @@ export type PostDeleteRequest = {
 export type PostDeleteResponse = {}
 
 export async function postDelete(req: PostDeleteRequest, db: DatabaseClient, storage: FileStorage): Promise<PostDeleteResponse> {
-  const mediaUrl = await db.$transaction(async (tx) => {
-    const post = await tx.post.findFirst({ where: { id: req.id } })
-
-    if (!post) throw Errors.NOT_FOUND()
-
-    const mediaUrl = post.mediaUrl;
-
-    await tx.post.delete({
-      where: { id: req.id }
-    })
-
-    return mediaUrl
+  const post = await db.post.delete({
+    where: { id: req.id }
   })
 
-  if (mediaUrl)
-    await storage.delete(mediaUrl)
+  if (!post)
+    throw Errors.NOT_FOUND()
+
+  if (post.mediaUrl)
+    await storage.delete(post.mediaUrl)
 
   return {}
 }
