@@ -16,30 +16,19 @@ This is the backend. We are using:
 
 ### Project Structure
 
-`src/` - Where the source code is
-
-`  domain/` - Core functionality
-
-`    functions/` - For code that does things
-
-`    helpers/` - For helper functions
-
-`  infra/` - For infrastructure
-
-`    adapters/` - For adapters (such as express middleware, routes)
-
-`    gateways/` - For Gateway classes (Database, JWT, File Storage, etc)
-
-`    middlewares/` - For middlewares
-
-`  main/` - For the code that actually runs the project
-
-`    app.ts` - App class
-
-`    routes.ts` - Where routes are registered
-
-`    server.dev.ts` - Development server entry point
-
-`  routes/` - For Route classes
-
-`test/` - Where the tests are
+```c
+src/ // Where the source code is
+  domain/ // Core functionality
+    functions/ // For code that does things
+    helpers/ // For helper functions
+  infra/ // For infrastructure
+    adapters/ // For adapters (such as express middleware, routes)
+    gateways/ // For Gateway classes (Database, JWT, File Storage, etc)
+    middlewares/ // For middlewares
+  main/ // For the code that actually runs the project
+    app.ts // App class
+    routes.ts // Where routes are registered
+    server.dev.ts // Development server entry point
+  routes/ // For Route classes
+test/` // Where the tests are
+```
