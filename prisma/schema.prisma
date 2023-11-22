@@ -34,13 +34,13 @@ model Comment {
   id   String @id @default(cuid())
   text String
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict)
   userId String
 
-  post   Post   @relation(fields: [postId], references: [id])
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Restrict)
   postId String @unique
 
-  parent   Comment?  @relation(name: "chain", fields: [parentId], references: [id])
+  parent   Comment?  @relation(name: "chain", fields: [parentId], references: [id], onDelete: Cascade, onUpdate: Restrict)
   parentId String?
   children Comment[] @relation(name: "chain")
 
@@ -54,7 +54,7 @@ model Post {
   mediaUrl String?
   thumbUrl String?
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict)
   userId String
 
   comments Comment[]
@@ -69,10 +69,10 @@ model Votes {
 
   vote Int @db.SmallInt
 
-  user   User   @relation(name: "userVotes", fields: [userId], references: [id])
+  user   User   @relation(name: "userVotes", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict)
   userId String
 
-  post   Post   @relation(name: "postVotes", fields: [postId], references: [id])
+  post   Post   @relation(name: "postVotes", fields: [postId], references: [id], onDelete: Cascade, onUpdate: Restrict)
   postId String
 
   createdAt DateTime @default(now())
