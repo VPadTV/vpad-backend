@@ -5,6 +5,10 @@ The main reason I think this is a good idea is because a percentage of the money
 
 ## Development
 
+### Joining the project
+
+We have a [discord server](https://discord.gg/CF8vQdShPx)! Feel free to join and message me (jaquiethecat) for developer approval 😄
+
 ### Stack
 
 This is the backend. We are using:
