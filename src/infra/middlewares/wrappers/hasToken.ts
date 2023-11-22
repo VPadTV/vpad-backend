@@ -21,13 +21,11 @@ export const tokenMiddleware = async (data: MiddlewareData, func: (user: User) =
   const user = await db.user.findFirst({ where: { id: id } })
   if (!user) throw Errors.UNAUTHORIZED()
 
-  const middlewareResponse = func(user)
+  await func(user)
 
   // if it expires in less than a day
   if (token.exp - now < 24 * 60 * 60 * 1000)
-    return { ...middlewareResponse, token: JwtGateway.newToken(user) }
-
-  await func(user)
+    return { user, token: JwtGateway.newToken(user) }
 
   return { user }
 }
