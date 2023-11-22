@@ -1,4 +1,5 @@
 import { Errors } from "@domain/helpers"
+import { SimpleUser } from "@domain/helpers/map"
 import { Paginate, paginate } from "@domain/helpers/paginate"
 import { DatabaseClient } from "@infra/gateways/database"
 import { User } from "@prisma/client"
@@ -16,7 +17,7 @@ export type PostGetManyResponse = Paginate<{
   text: string
   thumbUrl?: string
   meta: {
-    author: User
+    author: SimpleUser
     views: number
   }
 }>
@@ -57,7 +58,14 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
         id: true,
         text: true,
         thumbUrl: true,
-        user: true,
+        user: {
+          select: {
+            id: true,
+            username: true,
+            nickname: true,
+            profilePhotoUrl: true,
+          }
+        },
         _count: {
           select: {
             votes: true
@@ -80,7 +88,12 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
     text: post.text,
     thumbUrl: post.thumbUrl ?? undefined,
     meta: {
-      author: post.user,
+      author: {
+        id: post.user.id,
+        username: post.user.username,
+        nickname: post.user.nickname,
+        profilePhotoUrl: post.user.profilePhotoUrl,
+      },
       views: post._count.votes,
     }
   })))

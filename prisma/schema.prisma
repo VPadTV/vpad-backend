@@ -40,8 +40,8 @@ model Comment {
   post   Post   @relation(fields: [postId], references: [id])
   postId String @unique
 
-  parent   Comment   @relation(name: "chain", fields: [parentId], references: [id])
-  parentId String    @unique
+  parent   Comment?  @relation(name: "chain", fields: [parentId], references: [id])
+  parentId String?
   children Comment[] @relation(name: "chain")
 
   createdAt DateTime @default(now())
