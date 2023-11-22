@@ -20,7 +20,7 @@ This is the backend. We are using:
 
 ### Project Structure
 
-```c
+```as
 src/ // Where the source code is
   domain/ // Core functionality
     functions/ // For code that does things
