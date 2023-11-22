@@ -25,9 +25,9 @@ src/ - Where the source code is
   domain/ - Core functionality
     functions/ - Code that does things
     helpers/ - Helper functions
+      mappers/ - Database entity mappers
       errors.ts - Big Errors enum
       regex.ts - Regex constructors
-      map.ts - Mappers for Database entities
   infra/ - Infrastructure
     adapters/ - Adapters (such as express middleware, routes)
     gateways/ - Gateway classes (Database, JWT, File Storage, etc)

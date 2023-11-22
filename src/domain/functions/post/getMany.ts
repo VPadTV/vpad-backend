@@ -6,8 +6,9 @@ import { User } from "@prisma/client"
 
 export type PostGetManyRequest = {
   user: User
-  authorId?: string
+  userId?: string
   sortBy: "latest" | "oldest" | "high-views" | "low-views"
+
   page: number
   size: number
 }
@@ -17,7 +18,7 @@ export type PostGetManyResponse = Paginate<{
   text: string
   thumbUrl?: string
   meta: {
-    author: SimpleUser
+    user: SimpleUser
     views: number
   }
 }>
@@ -52,15 +53,13 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
       skip: offset,
       take: req.size,
       where: {
-        userId: req.authorId ?? undefined
+        userId: req.userId ?? undefined
       },
       select: {
         id: true,
         text: true,
         thumbUrl: true,
-        user: {
-          select: SimpleUser.selector
-        },
+        user: { select: SimpleUser.selector },
         _count: {
           select: {
             votes: true
@@ -71,7 +70,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
     }),
     db.post.count({
       where: {
-        userId: req.authorId ?? undefined
+        userId: req.userId ?? undefined
       }
     }),
   ])
@@ -83,7 +82,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
     text: post.text,
     thumbUrl: post.thumbUrl ?? undefined,
     meta: {
-      author: post.user,
+      user: post.user,
       views: post._count.votes,
     }
   })))
