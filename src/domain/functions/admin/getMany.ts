@@ -1,6 +1,6 @@
 import { Errors } from "@domain/helpers"
 import { Paginate, paginate } from "@domain/helpers/paginate"
-import { SimpleUser, simpleUser } from "@domain/helpers/safe"
+import { SimpleUser, simpleUser } from "@domain/helpers/simple"
 import { DatabaseClient } from "@infra/gateways/database"
 
 export type AdminGetManyRequest = {

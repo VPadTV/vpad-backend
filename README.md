@@ -23,16 +23,19 @@ This is the backend. We are using:
 ```txt
 src/ - Where the source code is
   domain/ - Core functionality
-    functions/ - For code that does things
-    helpers/ - For helper functions
-  infra/ - For infrastructure
-    adapters/ - For adapters (such as express middleware, routes)
-    gateways/ - For Gateway classes (Database, JWT, File Storage, etc)
-    middlewares/ - For middlewares
-  main/ - For the code that actually runs the project
+    functions/ - Code that does things
+    helpers/ - Helper functions
+      errors.ts - Big Errors enum
+      regex.ts - Regex constructors
+      simple.ts - Auto simplified versions of Database entities
+  infra/ - Infrastructure
+    adapters/ - Adapters (such as express middleware, routes)
+    gateways/ - Gateway classes (Database, JWT, File Storage, etc)
+    middlewares/ - Middlewares
+  main/ - The code that actually runs the project
     app.ts - App class
     routes.ts - Where routes are registered
     server.dev.ts - Development server entry point
-  routes/ - For Route classes
+  routes/ - Route classes
 test/ - Where the tests are
 ```
