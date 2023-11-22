@@ -4,29 +4,29 @@ import { DatabaseClient } from "@infra/gateways/database"
 import { User } from "@prisma/client"
 
 export type PostDeleteRequest = {
-    user: User
-    id: string
+  user: User
+  id: string
 }
 
 export type PostDeleteResponse = {}
 
 export async function postDelete(req: PostDeleteRequest, db: DatabaseClient, storage: FileStorage): Promise<PostDeleteResponse> {
-    const mediaUrl = await db.$transaction(async (tx) => {
-        const post = await tx.post.findFirst({ where: { id: req.id } })
+  const mediaUrl = await db.$transaction(async (tx) => {
+    const post = await tx.post.findFirst({ where: { id: req.id } })
 
-        if (!post) throw Errors.NOT_FOUND()
+    if (!post) throw Errors.NOT_FOUND()
 
-        const mediaUrl = post.mediaUrl;
+    const mediaUrl = post.mediaUrl;
 
-        await tx.post.delete({
-            where: { id: req.id }
-        })
-
-        return mediaUrl
+    await tx.post.delete({
+      where: { id: req.id }
     })
 
-    if (mediaUrl)
-        await storage.delete(mediaUrl)
+    return mediaUrl
+  })
 
-    return {}
+  if (mediaUrl)
+    await storage.delete(mediaUrl)
+
+  return {}
 }
