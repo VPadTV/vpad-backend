@@ -19,7 +19,8 @@ export const Errors = {
     FORBIDDEN: () => forbidden("Forbidden"),
     NOT_FOUND: () => notFound("Not Found"),
     IM_A_TEAPOT: () => imATeapot("I'm A Teapot!"),
-    
+    BAD_REQUEST: () => badRequest("Bad Request"),
+
     INVALID_TOKEN: () => badRequest("Invalid Token"),
     INVALID_NAME: () => badRequest("Invalid Name"),
     INVALID_EMAIL: () => badRequest("Invalid Email"),

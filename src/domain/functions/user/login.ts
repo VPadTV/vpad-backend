@@ -3,6 +3,7 @@ import { JwtGateway } from "@infra/gateways"
 import { DatabaseClient } from "@infra/gateways/database"
 import { User } from "@prisma/client"
 import bcrypt from "bcrypt"
+import { userIsBanned } from "./isBanned"
 
 export type UserLoginRequest = {
     email?: string
@@ -27,19 +28,13 @@ export async function userLogin(req: UserLoginRequest, db: DatabaseClient): Prom
         })
     else
         throw Errors.MUST_INCLUDE_EMAIL_OR_USERNAME()
-    
+
     if (!user)
         throw Errors.NOT_FOUND()
 
-    if (user.banned) {
-        if (!user.banTimeout || user.banTimeout.valueOf() < Date.now())
-            throw Errors.BANNED()
-        db.user.update({
-            where: { id: user.id },
-            data: { banned: false, banTimeout: null }
-        })
-    }
-    
+    if (await userIsBanned({ user }, db))
+        throw Errors.BANNED()
+
     if (!await bcrypt.compare(req.password, user.password))
         throw Errors.INCORRECT_PASSWORD()
 
