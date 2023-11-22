@@ -7,7 +7,7 @@ export class App {
   constructor() {
     this.app = express()
     this.app.use(express.json({ limit: '10mb' }))
-    
+
     for (let path in routes) {
       const router = express.Router()
       routes[path].register(router)

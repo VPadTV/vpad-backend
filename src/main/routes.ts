@@ -4,7 +4,7 @@ import { AdminRoute } from "@controllers/admin";
 import { DocumentationRoute } from "@controllers/documentation";
 
 export default {
-    '/user': new UserRoute(),
-    '/admin': new AdminRoute(),
-    '/docs': new DocumentationRoute()
-  } as {[path: string]: IRoute}
+  '/user': new UserRoute(),
+  '/admin': new AdminRoute(),
+  '/docs': new DocumentationRoute()
+} as { [path: string]: IRoute }

@@ -6,39 +6,39 @@ import bcrypt from "bcrypt"
 import { userIsBanned } from "./isBanned"
 
 export type UserLoginRequest = {
-    email?: string
-    username?: string
-    password: string
+  email?: string
+  username?: string
+  password: string
 }
 
 export type UserLoginResponse = {
-    id: string
-    token: string
+  id: string
+  token: string
 }
 
 export async function userLogin(req: UserLoginRequest, db: DatabaseClient): Promise<UserLoginResponse> {
-    let user: User | null
-    if (req.email)
-        user = await db.user.findFirst({
-            where: { email: req.email }
-        })
-    else if (req.username)
-        user = await db.user.findFirst({
-            where: { username: req.username }
-        })
-    else
-        throw Errors.MUST_INCLUDE_EMAIL_OR_USERNAME()
+  let user: User | null
+  if (req.email)
+    user = await db.user.findFirst({
+      where: { email: req.email }
+    })
+  else if (req.username)
+    user = await db.user.findFirst({
+      where: { username: req.username }
+    })
+  else
+    throw Errors.MUST_INCLUDE_EMAIL_OR_USERNAME()
 
-    if (!user)
-        throw Errors.NOT_FOUND()
+  if (!user)
+    throw Errors.NOT_FOUND()
 
-    if (await userIsBanned({ user }, db))
-        throw Errors.BANNED()
+  if (await userIsBanned({ user }, db))
+    throw Errors.BANNED()
 
-    if (!await bcrypt.compare(req.password, user.password))
-        throw Errors.INCORRECT_PASSWORD()
+  if (!await bcrypt.compare(req.password, user.password))
+    throw Errors.INCORRECT_PASSWORD()
 
-    const token = JwtGateway.newToken(user)
+  const token = JwtGateway.newToken(user)
 
-    return { id: user.id, token }
+  return { id: user.id, token }
 }

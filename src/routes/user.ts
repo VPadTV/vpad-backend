@@ -11,27 +11,27 @@ import { Database, FileStorage } from "@infra/gateways";
 import { privateInfo } from "@infra/middlewares/privateInfo";
 
 export class UserRoute implements IRoute {
-    register(router: Router): void {
-        router.post('/register',
-        expressRouterAdapter(async (request: UserRegisterRequest) => {
-            return ok(await userRegister(request, Database.get()))
-        }))
+  register(router: Router): void {
+    router.post('/register',
+      expressRouterAdapter(async (request: UserRegisterRequest) => {
+        return ok(await userRegister(request, Database.get()))
+      }))
 
-        router.post('/login',
-        expressRouterAdapter(async (request: UserLoginRequest) => {
-            return ok(await userLogin(request, Database.get()))
-        }))
-        
-        router.get('/:id',
-        expressMiddlewareAdapter(isLoggedIn),
-        expressRouterAdapter(async (request: UserGetByIdRequest) => {
-            return ok(await userGet(request, Database.get()))
-        }))
+    router.post('/login',
+      expressRouterAdapter(async (request: UserLoginRequest) => {
+        return ok(await userLogin(request, Database.get()))
+      }))
 
-        router.put('/:id',
-        expressMiddlewareAdapter(privateInfo),
-        expressRouterAdapter(async (request: UserEditRequest) => {
-            return ok(await userEdit(request, Database.get(), FileStorage.get()))
-        }))
-    }
+    router.get('/:id',
+      expressMiddlewareAdapter(isLoggedIn),
+      expressRouterAdapter(async (request: UserGetByIdRequest) => {
+        return ok(await userGet(request, Database.get()))
+      }))
+
+    router.put('/:id',
+      expressMiddlewareAdapter(privateInfo),
+      expressRouterAdapter(async (request: UserEditRequest) => {
+        return ok(await userEdit(request, Database.get(), FileStorage.get()))
+      }))
+  }
 }

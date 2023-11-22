@@ -3,7 +3,7 @@ import { Response, Request, NextFunction } from 'express'
 
 export type MiddlewareData = {
   authorization: string;
-  params: {[key: string]: string};
+  params: { [key: string]: string };
 }
 
 export function expressMiddlewareAdapter(fn: (request: MiddlewareData) => Promise<any>) {
@@ -21,7 +21,7 @@ export function expressMiddlewareAdapter(fn: (request: MiddlewareData) => Promis
     } catch (error) {
       console.error(`<MiddlewareError>: ${error?.message}`)
       if (error instanceof HttpError)
-          return res.status(error.code).json({ error: error.message })
+        return res.status(error.code).json({ error: error.message })
       return res.status(500).json({ error: error.message })
     }
   }

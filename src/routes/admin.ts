@@ -8,13 +8,13 @@ import { isLoggedIn } from "@infra/middlewares/authenticate";
 import { isAdmin } from "@infra/middlewares/isAdmin";
 
 export class AdminRoute implements IRoute {
-    register(router: Router): void {
-        router.use(expressMiddlewareAdapter(isAdmin))
+  register(router: Router): void {
+    router.use(expressMiddlewareAdapter(isAdmin))
 
-        router.post('/ban/manage',
-        expressMiddlewareAdapter(isLoggedIn),
-        expressRouterAdapter(async (request: AdminManageBanRequest) => {
-            return ok(await adminManageBan(request, Database.get()))
-        }))
-    }
+    router.post('/ban/manage',
+      expressMiddlewareAdapter(isLoggedIn),
+      expressRouterAdapter(async (request: AdminManageBanRequest) => {
+        return ok(await adminManageBan(request, Database.get()))
+      }))
+  }
 }

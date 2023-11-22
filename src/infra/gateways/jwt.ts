@@ -11,7 +11,7 @@ export type JWTClient = typeof Jwt
 
 export abstract class JwtGateway {
   private static defaultExpiry() {
-    return Date.now() + 7*24*60*60*1000 // 7 days in milliseconds
+    return Date.now() + 7 * 24 * 60 * 60 * 1000 // 7 days in milliseconds
   }
 
   public static decode(token: string): Jwt.JwtPayload {
