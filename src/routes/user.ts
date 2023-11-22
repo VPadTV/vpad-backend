@@ -2,7 +2,7 @@ import { expressMiddlewareAdapter, expressRouterAdapter } from "@infra/adapters"
 import { IRoute } from "@main/route";
 import { Router } from "express";
 import { ok } from "@domain/helpers";
-import { authenticate } from "@infra/middlewares/authenticate";
+import { isLoggedIn } from "@infra/middlewares/authenticate";
 import { UserGetByIdRequest, userFindById } from "@domain/functions/user/findById";
 import { UserLoginRequest, userLogin } from "@domain/functions/user/login";
 import { UserRegisterRequest, userRegister } from "@domain/functions/user/register";
@@ -23,12 +23,12 @@ export class UserRoute implements IRoute {
         }))
         
         router.get('/:id',
-        expressMiddlewareAdapter(authenticate),
+        expressMiddlewareAdapter(isLoggedIn),
         expressRouterAdapter(async (request: UserGetByIdRequest) => {
             return ok(await userFindById(request, Database.get()))
         }))
 
-        router.put('/edit/:id',
+        router.put('/:id',
         expressMiddlewareAdapter(privateInfo),
         expressRouterAdapter(async (request: UserEditRequest) => {
             return ok(await userEdit(request, Database.get(), FileStorage.get()))
