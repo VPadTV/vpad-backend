@@ -10,7 +10,6 @@
     "test-watch": "jest --no-cache --silent=false --runInBand --watch --no-coverage",
     "migrate": "prisma migrate dev && prisma generate",
     "lint": "eslint . --ext js,ts --fix",
-    "prettify": "prettier --write ./src/**/*.ts",
     "check": "tsc --noEmit"
   },
   "dependencies": {
