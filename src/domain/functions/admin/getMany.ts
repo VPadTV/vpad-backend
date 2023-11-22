@@ -1,6 +1,6 @@
 import { Errors } from "@domain/helpers"
 import { Paginate, paginate } from "@domain/helpers/paginate"
-import { SimpleUser, simpleUser } from "@domain/helpers/map"
+import { SimpleUser } from "@domain/helpers/mappers/user"
 import { DatabaseClient } from "@infra/gateways/database"
 
 export type AdminGetManyRequest = {
@@ -19,7 +19,8 @@ export async function adminGetMany(req: AdminGetManyRequest, db: DatabaseClient)
       where: {
         admin: true
       },
-      include: {
+      select: {
+        ...SimpleUser.selector,
         _count: {
           select: {
             votes: true
@@ -35,5 +36,5 @@ export async function adminGetMany(req: AdminGetManyRequest, db: DatabaseClient)
 
   if (!users || users.length === 0) throw Errors.NOT_FOUND()
 
-  return paginate(total, req.page, offset, req.size, users.map(simpleUser))
+  return paginate(total, req.page, offset, req.size, users)
 }

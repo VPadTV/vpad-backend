@@ -1,5 +1,5 @@
 import { Errors } from "@domain/helpers"
-import { SimpleUser } from "@domain/helpers/map"
+import { SimpleUser } from "@domain/helpers/mappers/user"
 import { Paginate, paginate } from "@domain/helpers/paginate"
 import { DatabaseClient } from "@infra/gateways/database"
 import { User } from "@prisma/client"
@@ -59,12 +59,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
         text: true,
         thumbUrl: true,
         user: {
-          select: {
-            id: true,
-            username: true,
-            nickname: true,
-            profilePhotoUrl: true,
-          }
+          select: SimpleUser.selector
         },
         _count: {
           select: {
@@ -88,12 +83,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
     text: post.text,
     thumbUrl: post.thumbUrl ?? undefined,
     meta: {
-      author: {
-        id: post.user.id,
-        username: post.user.username,
-        nickname: post.user.nickname,
-        profilePhotoUrl: post.user.profilePhotoUrl,
-      },
+      author: post.user,
       views: post._count.votes,
     }
   })))

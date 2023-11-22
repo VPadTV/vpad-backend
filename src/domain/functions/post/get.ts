@@ -1,4 +1,5 @@
 import { Errors } from "@domain/helpers"
+import { SimpleUser } from "@domain/helpers/mappers/user"
 import { DatabaseClient } from "@infra/gateways/database"
 import { User } from "@prisma/client"
 
@@ -11,7 +12,7 @@ export type PostGetResponse = {
   text: string
   mediaUrl?: string
   meta: {
-    author: User
+    author: SimpleUser
     likes: number
     dislikes: number
     views: number
@@ -22,7 +23,11 @@ export type PostGetResponse = {
 export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<PostGetResponse> {
   const post = await db.post.findFirst({
     where: { id: req.id },
-    include: { user: true }
+    include: {
+      user: {
+        select: SimpleUser.selector
+      }
+    }
   })
   if (!post) throw Errors.NOT_FOUND()
 
