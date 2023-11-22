@@ -7,7 +7,7 @@ The main reason I think this is a good idea is because a percentage of the money
 
 ### Joining the project
 
-We have a [discord server](https://discord.gg/CF8vQdShPx)! Feel free to join and message me (jaquiethecat) for developer approval 😄
+We have a [discord server](https:-discord.gg/CF8vQdShPx)! Feel free to join and message me (jaquiethecat) for developer approval 😄
 
 ### Stack
 
@@ -20,19 +20,19 @@ This is the backend. We are using:
 
 ### Project Structure
 
-```as
-src/ // Where the source code is
-  domain/ // Core functionality
-    functions/ // For code that does things
-    helpers/ // For helper functions
-  infra/ // For infrastructure
-    adapters/ // For adapters (such as express middleware, routes)
-    gateways/ // For Gateway classes (Database, JWT, File Storage, etc)
-    middlewares/ // For middlewares
-  main/ // For the code that actually runs the project
-    app.ts // App class
-    routes.ts // Where routes are registered
-    server.dev.ts // Development server entry point
-  routes/ // For Route classes
-test/` // Where the tests are
+```txt
+src/ - Where the source code is
+  domain/ - Core functionality
+    functions/ - For code that does things
+    helpers/ - For helper functions
+  infra/ - For infrastructure
+    adapters/ - For adapters (such as express middleware, routes)
+    gateways/ - For Gateway classes (Database, JWT, File Storage, etc)
+    middlewares/ - For middlewares
+  main/ - For the code that actually runs the project
+    app.ts - App class
+    routes.ts - Where routes are registered
+    server.dev.ts - Development server entry point
+  routes/ - For Route classes
+test/ - Where the tests are
 ```
