@@ -13,7 +13,6 @@ export type SwaggerObject = {
 }
 export type SwaggerError = {
   [code: number]: {
-    description: string
     content: {
       'application/json': {
         schema: {
@@ -34,20 +33,10 @@ export type Parameters = {
   [name: string]: ("string" | "number") | ["string" | "number", string | number]
 }
 
-type SwaggerTypes = "string" | "number" | "boolean" | "object"
 type SwaggerDefinitions = string | number | boolean
 
 export type Body = {
-  [name: string]: SwaggerTypes | [SwaggerTypes, SwaggerDefinitions | SwaggerObject]
-}
-export type GenSuccess = {
-  description: string,
-  body?: Body
-}
-
-export type GenError = {
-  description: string,
-  error: string
+  [name: string]: SwaggerDefinitions | Body
 }
 
 export type GenerateRoute = {
@@ -56,35 +45,33 @@ export type GenerateRoute = {
   pathParameters?: Parameters
   queryParameters?: Parameters
   body?: Body
-  success?: GenSuccess
+  success?: Body
   security?: boolean
-  [error: number]: GenError
+  [error: number]: string
 }
 
-export const obj = (args?: Body) => {
+export const makeObject = (args?: Body) => {
   if (!args) return undefined
 
   let swb: SwaggerObject = {}
   for (const name in args) {
     const value = args[name]
-    if (typeof value === 'string') {
+    if (typeof value === 'object')
       swb[name] = {
-        type: value
+        type: 'object',
+        properties: obj(value)
       }
-    } else {
-      if (typeof value[1] === 'object')
-        swb[name] = {
-          type: value[0],
-          properties: value[1]
-        }
-      else
-        swb[name] = {
-          type: value[0],
-          example: value[1]
-        }
-    }
+    else
+      swb[name] = {
+        type: typeof value,
+        example: value
+      }
   }
   return swb
+}
+
+export const obj = (args: Body) => {
+  return makeObject(args)!
 }
 
 const makeParameters = (type: "query" | "path", args?: Parameters) => {
@@ -110,14 +97,13 @@ const makeParameters = (type: "query" | "path", args?: Parameters) => {
   return swp
 }
 
-const makeErrors = (errors?: { [error: number]: GenError }) => {
+const makeErrors = (errors?: { [error: number]: string }) => {
   if (!errors) return undefined;
 
   let swe: SwaggerError = {}
   for (const code in errors) {
     const value = errors[code]
     swe[code] = {
-      description: value.description,
       content: {
         'application/json': {
           schema: {
@@ -125,7 +111,7 @@ const makeErrors = (errors?: { [error: number]: GenError }) => {
             properties: {
               error: {
                 type: 'string',
-                example: value.error
+                example: value
               }
             }
           }
@@ -145,13 +131,11 @@ export const makeRoute = (args: GenerateRoute) => {
   const swQuery = makeParameters("query", queryParameters) ?? []
   if (swQuery) swParams.push(...swQuery)
 
-  const swBody = obj(body)
+  const swBody = makeObject(body)
 
-  const swSuccess = obj(success?.body)
+  const swSuccess = makeObject(success)
 
   const swErrors = makeErrors(errors) ?? {}
-
-  console.log(swSuccess)
 
   return {
     security: security === true ? [{ bearerAuth: [] }] : undefined,
@@ -177,10 +161,10 @@ export const makeRoute = (args: GenerateRoute) => {
             schema: swSuccess ? {
               type: 'object',
               properties: {
-                ...swSuccess, token: security ? {
+                token: security ? {
                   type: "string",
                   example: "refreshed token",
-                } : undefined
+                } : undefined, ...swSuccess
               }
             } : undefined
           }

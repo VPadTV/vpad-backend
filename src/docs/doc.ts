@@ -1,4 +1,7 @@
+import { userRegister } from "@domain/functions/user/register";
 import { userId } from "./paths/user/id";
+import { userLogin } from "./paths/user/login";
+import { postId } from "./paths/post/id";
 
 export default {
   openapi: "3.0.0",
@@ -23,5 +26,8 @@ export default {
   },
   paths: {
     '/user/{id}': userId,
+    '/user/login': userLogin,
+    '/user/register': userRegister,
+    '/post/{id}': postId,
   }
 }

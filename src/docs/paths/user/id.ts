@@ -6,21 +6,15 @@ export const userId = {
     summary: "Returns user data from id, must be logged in",
     pathParameters: { id: "string" },
     success: {
-      description: "User data",
-      body: {
-        username: "string",
-        nickname: "string",
-        email: "string",
-        profilePhotoUrl: "string",
-        about: "string",
-        contact: "string",
-        admin: "boolean",
-      },
+      username: "string",
+      nickname: "string",
+      email: "string",
+      profilePhotoUrl: "string",
+      about: "string",
+      contact: "string",
+      admin: false,
     },
-    404: {
-      description: "Not found",
-      error: "Provided ID didnt resolve to any user"
-    }
+    404: "Provided ID didnt resolve to any user",
   }),
   put: makeRoute({
     tag: "User",
@@ -35,20 +29,15 @@ export const userId = {
       profilePhotoBase64: "string",
     },
     success: {
-      description: "User ID",
-      body: {
-        username: "string",
-        nickname: "string",
-        email: "string",
-        profilePhotoUrl: "string",
-        about: "string",
-        contact: "string",
-        admin: "boolean",
-      },
+      username: "string",
+      nickname: "string",
+      email: "string",
+      profilePhotoUrl: "string",
+      about: "string",
+      contact: "string",
+      admin: "boolean",
     },
-    404: {
-      description: "Not found",
-      error: "Provided ID didnt resolve to any user"
-    }
+    400: "Invalid username, nickname, email, password, or whatever",
+    404: "Provided ID didnt resolve to any user",
   })
 }
