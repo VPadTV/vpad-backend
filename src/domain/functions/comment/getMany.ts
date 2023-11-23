@@ -29,7 +29,7 @@ export async function commentGetMany(req: CommentGetManyRequest, db: DatabaseCli
         id: true,
         text: true,
         updatedAt: true,
-        user: { select: SimpleUser.selector }
+        user: { select: SimpleUser.selector },
       }
     }),
     db.comment.count({
