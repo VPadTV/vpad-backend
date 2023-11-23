@@ -1,4 +1,5 @@
 import { makeRoute } from "@docs/helpers";
+import { dateExample } from "@docs/schemas/dateExample";
 import { simpleUser } from "@docs/schemas/simpleUser";
 
 export const commentId = {
@@ -26,6 +27,7 @@ export const commentId = {
     path: { id: "string" },
     body: {
       text: "string",
+      updatedAt: dateExample,
     },
     404: "Provided ID didnt resolve to any comment",
   }),

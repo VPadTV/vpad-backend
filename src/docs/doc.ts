@@ -5,6 +5,9 @@ import { postId } from "./paths/post/id";
 import { postNoId } from "./paths/post/noId";
 import { commentId } from "./paths/comment/id";
 import { commentNoId } from "./paths/comment/noId";
+import { adminNoId } from "./paths/admin/noId";
+import { adminId } from "./paths/admin/manage/adminId";
+import { adminBanId } from "./paths/admin/manage/banId";
 
 export default {
   openapi: "3.0.0",
@@ -35,5 +38,8 @@ export default {
     '/post': postNoId,
     '/comment/{id}': commentId,
     '/comment': commentNoId,
+    '/admin': adminNoId,
+    '/manage/admin/{id}': adminId,
+    '/manage/ban/{id}': adminBanId,
   }
 }

@@ -1,40 +1,25 @@
 import { Errors } from "@domain/helpers"
-import { Paginate, paginate } from "@domain/helpers/paginate"
 import { SimpleUser } from "@domain/helpers/mappers/user"
 import { DatabaseClient } from "@infra/gateways/database"
 
-export type AdminGetManyRequest = {
-  page: number
-  size: number
-}
+export type AdminGetManyRequest = {}
 
-export type AdminGetManyResponse = Paginate<SimpleUser>
+export type AdminGetManyResponse = { users: SimpleUser[] }
 
-export async function adminGetMany(req: AdminGetManyRequest, db: DatabaseClient): Promise<AdminGetManyResponse> {
-  const offset = (req.page - 1) * req.size
-  const [users, total] = await db.$transaction([
-    db.user.findMany({
-      skip: offset,
-      take: req.size,
-      where: {
-        admin: true
-      },
-      select: {
-        ...SimpleUser.selector,
-        _count: {
-          select: {
-            votes: true
-          }
-        },
-      },
-      orderBy: {
-        createdAt: "desc"
-      }
-    }),
-    db.user.count({ where: { admin: true } }),
-  ])
+export async function adminGetMany(_req: AdminGetManyRequest, db: DatabaseClient): Promise<AdminGetManyResponse> {
+  const users = await db.user.findMany({
+    where: {
+      admin: true
+    },
+    select: {
+      ...SimpleUser.selector,
+    },
+    orderBy: {
+      createdAt: "desc"
+    }
+  })
 
   if (!users || users.length === 0) throw Errors.NOT_FOUND()
 
-  return paginate(total, req.page, offset, req.size, users)
+  return { users }
 }
