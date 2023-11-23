@@ -5,6 +5,7 @@ export const postId = {
   get: makeRoute({
     tag: "Post",
     summary: "Returns post data from id",
+    security: false,
     path: { id: "string" },
     success: {
       text: "string",

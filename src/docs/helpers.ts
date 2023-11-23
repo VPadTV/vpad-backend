@@ -1,7 +1,7 @@
 export type SwaggerParameter = {
   name: string
   in: "query" | "path"
-  schema: { type: "string" | "number", example?: string | number }
+  schema: { type: string, example?: string | number }
 }
 
 export type SwaggerObject = {
@@ -9,6 +9,10 @@ export type SwaggerObject = {
     type: string,
     example?: SwaggerDefinitions
     properties?: SwaggerObject
+    items?: {
+      type: 'object',
+      properties: SwaggerObject
+    }
   }
 }
 export type SwaggerError = {
@@ -30,13 +34,13 @@ export type SwaggerError = {
 }
 
 export type Parameters = {
-  [name: string]: ("string" | "number") | ["string" | "number", string | number]
+  [name: string]: string | number
 }
 
 type SwaggerDefinitions = string | number | boolean
 
 export type Body = {
-  [name: string]: SwaggerDefinitions | Body
+  [name: string]: SwaggerDefinitions | Body | [Body]
 }
 
 export type GenerateRoute = {
@@ -56,10 +60,18 @@ export const makeObject = (args?: Body) => {
   let swb: SwaggerObject = {}
   for (const name in args) {
     const value = args[name]
-    if (typeof value === 'object')
+    if (Array.isArray(value))
+      swb[name] = {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: obj(value[0]),
+        }
+      }
+    else if (typeof value === 'object')
       swb[name] = {
         type: 'object',
-        properties: obj(value)
+        properties: obj(value as Body)
       }
     else
       swb[name] = {
@@ -80,19 +92,14 @@ const makeParameters = (type: "query" | "path", args?: Parameters) => {
   let swp: SwaggerParameter[] = []
   for (const name in args) {
     const value = args[name]
-    if (typeof value === 'string') {
-      swp.push({
-        name,
-        in: type,
-        schema: { type: value }
-      })
-    } else {
-      swp.push({
-        name,
-        in: type,
-        schema: { type: value[0], example: value[1] }
-      })
-    }
+    swp.push({
+      name,
+      in: type,
+      schema: {
+        type: typeof value,
+        example: value
+      }
+    })
   }
   return swp
 }
@@ -123,7 +130,7 @@ const makeErrors = (errors?: { [error: number]: string }) => {
 }
 
 export const makeRoute = (args: GenerateRoute) => {
-  const { tag, summary, path: pathParameters, query: queryParameters, body, success, security = true, ...errors } = args
+  const { tag, summary, path: pathParameters, query: queryParameters, body: body, success, security = true, ...errors } = args
 
   let swParams: SwaggerParameter[] = []
   const swPath = makeParameters("path", pathParameters)
