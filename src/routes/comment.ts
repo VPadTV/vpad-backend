@@ -10,7 +10,7 @@ import { Router } from "express";
 
 export class CommentRoute implements IRoute {
   register(router: Router): void {
-    router.post('/:postId',
+    router.post('/create/:postId',
       expressRouterAdapter(async (request: CommentCreateRequest) => {
         return ok(commentCreate(request, Database.get()))
       }))
