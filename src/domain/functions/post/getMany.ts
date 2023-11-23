@@ -47,11 +47,11 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
       orderBy = { votes: { _count: "asc" } }
       break
   }
-  const offset = (req.page - 1) * req.size
+  const offset = (+req.page - 1) * +req.size
   const [posts, total] = await db.$transaction([
     db.post.findMany({
       skip: offset,
-      take: req.size,
+      take: +req.size,
       where: {
         userId: req.userId ?? undefined
       },
@@ -77,7 +77,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
 
   if (!posts || posts.length === 0) throw Errors.NOT_FOUND()
 
-  return paginate(total, req.page, offset, req.size, posts.map(post => ({
+  return paginate(total, +req.page, offset, +req.size, posts.map(post => ({
     id: post.id,
     text: post.text,
     thumbUrl: post.thumbUrl ?? undefined,

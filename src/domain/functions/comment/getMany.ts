@@ -6,6 +6,7 @@ import { User } from "@prisma/client"
 export type CommentGetManyRequest = {
   user: User
   postId: string
+  sortBy: "latest" | "oldset" // TODO: Implement comment sorting
 
   page: number
   size: number

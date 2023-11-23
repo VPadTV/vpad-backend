@@ -5,3 +5,4 @@ coverage
 prisma/migrations
 yarn.lock
 yarn-error.log
+testData.txt

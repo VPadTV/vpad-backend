@@ -2,29 +2,38 @@ import { PostCreateRequest, postCreate } from "@domain/functions/post/create";
 import { PostDeleteRequest, postDelete } from "@domain/functions/post/delete";
 import { PostEditRequest, postEdit } from "@domain/functions/post/edit";
 import { PostGetRequest, postGet } from "@domain/functions/post/get";
+import { PostGetManyRequest, postGetMany } from "@domain/functions/post/getMany";
 import { ok } from "@domain/helpers";
-import { expressRouterAdapter } from "@infra/adapters";
+import { expressMiddlewareAdapter, expressRouterAdapter } from "@infra/adapters";
 import { Database, FileStorage } from "@infra/gateways";
+import { isLoggedIn } from "@infra/middlewares/isLoggedIn";
 import { IRoute } from "@main/route";
 import { Router } from "express";
 
 export class PostRoute implements IRoute {
   register(router: Router): void {
     router.post('/',
+      expressMiddlewareAdapter(isLoggedIn),
       expressRouterAdapter(async (request: PostCreateRequest) => {
-        return ok(postCreate(request, Database.get(), FileStorage.get()))
+        return ok(await postCreate(request, Database.get(), FileStorage.get()))
+      }))
+    router.get('/',
+      expressRouterAdapter(async (request: PostGetManyRequest) => {
+        return ok(await postGetMany(request, Database.get()))
       }))
     router.get('/:id',
       expressRouterAdapter(async (request: PostGetRequest) => {
-        return ok(postGet(request, Database.get()))
+        return ok(await postGet(request, Database.get()))
       }))
     router.put('/:id',
+      expressMiddlewareAdapter(isLoggedIn),
       expressRouterAdapter(async (request: PostEditRequest) => {
-        return ok(postEdit(request, Database.get(), FileStorage.get()))
+        return ok(await postEdit(request, Database.get(), FileStorage.get()))
       }))
     router.delete('/:id',
+      expressMiddlewareAdapter(isLoggedIn),
       expressRouterAdapter(async (request: PostDeleteRequest) => {
-        return ok(postDelete(request, Database.get(), FileStorage.get()))
+        return ok(await postDelete(request, Database.get(), FileStorage.get()))
       }))
   }
 }

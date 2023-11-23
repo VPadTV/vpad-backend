@@ -4,7 +4,7 @@ import { DatabaseClient } from "@infra/gateways/database"
 import { User } from "@prisma/client"
 
 export type PostGetRequest = {
-  user: User
+  user?: User
   id: string
 }
 
@@ -43,8 +43,8 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
       where: { postId: post.id },
     }),
     db.votes.findFirst({
-      where: { postId: post.id, userId: req.user.id }
-    }),
+      where: { postId: post.id, userId: req.user?.id }
+    })
   ])
 
   return {

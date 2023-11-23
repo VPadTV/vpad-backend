@@ -13,7 +13,7 @@ export type CommentGetResponse = {
   children: {
     id: string
     text: string
-    user: SimpleUser
+    meta: { user: SimpleUser }
   }[]
   meta: {
     user: SimpleUser
@@ -47,7 +47,11 @@ export async function commentGet(req: CommentGetRequest, db: DatabaseClient): Pr
 
   return {
     text: comment.text,
-    children: comment.children,
+    children: comment.children.map(comment => ({
+      id: comment.id,
+      text: comment.text,
+      meta: { user: comment.user }
+    })),
     meta: { user: comment.user }
   }
 }

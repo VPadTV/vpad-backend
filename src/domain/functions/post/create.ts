@@ -14,12 +14,13 @@ export type PostCreateResponse = {
 }
 
 export async function postCreate(req: PostCreateRequest, db: DatabaseClient, storage: FileStorage): Promise<PostCreateResponse> {
+  console.log(req.user)
   const mediaUrl = await storage.upload(req.mediaBase64)
   let thumbUrl: string | undefined
   if (req.thumbBase64)
     thumbUrl = await storage.upload(req.mediaBase64)
   else
-    thumbUrl = "generate thumbnail" // TODO
+    thumbUrl = "generated thumbnail" // TODO
   const post = await db.post.create({
     data: {
       userId: req.user.id,

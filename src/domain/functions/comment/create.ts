@@ -1,4 +1,3 @@
-import { SimpleUser } from "@domain/helpers/mappers/user"
 import { DatabaseClient } from "@infra/gateways/database"
 import { User } from "@prisma/client"
 
@@ -11,9 +10,6 @@ export type CommentCreateRequest = {
 
 export type CommentCreateResponse = {
   id: string
-  text: string
-  user: SimpleUser
-  createdAt: Date
 }
 
 export async function commentCreate(req: CommentCreateRequest, db: DatabaseClient): Promise<CommentCreateResponse> {
@@ -26,11 +22,6 @@ export async function commentCreate(req: CommentCreateRequest, db: DatabaseClien
     },
     select: {
       id: true,
-      text: true,
-      user: {
-        select: SimpleUser.selector
-      },
-      createdAt: true,
     }
   })
   return comment

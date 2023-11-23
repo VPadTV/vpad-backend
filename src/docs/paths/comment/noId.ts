@@ -1,14 +1,14 @@
 import { makeRoute } from "@docs/helpers";
 import { simpleUser } from "@docs/schemas/simpleUser";
 
-export const postNoId = {
+export const commentNoId = {
   get: makeRoute({
-    tag: "Post",
-    summary: "Gets many posts",
+    tag: "Comment",
+    summary: "Gets many comments",
     security: false,
     query: {
-      userId: "string",
-      sortBy: "latest | oldest | high-views | low-views",
+      postId: "string",
+      sortBy: "latest | oldest",
       page: 1,
       size: 30,
     },
@@ -21,22 +21,20 @@ export const postNoId = {
       data: {
         id: "string",
         text: "string",
-        thumbUrl: "string",
         meta: {
-          user: simpleUser,
-          views: 1000
+          user: simpleUser
         }
       }
     },
-    404: "No posts found",
+    404: "No comments found",
   }),
   post: makeRoute({
-    tag: "Post",
-    summary: "Creates a new post",
+    tag: "Comment",
+    summary: "Creates a new comment",
     body: {
+      postId: "string",
+      parentId: "string",
       text: "string",
-      mediaBase64: "string",
-      thumbBase64: "string",
     },
     success: {
       id: "string"
