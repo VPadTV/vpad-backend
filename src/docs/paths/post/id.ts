@@ -31,5 +31,11 @@ export const postId = {
       thumbBase64: "string",
     },
     404: "Provided ID didnt resolve to any post",
+  }),
+  delete: makeRoute({
+    tag: "Post",
+    summary: "Deletes a post from id, must be logged in",
+    path: { id: "string" },
+    404: "Provided ID didnt resolve to any post",
   })
 }
