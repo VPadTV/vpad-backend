@@ -23,6 +23,8 @@ This is the backend. We are using:
 ```txt
 src/ - Where the source code is
   docs/ - Where the Swagger documentation is
+    paths/ - Each subfolder represents a path, with the file being the route itself
+    schemas/ - Reusable bits of code
     doc.ts - Main file where routes are registered
   domain/ - Core functionality
     functions/ - Code that does things
