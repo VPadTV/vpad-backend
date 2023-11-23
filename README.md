@@ -22,6 +22,8 @@ This is the backend. We are using:
 
 ```txt
 src/ - Where the source code is
+  docs/ - Where the Swagger documentation is
+    doc.ts - Main file where routes are registered
   domain/ - Core functionality
     functions/ - Code that does things
     helpers/ - Helper functions
@@ -33,7 +35,6 @@ src/ - Where the source code is
     gateways/ - Gateway classes (Database, JWT, File Storage, etc)
     middlewares/ - Middlewares
   main/ - The code that actually runs the project
-    app.ts - App class
     routes.ts - Where routes are registered
     server.dev.ts - Development server entry point
   routes/ - Route classes
