@@ -8,6 +8,7 @@ export type PostGetManyRequest = {
   user: User
   userId?: string
   sortBy: "latest" | "oldest" | "high-views" | "low-views"
+  titleSearch?: string
 
   page: number
   size: number
@@ -15,6 +16,7 @@ export type PostGetManyRequest = {
 
 export type PostGetManyResponse = Paginate<{
   id: string
+  title: string
   text: string
   thumbUrl?: string
   meta: {
@@ -53,10 +55,14 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
       skip: offset,
       take: +req.size,
       where: {
-        userId: req.userId ?? undefined
+        userId: req.userId ?? undefined,
+        title: req.titleSearch ? {
+          search: req.titleSearch
+        } : undefined,
       },
       select: {
         id: true,
+        title: true,
         text: true,
         thumbUrl: true,
         user: { select: SimpleUser.selector },
@@ -79,6 +85,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
 
   return paginate(total, +req.page, offset, +req.size, posts.map(post => ({
     id: post.id,
+    title: post.title,
     text: post.text,
     thumbUrl: post.thumbUrl ?? undefined,
     meta: {

@@ -9,6 +9,7 @@ export type PostGetRequest = {
 }
 
 export type PostGetResponse = {
+  title: string
   text: string
   mediaUrl?: string
   thumbUrl?: string
@@ -24,10 +25,15 @@ export type PostGetResponse = {
 export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<PostGetResponse> {
   const post = await db.post.findFirst({
     where: { id: req.id },
-    include: {
+    select: {
+      id: true,
+      title: true,
+      text: true,
+      mediaUrl: true,
+      thumbUrl: true,
       user: {
         select: SimpleUser.selector
-      }
+      },
     }
   })
   if (!post) throw Errors.NOT_FOUND()
@@ -48,6 +54,7 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
   ])
 
   return {
+    title: post.title,
     text: post.text,
     mediaUrl: post.mediaUrl ?? undefined,
     thumbUrl: post.thumbUrl ?? undefined,
