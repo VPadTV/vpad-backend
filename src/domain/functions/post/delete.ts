@@ -12,7 +12,7 @@ export type PostDeleteResponse = {}
 
 export async function postDelete(req: PostDeleteRequest, db: DatabaseClient, storage: FileStorage): Promise<PostDeleteResponse> {
   const post = await db.post.delete({
-    where: { id: req.id }
+    where: { id: req.id, userId: req.user.id }
   })
 
   if (!post)
