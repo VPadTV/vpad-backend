@@ -4,7 +4,7 @@ export const userId = {
   get: makeRoute({
     tag: "User",
     summary: "Returns user data from id, must be logged in",
-    pathParameters: { id: "string" },
+    path: { id: "string" },
     success: {
       username: "string",
       nickname: "string",
@@ -19,7 +19,7 @@ export const userId = {
   put: makeRoute({
     tag: "User",
     summary: "Updates user from id, must be logged in",
-    pathParameters: { id: "string" },
+    path: { id: "string" },
     body: {
       username: "string",
       nickname: "string",

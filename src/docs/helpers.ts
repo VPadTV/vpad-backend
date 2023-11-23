@@ -42,8 +42,8 @@ export type Body = {
 export type GenerateRoute = {
   tag: string
   summary: string
-  pathParameters?: Parameters
-  queryParameters?: Parameters
+  path?: Parameters
+  query?: Parameters
   body?: Body
   success?: Body
   security?: boolean
@@ -123,7 +123,7 @@ const makeErrors = (errors?: { [error: number]: string }) => {
 }
 
 export const makeRoute = (args: GenerateRoute) => {
-  const { tag, summary, pathParameters, queryParameters, body, success, security = true, ...errors } = args
+  const { tag, summary, path: pathParameters, query: queryParameters, body, success, security = true, ...errors } = args
 
   let swParams: SwaggerParameter[] = []
   const swPath = makeParameters("path", pathParameters)

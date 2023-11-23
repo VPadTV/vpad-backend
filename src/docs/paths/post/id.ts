@@ -5,7 +5,7 @@ export const postId = {
   get: makeRoute({
     tag: "Post",
     summary: "Returns post data from id",
-    pathParameters: { id: "string" },
+    path: { id: "string" },
     success: {
       text: "string",
       mediaUrl: "string",
@@ -23,7 +23,7 @@ export const postId = {
   put: makeRoute({
     tag: "Post",
     summary: "Updates post from id, must be logged in",
-    pathParameters: { id: "string" },
+    path: { id: "string" },
     body: {
       text: "string",
       mediaBase64: "string",
