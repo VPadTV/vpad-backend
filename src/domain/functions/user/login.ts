@@ -32,7 +32,7 @@ export async function userLogin(req: UserLoginRequest, db: DatabaseClient): Prom
   if (!user)
     throw Errors.NOT_FOUND()
 
-  if (await userIsBanned({ user }, db))
+  if ((await userIsBanned({ user }, db)).banned)
     throw Errors.BANNED()
 
   if (!await bcrypt.compare(req.password, user.password))

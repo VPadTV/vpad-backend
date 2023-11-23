@@ -122,12 +122,24 @@ paths:
             schema:
               type: object
               properties:
-                id:
+                username:
                   type: string
-                  example: someidlol
-                token:
+                  example: myUsername
+                nickname:
                   type: string
-                  example: blablajwttoken
+                  example: myNickname
+                email:
+                  type: string
+                  example: email@domain.com
+                password:
+                  type: string
+                  example: myfunnypassword
+                about:
+                  type: string
+                  example: some about section
+                profilePhotoBase64:
+                  type: string
+                  example: some about section
       responses:
         200:
           description: User ID, optional refreshed token
