@@ -1,8 +1,8 @@
-import { userLogin } from "@domain/functions/user/login.js"
-import { Errors } from "@domain/helpers/index.js"
-import { JwtGateway } from "@infra/gateways/index.js"
+import { userLogin } from "@domain/functions/user/login"
+import { Errors } from "@domain/helpers"
+import { JwtGateway } from "@infra/gateways"
 import { User } from "@prisma/client"
-import { prismaMock } from "@test/prismaMock.js"
+import { prismaMock } from "@test/prismaMock"
 import bcrypt from "bcrypt"
 
 jest.mock('@infra/gateways/jwt')

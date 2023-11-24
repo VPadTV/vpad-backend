@@ -1,6 +1,6 @@
-import { Errors } from "@domain/helpers/index.js"
-import { DatabaseClient } from "@infra/gateways/database.js"
-import { SimpleUser } from "@domain/helpers/mappers/user.js"
+import { Errors } from "@domain/helpers"
+import { DatabaseClient } from "@infra/gateways/database"
+import { SimpleUser } from "@domain/helpers/mappers/user"
 import { User } from "@prisma/client"
 
 export type PostGetRequest = {

@@ -1,7 +1,7 @@
-import { Errors } from "@domain/helpers/index.js"
-import { SimpleUser } from "@domain/helpers/mappers/user.js"
-import { Paginate, paginate } from "@domain/helpers/paginate.js"
-import { DatabaseClient } from "@infra/gateways/database.js"
+import { Errors } from "@domain/helpers"
+import { SimpleUser } from "@domain/helpers/mappers/user"
+import { Paginate, paginate } from "@domain/helpers/paginate"
+import { DatabaseClient } from "@infra/gateways/database"
 import { User } from "@prisma/client"
 
 export type PostGetManyRequest = {

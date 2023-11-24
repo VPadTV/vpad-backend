@@ -1,4 +1,4 @@
-import { HttpError, HttpResponse } from '@domain/helpers/index.js'
+import { HttpError, HttpResponse } from '@domain/helpers'
 import { Response, Request } from 'express'
 
 export function expressRouterAdapter<T, U extends HttpResponse>(fn: (request: T) => Promise<U>) {

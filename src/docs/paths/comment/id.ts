@@ -1,6 +1,6 @@
-import { makeRoute } from "@docs/helpers.js";
-import { dateExample } from "@docs/schemas/dateExample.js";
-import { simpleUser } from "@docs/schemas/simpleUser.js";
+import { makeRoute } from "@docs/helpers";
+import { dateExample } from "@docs/schemas/dateExample";
+import { simpleUser } from "@docs/schemas/simpleUser";
 
 export const commentId = {
   get: makeRoute({

@@ -1,9 +1,9 @@
-import { Errors } from "@domain/helpers/index.js"
-import { JwtGateway } from "@infra/gateways/index.js"
-import { DatabaseClient } from "@infra/gateways/database.js"
+import { Errors } from "@domain/helpers"
+import { JwtGateway } from "@infra/gateways"
+import { DatabaseClient } from "@infra/gateways/database"
 import { User } from "@prisma/client"
 import bcrypt from "bcrypt"
-import { userIsBanned } from "./isBanned.js"
+import { userIsBanned } from "./isBanned"
 
 export type UserLoginRequest = {
   email?: string

@@ -1,2 +1,2 @@
-export * from './expressMiddleware.js'
-export * from './expressRouter.js'
+export * from './expressMiddleware'
+export * from './expressRouter'

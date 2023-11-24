@@ -1,2 +1,2 @@
-export * from './cors.js'
-export * from './noCache.js'
+export * from './cors'
+export * from './noCache'

@@ -1,13 +1,13 @@
-import { expressMiddlewareAdapter, expressRouterAdapter } from "@infra/adapters/index.js";
-import { IRoute } from "@main/route.js";
+import { expressMiddlewareAdapter, expressRouterAdapter } from "@infra/adapters";
+import { IRoute } from "@main/route";
 import { Router } from "express";
-import { ok } from "@domain/helpers/index.js";
-import { isLoggedIn } from "@infra/middlewares/isLoggedIn.js";
-import { UserGetRequest, userGet } from "@domain/functions/user/get.js";
-import { UserLoginRequest, userLogin } from "@domain/functions/user/login.js";
-import { UserRegisterRequest, userRegister } from "@domain/functions/user/register.js";
-import { UserEditRequest, userEdit } from "@domain/functions/user/edit.js";
-import { Database, FileStorage } from "@infra/gateways/index.js";
+import { ok } from "@domain/helpers";
+import { isLoggedIn } from "@infra/middlewares/isLoggedIn";
+import { UserGetRequest, userGet } from "@domain/functions/user/get";
+import { UserLoginRequest, userLogin } from "@domain/functions/user/login";
+import { UserRegisterRequest, userRegister } from "@domain/functions/user/register";
+import { UserEditRequest, userEdit } from "@domain/functions/user/edit";
+import { Database, FileStorage } from "@infra/gateways";
 
 export class UserRoute implements IRoute {
   register(router: Router): void {

@@ -1,6 +1,6 @@
-import { Errors } from "@domain/helpers/index.js"
-import { FileStorage } from "@infra/gateways/index.js"
-import { DatabaseClient } from "@infra/gateways/database.js"
+import { Errors } from "@domain/helpers"
+import { FileStorage } from "@infra/gateways"
+import { DatabaseClient } from "@infra/gateways/database"
 import { User } from "@prisma/client"
 
 export type PostDeleteRequest = {

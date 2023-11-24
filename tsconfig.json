@@ -10,8 +10,8 @@
       "@routes/*": ["src/routes/*"],
       "@test/*": ["test/*"]
     },
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
+    "module": "es2022",
+    "moduleResolution": "bundler",
     "target": "esnext",
     "lib": ["esnext"],
     "removeComments": false,

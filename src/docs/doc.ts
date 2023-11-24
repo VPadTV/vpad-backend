@@ -1,13 +1,13 @@
-import { userRegister } from "./paths/user/register.js";
-import { userId } from "./paths/user/id.js";
-import { userLogin } from "./paths/user/login.js";
-import { postId } from "./paths/post/id.js";
-import { postNoId } from "./paths/post/noId.js";
-import { commentId } from "./paths/comment/id.js";
-import { commentNoId } from "./paths/comment/noId.js";
-import { adminNoId } from "./paths/admin/noId.js";
-import { adminId } from "./paths/admin/manage/adminId.js";
-import { adminBanId } from "./paths/admin/manage/banId.js";
+import { userRegister } from "./paths/user/register";
+import { userId } from "./paths/user/id";
+import { userLogin } from "./paths/user/login";
+import { postId } from "./paths/post/id";
+import { postNoId } from "./paths/post/noId";
+import { commentId } from "./paths/comment/id";
+import { commentNoId } from "./paths/comment/noId";
+import { adminNoId } from "./paths/admin/noId";
+import { adminId } from "./paths/admin/manage/adminId";
+import { adminBanId } from "./paths/admin/manage/banId";
 
 export default {
   openapi: "3.0.0",

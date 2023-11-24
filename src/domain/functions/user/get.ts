@@ -1,5 +1,5 @@
-import { Errors } from "@domain/helpers/index.js"
-import { DatabaseClient } from "@infra/gateways/database.js"
+import { Errors } from "@domain/helpers"
+import { DatabaseClient } from "@infra/gateways/database"
 
 export type UserGetRequest = {
   id: string

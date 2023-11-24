@@ -1,3 +1,3 @@
-export * from './jwt.js'
-export * from './database.js'
-export * from './storage.js'
+export * from './jwt'
+export * from './database'
+export * from './storage'

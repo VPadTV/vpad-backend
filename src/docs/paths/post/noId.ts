@@ -1,5 +1,5 @@
-import { makeRoute } from "@docs/helpers.js";
-import { simpleUser } from "@docs/schemas/simpleUser.js";
+import { makeRoute } from "@docs/helpers";
+import { simpleUser } from "@docs/schemas/simpleUser";
 
 export const postNoId = {
   get: makeRoute({

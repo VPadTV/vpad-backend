@@ -1,12 +1,12 @@
-import { CommentCreateRequest, commentCreate } from "@domain/functions/comment/create.js";
-import { CommentDeleteRequest, commentDelete } from "@domain/functions/comment/delete.js";
-import { CommentEditRequest, commentEdit } from "@domain/functions/comment/edit.js";
-import { CommentGetRequest, commentGet } from "@domain/functions/comment/get.js";
-import { expressMiddlewareAdapter, expressRouterAdapter } from "@infra/adapters/index.js";
-import { isLoggedIn } from "@infra/middlewares/isLoggedIn.js";
-import { ok } from "@domain/helpers/index.js";
-import { Database } from "@infra/gateways/index.js";
-import { IRoute } from "@main/route.js";
+import { CommentCreateRequest, commentCreate } from "@domain/functions/comment/create";
+import { CommentDeleteRequest, commentDelete } from "@domain/functions/comment/delete";
+import { CommentEditRequest, commentEdit } from "@domain/functions/comment/edit";
+import { CommentGetRequest, commentGet } from "@domain/functions/comment/get";
+import { expressMiddlewareAdapter, expressRouterAdapter } from "@infra/adapters";
+import { isLoggedIn } from "@infra/middlewares/isLoggedIn";
+import { ok } from "@domain/helpers";
+import { Database } from "@infra/gateways";
+import { IRoute } from "@main/route";
 import { Router } from "express";
 
 export class CommentRoute implements IRoute {

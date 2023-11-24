@@ -1,6 +1,6 @@
-import { Errors } from '@domain/helpers/index.js'
-import { MiddlewareData } from '@infra/adapters/index.js'
-import { tokenMiddleware } from './wrappers/hasToken.js'
+import { Errors } from '@domain/helpers'
+import { MiddlewareData } from '@infra/adapters'
+import { tokenMiddleware } from './wrappers/hasToken'
 
 export const isAdmin = async (data: MiddlewareData) =>
   tokenMiddleware(data, async (user) => {

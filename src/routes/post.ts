@@ -1,13 +1,13 @@
-import { PostCreateRequest, postCreate } from "@domain/functions/post/create.js";
-import { PostDeleteRequest, postDelete } from "@domain/functions/post/delete.js";
-import { PostEditRequest, postEdit } from "@domain/functions/post/edit.js";
-import { PostGetRequest, postGet } from "@domain/functions/post/get.js";
-import { PostGetManyRequest, postGetMany } from "@domain/functions/post/getMany.js";
-import { ok } from "@domain/helpers/index.js";
-import { expressMiddlewareAdapter, expressRouterAdapter } from "@infra/adapters/index.js";
-import { Database, FileStorage } from "@infra/gateways/index.js";
-import { isLoggedIn } from "@infra/middlewares/isLoggedIn.js";
-import { IRoute } from "@main/route.js";
+import { PostCreateRequest, postCreate } from "@domain/functions/post/create";
+import { PostDeleteRequest, postDelete } from "@domain/functions/post/delete";
+import { PostEditRequest, postEdit } from "@domain/functions/post/edit";
+import { PostGetRequest, postGet } from "@domain/functions/post/get";
+import { PostGetManyRequest, postGetMany } from "@domain/functions/post/getMany";
+import { ok } from "@domain/helpers";
+import { expressMiddlewareAdapter, expressRouterAdapter } from "@infra/adapters";
+import { Database, FileStorage } from "@infra/gateways";
+import { isLoggedIn } from "@infra/middlewares/isLoggedIn";
+import { IRoute } from "@main/route";
 import { Router } from "express";
 
 export class PostRoute implements IRoute {

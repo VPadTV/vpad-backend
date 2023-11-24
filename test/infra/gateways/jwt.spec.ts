@@ -1,4 +1,4 @@
-import { JwtGateway } from "@infra/gateways/index.js"
+import { JwtGateway } from "@infra/gateways"
 import { User } from "@prisma/client"
 // import Jwt from 'jsonwebtoken'
 

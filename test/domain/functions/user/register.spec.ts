@@ -1,7 +1,7 @@
-import { userRegister } from "@domain/functions/user/register.js"
-import { Errors } from "@domain/helpers/index.js"
+import { userRegister } from "@domain/functions/user/register"
+import { Errors } from "@domain/helpers"
 import { User } from "@prisma/client"
-import { prismaMock } from "@test/prismaMock.js"
+import { prismaMock } from "@test/prismaMock"
 
 jest.mock('@infra/gateways/storage')
 

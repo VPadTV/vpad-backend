@@ -1,2 +1,2 @@
-export * from './http/index.js'
-export * from './errors.js'
+export * from './http'
+export * from './errors'

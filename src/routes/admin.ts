@@ -1,12 +1,12 @@
-import { expressMiddlewareAdapter, expressRouterAdapter } from "@infra/adapters/index.js"
-import { IRoute } from "@main/route.js"
+import { expressMiddlewareAdapter, expressRouterAdapter } from "@infra/adapters"
+import { IRoute } from "@main/route"
 import { Router } from "express"
-import { ok } from "@domain/helpers/index.js"
-import { Database } from "@infra/gateways/index.js"
-import { AdminManageBanRequest, adminManageBan } from "@domain/functions/admin/manageBan.js"
-import { isAdmin } from "@infra/middlewares/isAdmin.js"
-import { AdminGetManyRequest, adminGetMany } from "@domain/functions/admin/getMany.js"
-import { AdminManageRequest, adminManage } from "@domain/functions/admin/manage.js"
+import { ok } from "@domain/helpers"
+import { Database } from "@infra/gateways"
+import { AdminManageBanRequest, adminManageBan } from "@domain/functions/admin/manageBan"
+import { isAdmin } from "@infra/middlewares/isAdmin"
+import { AdminGetManyRequest, adminGetMany } from "@domain/functions/admin/getMany"
+import { AdminManageRequest, adminManage } from "@domain/functions/admin/manage"
 
 export class AdminRoute implements IRoute {
   register(router: Router): void {

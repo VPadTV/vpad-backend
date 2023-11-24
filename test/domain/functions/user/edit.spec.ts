@@ -1,7 +1,7 @@
-import { userEdit } from "@domain/functions/user/edit.js"
-import { Errors } from "@domain/helpers/index.js"
+import { userEdit } from "@domain/functions/user/edit"
+import { Errors } from "@domain/helpers"
 import { User } from "@prisma/client"
-import { prismaMock } from "@test/prismaMock.js"
+import { prismaMock } from "@test/prismaMock"
 
 jest.mock('@infra/gateways/storage')
 
