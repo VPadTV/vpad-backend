@@ -1,5 +1,5 @@
-import { Errors } from "@domain/helpers"
-import { DatabaseClient } from "@infra/gateways/database"
+import { Errors } from "@domain/helpers/index.ts"
+import { DatabaseClient } from "@infra/gateways/database.ts"
 import { User } from "@prisma/client"
 
 export type AdminManageRequest = {

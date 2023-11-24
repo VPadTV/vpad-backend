@@ -1,4 +1,4 @@
-import { Body } from "@docs/helpers";
+import { Body } from "@docs/helpers.ts";
 
 export const simpleUser: Body = {
   id: "string",

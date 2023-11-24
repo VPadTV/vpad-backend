@@ -1,8 +1,8 @@
 /// <reference types="jest" />
 export declare type MockProxy<T> = {
   [K in keyof T]: T[K] extends (...args: infer A) => infer B
-    ? CalledWithMock<B, A>
-    : T[K]
+  ? CalledWithMock<B, A>
+  : T[K]
 } & T
 
 export interface CalledWithMock<T, Y extends any[]> extends jest.Mock<T, Y> {

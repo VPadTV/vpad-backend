@@ -1,4 +1,4 @@
-import { makeRoute } from "@docs/helpers";
+import { makeRoute } from "@docs/helpers.ts";
 
 export const adminId = {
   post: makeRoute({

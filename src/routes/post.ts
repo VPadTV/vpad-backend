@@ -1,13 +1,13 @@
-import { PostCreateRequest, postCreate } from "@domain/functions/post/create";
-import { PostDeleteRequest, postDelete } from "@domain/functions/post/delete";
-import { PostEditRequest, postEdit } from "@domain/functions/post/edit";
-import { PostGetRequest, postGet } from "@domain/functions/post/get";
-import { PostGetManyRequest, postGetMany } from "@domain/functions/post/getMany";
-import { ok } from "@domain/helpers";
-import { expressMiddlewareAdapter, expressRouterAdapter } from "@infra/adapters";
-import { Database, FileStorage } from "@infra/gateways";
-import { isLoggedIn } from "@infra/middlewares/isLoggedIn";
-import { IRoute } from "@main/route";
+import { PostCreateRequest, postCreate } from "@domain/functions/post/create.ts";
+import { PostDeleteRequest, postDelete } from "@domain/functions/post/delete.ts";
+import { PostEditRequest, postEdit } from "@domain/functions/post/edit.ts";
+import { PostGetRequest, postGet } from "@domain/functions/post/get.ts";
+import { PostGetManyRequest, postGetMany } from "@domain/functions/post/getMany.ts";
+import { ok } from "@domain/helpers/index.ts";
+import { expressMiddlewareAdapter, expressRouterAdapter } from "@infra/adapters/index.ts";
+import { Database, FileStorage } from "@infra/gateways/index.ts";
+import { isLoggedIn } from "@infra/middlewares/isLoggedIn.ts";
+import { IRoute } from "@main/route.ts";
 import { Router } from "express";
 
 export class PostRoute implements IRoute {

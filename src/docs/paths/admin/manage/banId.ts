@@ -1,5 +1,5 @@
-import { makeRoute } from "@docs/helpers";
-import { dateExample } from "@docs/schemas/dateExample"
+import { makeRoute } from "@docs/helpers.ts";
+import { dateExample } from "@docs/schemas/dateExample.ts"
 
 export const adminBanId = {
   post: makeRoute({

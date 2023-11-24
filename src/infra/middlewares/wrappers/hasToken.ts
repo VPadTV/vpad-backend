@@ -1,6 +1,6 @@
-import { Errors } from '@domain/helpers'
-import { MiddlewareData } from '@infra/adapters'
-import { JwtGateway, Database } from '@infra/gateways'
+import { Errors } from '@domain/helpers/index.ts'
+import { MiddlewareData } from '@infra/adapters/index.ts'
+import { JwtGateway, Database } from '@infra/gateways/index.ts'
 import { User } from '@prisma/client'
 
 export const tokenMiddleware = async (data: MiddlewareData, func: (user: User) => Promise<void>) => {

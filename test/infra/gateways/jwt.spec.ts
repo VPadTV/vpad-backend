@@ -1,4 +1,4 @@
-import { JwtGateway } from "@infra/gateways"
+import { JwtGateway } from "@infra/gateways/index.ts"
 import { User } from "@prisma/client"
 // import Jwt from 'jsonwebtoken'
 
@@ -6,8 +6,8 @@ import { User } from "@prisma/client"
 
 
 const mockUser = {
-    id: "default",
-    username: "sussybaka",
+  id: "default",
+  username: "sussybaka",
 } as User
 
 // beforeEach(() => {
@@ -16,20 +16,20 @@ const mockUser = {
 // })
 
 describe('jwt gateway', () => {
-    it('should create token and verifty it :)', async () => {
-        const token = JwtGateway.newToken(mockUser)
-        const decoded = JwtGateway.decode(token)
-        expect(decoded.sub).toStrictEqual('default#sussybaka')
-        expect(typeof decoded.exp).toBe('number')
-        expect(typeof decoded.iat).toBe('number')
-    })
+  it('should create token and verifty it :)', async () => {
+    const token = JwtGateway.newToken(mockUser)
+    const decoded = JwtGateway.decode(token)
+    expect(decoded.sub).toStrictEqual('default#sussybaka')
+    expect(typeof decoded.exp).toBe('number')
+    expect(typeof decoded.iat).toBe('number')
+  })
 
-    // it('should create token normally :)', async () => {
-    //     expect(JwtGateway.newToken(mockUser)).toBe('signed')
-    // })
-    // it('should verify token normally :)', async () => {
-    //     expect(JwtGateway.decode(token)).toStrictEqual({
-    //         sub: 'default#sussybaka'
-    //     })
-    // })
+  // it('should create token normally :)', async () => {
+  //     expect(JwtGateway.newToken(mockUser)).toBe('signed')
+  // })
+  // it('should verify token normally :)', async () => {
+  //     expect(JwtGateway.decode(token)).toStrictEqual({
+  //         sub: 'default#sussybaka'
+  //     })
+  // })
 })

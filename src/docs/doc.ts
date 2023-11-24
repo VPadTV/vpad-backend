@@ -1,13 +1,13 @@
-import { userRegister } from "./paths/user/register";
-import { userId } from "./paths/user/id";
-import { userLogin } from "./paths/user/login";
-import { postId } from "./paths/post/id";
-import { postNoId } from "./paths/post/noId";
-import { commentId } from "./paths/comment/id";
-import { commentNoId } from "./paths/comment/noId";
-import { adminNoId } from "./paths/admin/noId";
-import { adminId } from "./paths/admin/manage/adminId";
-import { adminBanId } from "./paths/admin/manage/banId";
+import { userRegister } from "./paths/user/register.ts";
+import { userId } from "./paths/user/id.ts";
+import { userLogin } from "./paths/user/login.ts";
+import { postId } from "./paths/post/id.ts";
+import { postNoId } from "./paths/post/noId.ts";
+import { commentId } from "./paths/comment/id.ts";
+import { commentNoId } from "./paths/comment/noId.ts";
+import { adminNoId } from "./paths/admin/noId.ts";
+import { adminId } from "./paths/admin/manage/adminId.ts";
+import { adminBanId } from "./paths/admin/manage/banId.ts";
 
 export default {
   openapi: "3.0.0",

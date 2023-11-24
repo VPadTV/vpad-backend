@@ -1,9 +1,10 @@
-import { FileStorage } from "@infra/gateways"
-import { DatabaseClient } from "@infra/gateways/database"
+import { FileStorage } from "@infra/gateways/index.ts"
+import { DatabaseClient } from "@infra/gateways/database.ts"
 import { User } from "@prisma/client"
 
 export type PostCreateRequest = {
   user: User
+  title: string
   text: string
   mediaBase64: string
   thumbBase64?: string
@@ -24,6 +25,7 @@ export async function postCreate(req: PostCreateRequest, db: DatabaseClient, sto
   const post = await db.post.create({
     data: {
       userId: req.user.id,
+      title: req.title,
       text: req.text,
       mediaUrl,
       thumbUrl,

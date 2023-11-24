@@ -1,10 +1,12 @@
 {
   "name": "TODO-backend",
   "version": "0.0.1",
-  "main": "index.js",
   "license": "MIT",
+  "main": "./lib/src/main/server.prod.js",
+  "type": "module",
   "scripts": {
-    "start": "",
+    "start": "tsc && pm2 start lib/src/main/server.prod.js",
+    "stop": "pm2 stop server.prod",
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only ./src/main/server.dev.ts --watch-files './docs/swagger.yaml'",
     "test": "jest --no-cache --coverage --silent --forceExit --runInBand --detectOpenHandles",
     "test-watch": "jest --no-cache --silent=false --runInBand --watch --no-coverage",
@@ -26,6 +28,7 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "pg": "^8.9.0",
+    "pm2": "^5.3.0",
     "prisma": "^5.6.0",
     "swagger-ui-express": "^5.0.0",
     "ts-jest": "^29.1.1",

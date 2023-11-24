@@ -1,13 +1,13 @@
-import { expressMiddlewareAdapter, expressRouterAdapter } from "@infra/adapters";
-import { IRoute } from "@main/route";
+import { expressMiddlewareAdapter, expressRouterAdapter } from "@infra/adapters/index.ts";
+import { IRoute } from "@main/route.ts";
 import { Router } from "express";
-import { ok } from "@domain/helpers";
-import { isLoggedIn } from "@infra/middlewares/isLoggedIn";
-import { UserGetRequest, userGet } from "@domain/functions/user/get";
-import { UserLoginRequest, userLogin } from "@domain/functions/user/login";
-import { UserRegisterRequest, userRegister } from "@domain/functions/user/register";
-import { UserEditRequest, userEdit } from "@domain/functions/user/edit";
-import { Database, FileStorage } from "@infra/gateways";
+import { ok } from "@domain/helpers/index.ts";
+import { isLoggedIn } from "@infra/middlewares/isLoggedIn.ts";
+import { UserGetRequest, userGet } from "@domain/functions/user/get.ts";
+import { UserLoginRequest, userLogin } from "@domain/functions/user/login.ts";
+import { UserRegisterRequest, userRegister } from "@domain/functions/user/register.ts";
+import { UserEditRequest, userEdit } from "@domain/functions/user/edit.ts";
+import { Database, FileStorage } from "@infra/gateways/index.ts";
 
 export class UserRoute implements IRoute {
   register(router: Router): void {

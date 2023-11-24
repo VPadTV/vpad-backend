@@ -1,6 +1,6 @@
-import { Errors } from "@domain/helpers"
-import { SimpleUser } from "@domain/helpers/mappers/user"
-import { DatabaseClient } from "@infra/gateways/database"
+import { Errors } from "@domain/helpers/index.ts"
+import { SimpleUser } from "@domain/helpers/mappers/user.ts"
+import { DatabaseClient } from "@infra/gateways/database.ts"
 
 export type UserGetManyRequest = {
   usernameSearch?: string

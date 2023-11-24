@@ -1,2 +1,2 @@
-export * from './expressMiddleware'
-export * from './expressRouter'
+export * from './expressMiddleware.ts'
+export * from './expressRouter.ts'

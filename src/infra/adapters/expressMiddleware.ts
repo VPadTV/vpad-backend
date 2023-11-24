@@ -1,4 +1,4 @@
-import { HttpError } from '@domain/helpers'
+import { HttpError } from '@domain/helpers/errors.ts'
 import { Response, Request, NextFunction } from 'express'
 
 export type MiddlewareData = {

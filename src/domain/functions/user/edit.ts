@@ -1,7 +1,7 @@
-import { Errors } from "@domain/helpers"
-import { emailRegex, nameRegex, passwordRegex } from "@domain/helpers/regex"
-import { DatabaseClient } from "@infra/gateways/database"
-import { FileStorage } from "@infra/gateways/storage"
+import { Errors } from "@domain/helpers/index.ts"
+import { emailRegex, nameRegex, passwordRegex } from "@domain/helpers/regex.ts"
+import { DatabaseClient } from "@infra/gateways/database.ts"
+import { FileStorage } from "@infra/gateways/storage.ts"
 import bcrypt from "bcrypt"
 
 export type UserEditRequest = {
