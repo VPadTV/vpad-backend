@@ -10,13 +10,11 @@ export type CommentGetRequest = {
 
 export type CommentGetResponse = {
   text: string
-  children: {
-    id: string
-    text: string
-    meta: { user: SimpleUser }
-  }[]
+  childrenCount: number
   meta: {
     user: SimpleUser
+    createdAt: string
+    updatedAt: string
   }
 }
 
@@ -25,33 +23,24 @@ export async function commentGet(req: CommentGetRequest, db: DatabaseClient): Pr
     where: { id: req.id },
     select: {
       text: true,
-      updatedAt: true,
       user: { select: SimpleUser.selector },
-      children: {
-        select: {
-          id: true,
-          text: true,
-          user: { select: SimpleUser.selector },
-          children: {
-            select: {
-              id: true,
-              text: true,
-              user: { select: SimpleUser.selector },
-            }
-          }
-        }
+      createdAt: true,
+      updatedAt: true,
+      _count: {
+        select: { children: true }
       }
     }
   })
+
   if (!comment) throw Errors.NOT_FOUND()
 
   return {
     text: comment.text,
-    children: comment.children.map(comment => ({
-      id: comment.id,
-      text: comment.text,
-      meta: { user: comment.user }
-    })),
-    meta: { user: comment.user }
+    childrenCount: comment._count.children,
+    meta: {
+      user: comment.user,
+      createdAt: comment.createdAt.toISOString(),
+      updatedAt: comment.updatedAt.toISOString(),
+    },
   }
 }

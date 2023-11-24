@@ -5,7 +5,8 @@ import { User } from "@prisma/client"
 
 export type CommentGetManyRequest = {
   user: User
-  postId: string
+  postId?: string
+  parentId?: string
   sortBy: "latest" | "oldset" // TODO: Implement comment sorting
 
   page: number
@@ -15,8 +16,11 @@ export type CommentGetManyRequest = {
 export type CommentGetManyResponse = Paginate<{
   id: string
   text: string
+  childrenCount: number
   meta: {
     user: SimpleUser
+    createdAt: string,
+    updatedAt: string,
   }
 }>
 
@@ -25,24 +29,37 @@ export async function commentGetMany(req: CommentGetManyRequest, db: DatabaseCli
 
   const [comments, total] = await db.$transaction([
     db.comment.findMany({
-      where: { postId: req.postId },
+      where: {
+        postId: req.postId ?? undefined,
+        parentId: req.parentId ?? undefined
+      },
       select: {
         id: true,
         text: true,
-        updatedAt: true,
         user: { select: SimpleUser.selector },
+        createdAt: true,
+        updatedAt: true,
+        _count: {
+          select: { children: true }
+        }
       }
     }),
     db.comment.count({
-      where: { postId: req.postId }
+      where: {
+        postId: req.postId ?? undefined,
+        parentId: req.parentId ?? undefined
+      }
     }),
   ])
 
   return paginate(total, req.page, offset, req.size, comments.map(comment => ({
     id: comment.id,
     text: comment.text,
+    childrenCount: comment._count.children,
     meta: {
-      user: comment.user
+      user: comment.user,
+      createdAt: comment.createdAt.toISOString(),
+      updatedAt: comment.updatedAt.toISOString(),
     }
   })))
 }

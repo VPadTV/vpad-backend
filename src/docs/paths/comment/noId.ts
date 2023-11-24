@@ -1,13 +1,15 @@
 import { makeRoute } from "@docs/helpers";
+import { dateExample } from "@docs/schemas/dateExample";
 import { simpleUser } from "@docs/schemas/simpleUser";
 
 export const commentNoId = {
   get: makeRoute({
     tag: "Comment",
-    summary: "Gets many comments",
+    summary: "Returns many comments",
     security: false,
     query: {
       postId: "string",
+      parentId: "string",
       sortBy: "latest | oldest",
       page: 1,
       size: 30,
@@ -21,8 +23,11 @@ export const commentNoId = {
       data: {
         id: "string",
         text: "string",
+        childrenCount: 10,
         meta: {
-          user: simpleUser
+          user: simpleUser,
+          createdAt: dateExample,
+          updatedAt: dateExample,
         }
       }
     },

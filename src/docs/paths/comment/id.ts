@@ -10,13 +10,11 @@ export const commentId = {
     path: { id: "string" },
     success: {
       text: "string",
-      children: {
-        id: "string",
-        text: "string",
-        meta: { user: simpleUser }
-      },
+      childrenCount: 10,
       meta: {
         user: simpleUser,
+        createdAt: dateExample,
+        updatedAt: dateExample,
       },
     },
     404: "Provided ID didnt resolve to any comment",

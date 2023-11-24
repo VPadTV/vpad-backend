@@ -19,6 +19,8 @@ export type PostGetResponse = {
     dislikes: number
     views: number
     myVote: number
+    createdAt: string
+    updatedAt: string
   }
 }
 
@@ -34,6 +36,8 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
       user: {
         select: SimpleUser.selector
       },
+      createdAt: true,
+      updatedAt: true,
     }
   })
   if (!post) throw Errors.NOT_FOUND()
@@ -63,7 +67,9 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
       likes: likes ?? 0,
       dislikes: dislikes ?? 0,
       views: views ?? 0,
-      myVote: myVote?.vote ?? 0
+      myVote: myVote?.vote ?? 0,
+      createdAt: post.createdAt.toISOString(),
+      updatedAt: post.updatedAt.toISOString(),
     }
   }
 }

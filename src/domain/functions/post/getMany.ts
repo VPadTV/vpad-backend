@@ -22,6 +22,7 @@ export type PostGetManyResponse = Paginate<{
   meta: {
     user: SimpleUser
     views: number
+    createdAt: string
   }
 }>
 
@@ -66,6 +67,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
         text: true,
         thumbUrl: true,
         user: { select: SimpleUser.selector },
+        createdAt: true,
         _count: {
           select: {
             votes: true
@@ -91,6 +93,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
     meta: {
       user: post.user,
       views: post._count.votes,
+      createdAt: post.createdAt.toISOString(),
     }
   })))
 }
