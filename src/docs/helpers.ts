@@ -54,7 +54,7 @@ export type GenerateRoute = {
   [error: number]: string
 }
 
-export const makeObject = (args?: Body) => {
+const makeObject = (args?: Body) => {
   if (!args) return undefined
 
   let swb: SwaggerObject = {}
@@ -80,10 +80,6 @@ export const makeObject = (args?: Body) => {
       }
   }
   return swb
-}
-
-export const obj = (args: Body) => {
-  return makeObject(args)!
 }
 
 const makeParameters = (type: "query" | "path", args?: Parameters) => {
@@ -127,6 +123,10 @@ const makeErrors = (errors?: { [error: number]: string }) => {
     }
   }
   return swe
+}
+
+export const obj = (args: Body) => {
+  return makeObject(args)!
 }
 
 export const makeRoute = (args: GenerateRoute) => {
