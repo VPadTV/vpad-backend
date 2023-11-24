@@ -1,7 +1,7 @@
-import { userGet } from "@domain/functions/user/get.ts"
-import { Errors } from "@domain/helpers/index.ts"
+import { userGet } from "@domain/functions/user/get.js"
+import { Errors } from "@domain/helpers/index.js"
 import { User } from "@prisma/client"
-import { prismaMock } from "@test/prismaMock.ts"
+import { prismaMock } from "@test/prismaMock.js"
 
 const mockUser = {
   id: "default",

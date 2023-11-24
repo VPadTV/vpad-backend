@@ -1,6 +1,6 @@
-import { SimpleUser } from "@domain/helpers/mappers/user.ts"
-import { Paginate, paginate } from "@domain/helpers/paginate.ts"
-import { DatabaseClient } from "@infra/gateways/database.ts"
+import { SimpleUser } from "@domain/helpers/mappers/user.js"
+import { Paginate, paginate } from "@domain/helpers/paginate.js"
+import { DatabaseClient } from "@infra/gateways/database.js"
 import { User } from "@prisma/client"
 
 export type CommentGetManyRequest = {

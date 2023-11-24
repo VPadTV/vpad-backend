@@ -1,5 +1,5 @@
-import { App } from './app.ts'
-import { cors } from '@infra/middlewares/cors.ts'
+import { App } from './app.js'
+import { cors } from '@infra/middlewares/cors.js'
 import * as dotenv from 'dotenv'
 dotenv.config({
   path: '.local.env'

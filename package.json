@@ -5,14 +5,15 @@
   "main": "./lib/src/main/server.prod.js",
   "type": "module",
   "scripts": {
-    "start": "tsc && pm2 start lib/src/main/server.prod.js",
+    "start": "tsc && resolve-tspaths && pm2 start lib/src/main/server.prod.js",
     "stop": "pm2 stop server.prod",
+    "build": "tsc && resolve-tspaths",
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only ./src/main/server.dev.ts --watch-files './docs/swagger.yaml'",
     "test": "jest --no-cache --coverage --silent --forceExit --runInBand --detectOpenHandles",
     "test-watch": "jest --no-cache --silent=false --runInBand --watch --no-coverage",
     "migrate": "prisma migrate dev && prisma generate",
     "lint": "eslint . --ext js,ts --fix",
-    "check": "tsc --noEmit"
+    "check": "tsc && resolve-tspaths --noEmit"
   },
   "dependencies": {
     "@prisma/client": "5.6.0",
@@ -30,6 +31,7 @@
     "pg": "^8.9.0",
     "pm2": "^5.3.0",
     "prisma": "^5.6.0",
+    "resolve-tspaths": "^0.8.17",
     "swagger-ui-express": "^5.0.0",
     "ts-jest": "^29.1.1",
     "typescript": "^5.3.2",

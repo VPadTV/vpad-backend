@@ -1,5 +1,5 @@
-import { FileStorage } from "@infra/gateways/index.ts"
-import { DatabaseClient } from "@infra/gateways/database.ts"
+import { FileStorage } from "@infra/gateways/index.js"
+import { DatabaseClient } from "@infra/gateways/database.js"
 import { User } from "@prisma/client"
 
 export type PostCreateRequest = {

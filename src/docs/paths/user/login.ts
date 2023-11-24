@@ -1,4 +1,4 @@
-import { makeRoute } from "@docs/helpers.ts";
+import { makeRoute } from "@docs/helpers.js";
 
 export const userLogin = {
   post: makeRoute({

@@ -1,4 +1,4 @@
-import { DatabaseClient } from "@infra/gateways/database.ts"
+import { DatabaseClient } from "@infra/gateways/database.js"
 import { User } from "@prisma/client"
 
 export type CommentEditRequest = {

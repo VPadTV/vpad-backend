@@ -1,6 +1,6 @@
-import { Errors } from "@domain/helpers/index.ts"
-import { emailRegex, nameRegex, passwordRegex } from "@domain/helpers/regex.ts"
-import { DatabaseClient } from "@infra/gateways/database.ts"
+import { Errors } from "@domain/helpers/index.js"
+import { emailRegex, nameRegex, passwordRegex } from "@domain/helpers/regex.js"
+import { DatabaseClient } from "@infra/gateways/database.js"
 import bcrypt from "bcrypt"
 
 export type UserRegisterRequest = {

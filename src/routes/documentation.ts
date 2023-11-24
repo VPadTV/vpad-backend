@@ -1,7 +1,7 @@
-import { IRoute } from "@main/route.ts";
+import { IRoute } from "@main/route.js";
 import { Router } from "express";
 import swaggerUi from "swagger-ui-express"
-import swaggerDocument from "@docs/doc.ts"
+import swaggerDocument from "@docs/doc.js"
 
 export class DocumentationRoute implements IRoute {
   register(router: Router): void {

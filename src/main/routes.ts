@@ -1,9 +1,9 @@
-import { IRoute } from "@main/route.ts";
-import { UserRoute } from "../routes/user.ts";
-import { AdminRoute } from "@controllers/admin.ts";
-import { DocumentationRoute } from "@controllers/documentation.ts";
-import { PostRoute } from "@controllers/post.ts";
-import { CommentRoute } from "@controllers/comment.ts";
+import { IRoute } from "@main/route.js";
+import { UserRoute } from "../routes/user.js";
+import { AdminRoute } from "@controllers/admin.js";
+import { DocumentationRoute } from "@controllers/documentation.js";
+import { PostRoute } from "@controllers/post.js";
+import { CommentRoute } from "@controllers/comment.js";
 
 export default {
   '/user': new UserRoute(),

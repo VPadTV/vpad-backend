@@ -14,8 +14,6 @@
     "moduleResolution": "nodenext",
     "target": "esnext",
     "lib": ["esnext"],
-    "noEmit": true,
-    "allowImportingTsExtensions": true,
     "removeComments": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,

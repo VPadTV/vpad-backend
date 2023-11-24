@@ -1,6 +1,6 @@
-import { Errors } from "@domain/helpers/index.ts"
-import { FileStorage } from "@infra/gateways/index.ts"
-import { DatabaseClient } from "@infra/gateways/database.ts"
+import { Errors } from "@domain/helpers/index.js"
+import { FileStorage } from "@infra/gateways/index.js"
+import { DatabaseClient } from "@infra/gateways/database.js"
 import { User } from "@prisma/client"
 
 export type PostEditRequest = {

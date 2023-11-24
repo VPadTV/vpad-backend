@@ -1,13 +1,13 @@
-import { userRegister } from "./paths/user/register.ts";
-import { userId } from "./paths/user/id.ts";
-import { userLogin } from "./paths/user/login.ts";
-import { postId } from "./paths/post/id.ts";
-import { postNoId } from "./paths/post/noId.ts";
-import { commentId } from "./paths/comment/id.ts";
-import { commentNoId } from "./paths/comment/noId.ts";
-import { adminNoId } from "./paths/admin/noId.ts";
-import { adminId } from "./paths/admin/manage/adminId.ts";
-import { adminBanId } from "./paths/admin/manage/banId.ts";
+import { userRegister } from "./paths/user/register.js";
+import { userId } from "./paths/user/id.js";
+import { userLogin } from "./paths/user/login.js";
+import { postId } from "./paths/post/id.js";
+import { postNoId } from "./paths/post/noId.js";
+import { commentId } from "./paths/comment/id.js";
+import { commentNoId } from "./paths/comment/noId.js";
+import { adminNoId } from "./paths/admin/noId.js";
+import { adminId } from "./paths/admin/manage/adminId.js";
+import { adminBanId } from "./paths/admin/manage/banId.js";
 
 export default {
   openapi: "3.0.0",

@@ -1,5 +1,5 @@
 import express from 'express'
-import routes from './routes.ts';
+import routes from './routes.js';
 
 export class App {
   public app: express.Application

@@ -1,5 +1,5 @@
-import { makeRoute } from "@docs/helpers.ts";
-import { simpleUser } from "@docs/schemas/simpleUser.ts";
+import { makeRoute } from "@docs/helpers.js";
+import { simpleUser } from "@docs/schemas/simpleUser.js";
 
 export const adminNoId = {
   get: makeRoute({
