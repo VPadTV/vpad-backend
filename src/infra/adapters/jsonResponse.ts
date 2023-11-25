@@ -1,13 +1,15 @@
 import { HttpError, HttpResponse } from '@domain/helpers'
 import { Response, Request } from 'express'
 
-export function expressRouterAdapter<T, U extends HttpResponse>(fn: (request: T) => Promise<U>) {
+export function jsonResponse<T, U extends HttpResponse>(fn: (request: T) => Promise<U>) {
     return async (req: Request, res: Response) => {
         const body = Array.isArray(req.body) ? { data: req.body } : req.body
 
         try {
             const { statusCode, data } = await fn({
                 ...body,
+                ...req.file,
+                ...req.files,
                 ...req.params,
                 ...req.query,
                 ...res.locals,

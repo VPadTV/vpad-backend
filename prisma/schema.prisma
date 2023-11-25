@@ -49,12 +49,18 @@ model Comment {
     updatedAt DateTime @updatedAt
 }
 
+enum MediaType {
+    VIDEO
+    IMAGE
+}
+
 model Post {
-    id       String  @id @default(cuid())
-    title    String
-    text     String
-    mediaUrl String?
-    thumbUrl String?
+    id        String    @id @default(cuid())
+    title     String
+    text      String
+    mediaUrl  String
+    mediaType MediaType
+    thumbUrl  String?
 
     user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict)
     userId String

@@ -6,7 +6,7 @@ export type MiddlewareData = {
     params: { [key: string]: string };
 }
 
-export function expressMiddlewareAdapter(fn: (request: MiddlewareData) => Promise<any>) {
+export function middleware(fn: (request: MiddlewareData) => Promise<any>) {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
             const data = await fn({

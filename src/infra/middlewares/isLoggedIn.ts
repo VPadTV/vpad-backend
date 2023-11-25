@@ -1,4 +1,4 @@
-import { MiddlewareData } from '@infra/adapters/expressMiddleware'
+import { MiddlewareData } from '@infra/adapters/middleware'
 import { tokenMiddleware } from './wrappers/hasToken'
 
 export const isLoggedIn = async (data: MiddlewareData) =>

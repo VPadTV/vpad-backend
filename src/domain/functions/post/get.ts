@@ -11,7 +11,8 @@ export type PostGetRequest = {
 export type PostGetResponse = {
     title: string
     text: string
-    mediaUrl?: string
+    mediaType: string
+    mediaUrl: string
     thumbUrl?: string
     meta: {
         user: SimpleUser
@@ -31,6 +32,7 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
             id: true,
             title: true,
             text: true,
+            mediaType: true,
             mediaUrl: true,
             thumbUrl: true,
             user: {
@@ -60,7 +62,8 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
     return {
         title: post.title,
         text: post.text,
-        mediaUrl: post.mediaUrl ?? undefined,
+        mediaUrl: post.mediaUrl,
+        mediaType: post.mediaType,
         thumbUrl: post.thumbUrl ?? undefined,
         meta: {
             user: post.user,

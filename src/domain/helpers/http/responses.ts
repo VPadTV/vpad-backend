@@ -1,19 +1,23 @@
-export type HttpResponse<T = any> = {
-    statusCode: number
-    data: T
+export type Json = {
+    [key: string | number]: any
 }
 
-export const ok = <T = any>(data: T): HttpResponse<T> => ({
+export type HttpResponse = {
+    statusCode: number
+    data: Json
+}
+
+export const ok = (data: Json): HttpResponse => ({
     statusCode: 200,
     data,
 })
 
-export const created = <T = any>(data: T): HttpResponse<T> => ({
+export const created = (data: Json): HttpResponse => ({
     statusCode: 201,
     data,
 })
 
-export const noContent = <T = any>(data: T): HttpResponse<T> => ({
+export const noContent = (data: Json): HttpResponse => ({
     statusCode: 204,
     data,
 })

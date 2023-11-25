@@ -14,6 +14,8 @@ export type AdminManageResponse = {
 }
 
 export async function adminManage(req: AdminManageRequest, db: DatabaseClient): Promise<AdminManageResponse> {
+    if (!req.id) throw Errors.MISSING_ID()
+    if (!req.admin) throw Errors.MISSING_ADMIN()
     if (req.id === req.user.id)
         throw Errors.FORBIDDEN()
 

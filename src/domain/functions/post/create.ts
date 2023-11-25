@@ -1,13 +1,15 @@
+import { Errors } from "@domain/helpers"
 import { Storage } from "@infra/gateways"
 import { DatabaseClient } from "@infra/gateways/database"
+import { FileRawUpload } from "@infra/middlewares"
 import { User } from "@prisma/client"
 
 export type PostCreateRequest = {
     user: User
     title: string
     text: string
-    mediaBase64: string
-    thumbBase64?: string
+    media: FileRawUpload
+    thumb?: FileRawUpload
 }
 
 export type PostCreateResponse = {
@@ -15,14 +17,19 @@ export type PostCreateResponse = {
 }
 
 export async function postCreate(req: PostCreateRequest, db: DatabaseClient, storage: Storage): Promise<PostCreateResponse> {
-    const mediaData = storage.getFileData(req.mediaBase64)
-    const thumbData = storage.getFileData(req.thumbBase64)
+    if (!req.title) throw Errors.MISSING_TITLE()
+    if (!req.text) throw Errors.MISSING_TEXT()
+    if (!req.media) throw Errors.MISSING_MEDIA()
+
+    const mediaData = storage.getFileData(req.media)!
+    const thumbData = storage.getFileData(req.thumb)
     const post = await db.post.create({
         data: {
             userId: req.user.id,
             title: req.title,
             text: req.text,
-            mediaUrl: mediaData?.url,
+            mediaType: mediaData.type,
+            mediaUrl: mediaData.url,
             thumbUrl: thumbData?.url
         }
     })

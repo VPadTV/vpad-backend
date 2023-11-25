@@ -37,17 +37,18 @@ export type PostSort = {
 export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): Promise<PostGetManyResponse> {
     let orderBy: PostSort
     switch (req.sortBy) {
-        case "latest":
-            orderBy = { createdAt: "desc" }
-            break
-        case "oldest":
-            orderBy = { createdAt: "asc" }
+        case "low-views":
+            orderBy = { votes: { _count: "asc" } }
             break
         case "high-views":
             orderBy = { votes: { _count: "desc" } }
             break
-        case "low-views":
-            orderBy = { votes: { _count: "asc" } }
+        case "oldest":
+            orderBy = { createdAt: "asc" }
+            break
+        case "latest":
+        default:
+            orderBy = { createdAt: "desc" }
             break
     }
     const offset = (+req.page - 1) * +req.size

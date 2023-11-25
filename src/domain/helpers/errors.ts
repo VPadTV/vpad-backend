@@ -28,5 +28,13 @@ export const Errors = {
     INVALID_FILE: () => badRequest("Invalid File"),
     INCORRECT_PASSWORD: () => badRequest("Incorrect Password"),
     MUST_INCLUDE_EMAIL_OR_USERNAME: () => badRequest("Must Include Email Or Username"),
+    MISSING_TITLE: () => badRequest("Missing title"),
+    MISSING_TEXT: () => badRequest("Missing text"),
+    MISSING_MEDIA: () => badRequest("Missing media"),
+    MISSING_ID: () => badRequest("Missing ID"),
+    MISSING_ADMIN: () => badRequest("Missing admin (must be true or false)"),
+    MISSING_NAME: () => badRequest("Missing name"),
+    MISSING_EMAIL: () => badRequest("Missing email"),
+    MISSING_PASSWORD: () => badRequest("Missing password"),
     BANNED: () => forbidden("Banned"),
 }

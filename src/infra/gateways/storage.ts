@@ -1,12 +1,14 @@
 import AWS from 'aws-sdk'
 import { MimeTypes } from './mimeTypes'
-import { Errors } from '@domain/helpers'
-import { randomUUID } from 'crypto';
+import { randomBytes } from 'crypto';
+import { FileRawUpload } from '@infra/middlewares';
+import { MediaType } from '@prisma/client';
 
-export type FileData = {
+export type FileUpload = {
     id: string;
     mimeType: string;
     extension: string;
+    type: MediaType
     buffer: Buffer;
     url: string
 }
@@ -30,27 +32,26 @@ export class Storage {
         return this.instance
     }
 
-    getFileData(fileBase64?: string, fileId?: string): FileData | undefined {
-        if (!fileBase64) return undefined
-        if (!fileId) fileId = randomUUID()
-        const matches = fileBase64.match(/^data:([a-zA-Z-+/.]+);base64,(.+)$/)
-        if (matches?.length !== 3)
-            throw Errors.INVALID_FILE()
-        const extension = MimeTypes.extension(matches[1])
-        return {
-            id: fileId,
-            mimeType: matches[1],
-            extension,
-            buffer: Buffer.from(matches[2], 'base64'),
-            url: this.getUrl(fileId, extension)
-        }
-    }
-
     getUrl(id: string, extension: string) {
         return `https://${process.env.BB_BUCKET!}.s3.backblazeb2.com/${id}.${extension}`
     }
 
-    async upload(fileData?: FileData): Promise<void> {
+    getFileData(file?: FileRawUpload): FileUpload | undefined {
+        if (!file) return undefined
+        let fileId: string = randomBytes(16).toString('hex')
+        const extension = MimeTypes.extension(file.mimetype)
+        const type = MimeTypes.getType(file.mimetype)
+        return {
+            id: fileId,
+            mimeType: file.mimetype,
+            extension,
+            type,
+            buffer: file.buffer,
+            url: this.getUrl(fileId, extension)
+        }
+    }
+
+    async upload(fileData?: FileUpload): Promise<void> {
         if (!fileData) return
         await this.client
             .putObject({
