@@ -7,7 +7,7 @@ export type CommentGetManyRequest = {
     user: User
     postId?: string
     parentId?: string
-    sortBy: "latest" | "oldset" // TODO: Implement comment sorting
+    sortBy: "latest" | "oldest"
 
     page: number
     size: number
@@ -27,6 +27,7 @@ export type CommentGetManyResponse = Paginate<{
 export async function commentGetMany(req: CommentGetManyRequest, db: DatabaseClient): Promise<CommentGetManyResponse> {
     const offset = (req.page - 1) * req.size
 
+    const orderByUpdatedAt = req.sortBy === "oldest" ? "asc" : "desc"
     const [comments, total] = await db.$transaction([
         db.comment.findMany({
             where: {
@@ -42,6 +43,9 @@ export async function commentGetMany(req: CommentGetManyRequest, db: DatabaseCli
                 _count: {
                     select: { children: true }
                 }
+            },
+            orderBy: {
+                updatedAt: orderByUpdatedAt
             }
         }),
         db.comment.count({
