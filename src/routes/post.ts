@@ -5,7 +5,7 @@ import { PostGetRequest, postGet } from "@domain/functions/post/get";
 import { PostGetManyRequest, postGetMany } from "@domain/functions/post/getMany";
 import { ok } from "@domain/helpers";
 import { expressMiddlewareAdapter, expressRouterAdapter } from "@infra/adapters";
-import { Database, FileStorage } from "@infra/gateways";
+import { Database, StorageGateway } from "@infra/gateways";
 import { isLoggedIn } from "@infra/middlewares/isLoggedIn";
 import { IRoute } from "@main/route";
 import { Router } from "express";
@@ -15,7 +15,7 @@ export class PostRoute implements IRoute {
     router.post('/',
       expressMiddlewareAdapter(isLoggedIn),
       expressRouterAdapter(async (request: PostCreateRequest) => {
-        return ok(await postCreate(request, Database.get(), FileStorage.get()))
+        return ok(await postCreate(request, Database.get(), StorageGateway.get()))
       }))
     router.get('/',
       expressRouterAdapter(async (request: PostGetManyRequest) => {
@@ -28,12 +28,12 @@ export class PostRoute implements IRoute {
     router.put('/:id',
       expressMiddlewareAdapter(isLoggedIn),
       expressRouterAdapter(async (request: PostEditRequest) => {
-        return ok(await postEdit(request, Database.get(), FileStorage.get()))
+        return ok(await postEdit(request, Database.get(), StorageGateway.get()))
       }))
     router.delete('/:id',
       expressMiddlewareAdapter(isLoggedIn),
       expressRouterAdapter(async (request: PostDeleteRequest) => {
-        return ok(await postDelete(request, Database.get(), FileStorage.get()))
+        return ok(await postDelete(request, Database.get(), StorageGateway.get()))
       }))
   }
 }

@@ -7,7 +7,7 @@ import { UserGetRequest, userGet } from "@domain/functions/user/get";
 import { UserLoginRequest, userLogin } from "@domain/functions/user/login";
 import { UserRegisterRequest, userRegister } from "@domain/functions/user/register";
 import { UserEditRequest, userEdit } from "@domain/functions/user/edit";
-import { Database, FileStorage } from "@infra/gateways";
+import { Database, StorageGateway } from "@infra/gateways";
 
 export class UserRoute implements IRoute {
   register(router: Router): void {
@@ -30,7 +30,7 @@ export class UserRoute implements IRoute {
     router.put('/:id',
       expressMiddlewareAdapter(isLoggedIn),
       expressRouterAdapter(async (request: UserEditRequest) => {
-        return ok(await userEdit(request, Database.get(), FileStorage.get()))
+        return ok(await userEdit(request, Database.get(), StorageGateway.get()))
       }))
   }
 }

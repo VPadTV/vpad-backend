@@ -1,5 +1,5 @@
 import { Errors } from "@domain/helpers"
-import { FileStorage } from "@infra/gateways"
+import { StorageGateway } from "@infra/gateways"
 import { DatabaseClient } from "@infra/gateways/database"
 import { User } from "@prisma/client"
 
@@ -13,7 +13,7 @@ export type PostEditRequest = {
 
 export type PostEditResponse = {}
 
-export async function postEdit(req: PostEditRequest, db: DatabaseClient, storage: FileStorage): Promise<PostEditResponse> {
+export async function postEdit(req: PostEditRequest, db: DatabaseClient, storage: StorageGateway): Promise<PostEditResponse> {
   let mediaUrl: string | undefined
   const post = await db.post.findFirst({ where: { id: req.id, userId: req.user.id } })
 

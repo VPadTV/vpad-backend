@@ -1,5 +1,5 @@
 import { Errors } from "@domain/helpers"
-import { FileStorage } from "@infra/gateways"
+import { StorageGateway } from "@infra/gateways"
 import { DatabaseClient } from "@infra/gateways/database"
 import { User } from "@prisma/client"
 
@@ -10,7 +10,7 @@ export type PostDeleteRequest = {
 
 export type PostDeleteResponse = {}
 
-export async function postDelete(req: PostDeleteRequest, db: DatabaseClient, storage: FileStorage): Promise<PostDeleteResponse> {
+export async function postDelete(req: PostDeleteRequest, db: DatabaseClient, storage: StorageGateway): Promise<PostDeleteResponse> {
   const post = await db.post.delete({
     where: { id: req.id, userId: req.user.id }
   })

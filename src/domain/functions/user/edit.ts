@@ -1,7 +1,7 @@
 import { Errors } from "@domain/helpers"
 import { emailRegex, nameRegex, passwordRegex } from "@domain/helpers/regex"
 import { DatabaseClient } from "@infra/gateways/database"
-import { FileStorage } from "@infra/gateways/storage"
+import { StorageGateway } from "@infra/gateways/storage"
 import bcrypt from "bcrypt"
 
 export type UserEditRequest = {
@@ -17,7 +17,7 @@ export type UserEditResponse = {
   id: string
 }
 
-export async function userEdit(req: UserEditRequest, db: DatabaseClient, storage: FileStorage): Promise<UserEditResponse> {
+export async function userEdit(req: UserEditRequest, db: DatabaseClient, storage: StorageGateway): Promise<UserEditResponse> {
   if (req.username && !nameRegex().test(req.username)) {
     throw Errors.INVALID_NAME()
   }
@@ -36,7 +36,7 @@ export async function userEdit(req: UserEditRequest, db: DatabaseClient, storage
   }
   let profilePhotoUrl: string | undefined = undefined
   if (req.profilePhotoBase64) {
-    profilePhotoUrl = await storage.upload(req.profilePhotoBase64)
+    profilePhotoUrl = await storage.upload(req.profilePhotoBase64) || undefined
   }
 
   const user = await db.user.update(

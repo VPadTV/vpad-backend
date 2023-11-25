@@ -21,7 +21,7 @@
     "baseUrl": ".",
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "outDir": "lib",
+    "outDir": "dist",
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "emitDecoratorMetadata": true,
@@ -31,21 +31,12 @@
   },
   "include": [
     "./src/**/*",
-    "./dbconfig.ts",
     "./test/**/*",
-    "./migrations/**/*",
-    "./knexfile.ts",
-    "./seeds/**/*",
-    "./documentation/*"
   ],
   "exclude": [
     "node_modules/**/*",
-    ".serverless/**/*",
-    ".webpack/**/*",
-    "_warmup/**/*",
     ".vscode/**/*",
-    "webpack.config.js",
-    "dist",
+    "dist/**/*",
     "prisma"
   ]
 }

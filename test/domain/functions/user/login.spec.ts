@@ -22,7 +22,7 @@ describe('user login', () => {
     await expect(userLogin({
       username: "iliketrains",
       password: "sussybaka"
-    }, prismaMock)).resolves.toStrictEqual({ token: "token" })
+    }, prismaMock)).resolves.toStrictEqual({ id: "default", token: "token" })
   })
 
   it('should login normally with email :)', async () => {
@@ -33,7 +33,7 @@ describe('user login', () => {
     await expect(userLogin({
       email: "ilike@trains.com",
       password: "sussybaka"
-    }, prismaMock)).resolves.toStrictEqual({ token: "token" })
+    }, prismaMock)).resolves.toStrictEqual({ id: "default", token: "token" })
   })
 
   it('should fail - no username or email', async () => {

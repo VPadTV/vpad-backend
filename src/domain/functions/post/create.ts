@@ -1,4 +1,4 @@
-import { FileStorage } from "@infra/gateways"
+import { StorageGateway } from "@infra/gateways"
 import { DatabaseClient } from "@infra/gateways/database"
 import { User } from "@prisma/client"
 
@@ -14,7 +14,7 @@ export type PostCreateResponse = {
   id: string
 }
 
-export async function postCreate(req: PostCreateRequest, db: DatabaseClient, storage: FileStorage): Promise<PostCreateResponse> {
+export async function postCreate(req: PostCreateRequest, db: DatabaseClient, storage: StorageGateway): Promise<PostCreateResponse> {
   console.log(req.user)
   const mediaUrl = await storage.upload(req.mediaBase64)
   let thumbUrl: string | undefined

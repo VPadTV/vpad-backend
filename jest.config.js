@@ -10,7 +10,7 @@ module.exports = {
   coveragePathIgnorePatterns: ['coverage', 'node_modules'],
   collectCoverageFrom: [
     'src/domain/functions/**/*',
-    'src/infra/gateways/jwt.ts',
+    'src/infra/gateways/*',
   ],
   coverageReporters: ['json', 'text', 'lcov', 'clover'],
   coverageThreshold: {

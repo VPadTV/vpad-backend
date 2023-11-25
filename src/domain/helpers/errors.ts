@@ -25,6 +25,7 @@ export const Errors = {
   INVALID_NAME: () => badRequest("Invalid Name"),
   INVALID_EMAIL: () => badRequest("Invalid Email"),
   INVALID_PASSWORD: () => badRequest("Invalid Password"),
+  INVALID_FILE: () => badRequest("Invalid File"),
   INCORRECT_PASSWORD: () => badRequest("Incorrect Password"),
   MUST_INCLUDE_EMAIL_OR_USERNAME: () => badRequest("Must Include Email Or Username"),
   BANNED: () => forbidden("Banned"),
