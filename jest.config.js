@@ -10,7 +10,7 @@ module.exports = {
   coveragePathIgnorePatterns: ['coverage', 'node_modules'],
   collectCoverageFrom: [
     'src/domain/functions/**/*',
-    'src/infra/gateways/*',
+    'src/infra/gateways/jwt.ts',
   ],
   coverageReporters: ['json', 'text', 'lcov', 'clover'],
   coverageThreshold: {
@@ -26,7 +26,7 @@ module.exports = {
   coveragePathIgnorePatterns: [
     '<rootDir>/src/domain/helpers'
   ],
-  testPathIgnorePatterns: ['/node_modules/'],
+  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>',
   }),

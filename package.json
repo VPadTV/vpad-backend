@@ -20,7 +20,7 @@
     "@types/backblaze-b2": "^1.5.6",
     "@types/bcrypt": "^5.0.2",
     "@types/typescript": "^2.0.0",
-    "aws-sdk": "^2.1323.0",
+    "aws-sdk": "^2.1502.0",
     "backblaze-b2": "^1.7.0",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.3.1",

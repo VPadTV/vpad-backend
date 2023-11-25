@@ -30,13 +30,13 @@
     "strictNullChecks": true
   },
   "include": [
-    "./src/**/*",
-    "./test/**/*",
+    "./src/**/*"
   ],
   "exclude": [
     "node_modules/**/*",
     ".vscode/**/*",
     "dist/**/*",
+    "test/**/*",
     "prisma"
   ]
 }
