@@ -1,4 +1,8 @@
 {
+    "ts-node": {
+        "esm": true,
+        "module": "ESNext"
+    },
     "compilerOptions": {
         "paths": {
             "@docs/*": ["src/docs/*"],
@@ -10,24 +14,24 @@
             "@routes/*": ["src/routes/*"],
             "@test/*": ["test/*"]
         },
-        "module": "es2022",
-        "moduleResolution": "bundler",
-        "target": "esnext",
-        "lib": ["esnext"],
+        "lib": ["ESNext"],
+        "target": "ESNext",
+        "moduleResolution": "Bundler",
+        "allowSyntheticDefaultImports": true,
         "removeComments": false,
+        "sourceMap": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "rootDir": ".",
         "baseUrl": ".",
         "experimentalDecorators": true,
-        "allowSyntheticDefaultImports": true,
         "outDir": "dist",
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "emitDecoratorMetadata": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "strictNullChecks": true
+        "strictNullChecks": true,
     },
     "include": ["./src/**/*"],
     "exclude": [

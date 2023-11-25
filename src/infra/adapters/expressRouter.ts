@@ -15,6 +15,7 @@ export function expressRouterAdapter<T, U extends HttpResponse>(fn: (request: T)
             return res.status(statusCode).json({ ...data, token: data.token ?? req.params?.token })
         } catch (error) {
             console.error(`<RouteError>: ${error?.message}`)
+            console.log(error)
             if (error instanceof HttpError) {
                 return res.status(error.code).json({ error: error.message })
             }

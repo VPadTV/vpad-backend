@@ -2,13 +2,12 @@
     "name": "TODO-backend",
     "version": "0.0.1",
     "license": "MIT",
-    "main": "./lib/src/main/server.prod.js",
+    "main": "./dist/src/main/server.prod.js",
     "type": "module",
     "scripts": {
         "build": "tsc && resolve-tspaths",
-        "start": "yarn build && resolve-tspaths && pm2 start lib/src/main/server.prod.js",
-        "stop": "pm2 stop server.prod",
-        "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only ./src/main/server.dev.ts --watch-files './docs/swagger.yaml'",
+        "start": "node dist/src/main/server.js",
+        "dev": "nodemon --exec tsx ./src/main/server.ts",
         "test": "jest --no-cache --coverage --silent --forceExit --runInBand --detectOpenHandles",
         "test-watch": "jest --no-cache --silent=false --runInBand --watch --no-coverage",
         "migrate": "prisma migrate && prisma generate",
@@ -36,6 +35,7 @@
         "resolve-tspaths": "^0.8.17",
         "swagger-ui-express": "^5.0.0",
         "ts-jest": "^29.1.1",
+        "tsx": "^4.5.0",
         "typescript": "^5.3.2",
         "yaml": "^2.3.4"
     },
@@ -54,8 +54,6 @@
         "jest-mock-extended": "^3.0.5",
         "nodemon": "^2.0.22",
         "prettier": "^2.8.4",
-        "ts-node": "^10.9.1",
-        "ts-node-dev": "^2.0.0",
         "tsconfig-paths": "^4.2.0",
         "tscpaths": "^0.0.9",
         "yarn-audit-fix": "^9.3.9"

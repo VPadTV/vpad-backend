@@ -1,4 +1,4 @@
-import { S3 } from 'aws-sdk'
+import AWS from 'aws-sdk'
 import { MimeTypes } from './mimeTypes'
 import { Errors } from '@domain/helpers'
 import { randomUUID } from 'crypto';
@@ -11,13 +11,13 @@ export type FileData = {
     url: string
 }
 
-export type StorageClient = S3
+export type StorageClient = AWS.S3
 export class Storage {
     private static instance: Storage;
     private client: StorageClient
 
     private constructor() {
-        this.client = new S3({
+        this.client = new AWS.S3({
             region: process.env.BB_S3_REGION,
             endpoint: `s3.${process.env.BB_S3_REGION}.backblazeb2.com`,
             s3ForcePathStyle: true,

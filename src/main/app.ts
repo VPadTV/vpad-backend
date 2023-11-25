@@ -6,7 +6,7 @@ export class App {
 
     constructor() {
         this.app = express()
-        this.app.use(express.json({ limit: '10mb' }))
+        this.app.use(express.json({ limit: '10mb', type: '*/*' }))
 
         for (let path in routes) {
             const router = express.Router()
