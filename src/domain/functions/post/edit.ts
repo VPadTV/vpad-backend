@@ -1,44 +1,42 @@
 import { Errors } from "@domain/helpers"
-import { StorageGateway } from "@infra/gateways"
+import { Storage } from "@infra/gateways"
 import { DatabaseClient } from "@infra/gateways/database"
 import { User } from "@prisma/client"
 
 export type PostEditRequest = {
-  user: User
-  id: string
-  text?: string
-  mediaBase64?: string
-  thumbBase64?: string
+    user: User
+    id: string
+    text?: string
+    mediaBase64?: string
+    thumbBase64?: string
 }
 
 export type PostEditResponse = {}
 
-export async function postEdit(req: PostEditRequest, db: DatabaseClient, storage: StorageGateway): Promise<PostEditResponse> {
-  let mediaUrl: string | undefined
-  const post = await db.post.findFirst({ where: { id: req.id, userId: req.user.id } })
+export async function postEdit(req: PostEditRequest, db: DatabaseClient, storage: Storage): Promise<PostEditResponse> {
 
-  if (!post) throw Errors.NOT_FOUND()
+    const postFound = await db.post.findFirst({ where: { id: req.id, userId: req.user.id } })
+    if (!postFound) throw Errors.NOT_FOUND()
 
-  // FIXME: if update fails, old video is still deleted
-  if (req.mediaBase64) {
-    if (post.mediaUrl)
-      await storage.delete(post?.mediaUrl)
-    mediaUrl = await storage.upload(req.mediaBase64)
-  }
+    let mediaData = req.mediaBase64 ?
+        storage.getFileData(req.mediaBase64) : undefined
+    let thumbData = req.thumbBase64 ?
+        storage.getFileData(req.thumbBase64) : undefined
 
-  // FIXME: if update fails, old thumbnail is still deleted
-  if (req.thumbBase64) {
-    if (post.thumbUrl)
-      await storage.delete(post?.thumbUrl)
-    mediaUrl = await storage.upload(req.thumbBase64)
-  }
+    await db.post.update({
+        where: { id: req.id },
+        data: {
+            text: req.text ?? undefined,
+            mediaUrl: mediaData?.url,
+            thumbUrl: thumbData?.url,
+        }
+    })
 
-  await db.post.update({
-    where: { id: req.id },
-    data: {
-      text: req.text ?? undefined,
-      mediaUrl: mediaUrl,
-    }
-  })
-  return {}
+    if (postFound.mediaUrl) await storage.delete(postFound.mediaUrl)
+    if (postFound.thumbUrl) await storage.delete(postFound.thumbUrl)
+
+    if (mediaData) await storage.upload(mediaData)
+    if (thumbData) await storage.upload(thumbData)
+
+    return {}
 }

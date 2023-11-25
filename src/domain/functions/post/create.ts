@@ -1,35 +1,33 @@
-import { StorageGateway } from "@infra/gateways"
+import { Storage } from "@infra/gateways"
 import { DatabaseClient } from "@infra/gateways/database"
 import { User } from "@prisma/client"
 
 export type PostCreateRequest = {
-  user: User
-  title: string
-  text: string
-  mediaBase64: string
-  thumbBase64?: string
+    user: User
+    title: string
+    text: string
+    mediaBase64: string
+    thumbBase64?: string
 }
 
 export type PostCreateResponse = {
-  id: string
+    id: string
 }
 
-export async function postCreate(req: PostCreateRequest, db: DatabaseClient, storage: StorageGateway): Promise<PostCreateResponse> {
-  console.log(req.user)
-  const mediaUrl = await storage.upload(req.mediaBase64)
-  let thumbUrl: string | undefined
-  if (req.thumbBase64)
-    thumbUrl = await storage.upload(req.mediaBase64)
-  else
-    thumbUrl = "generated thumbnail" // TODO
-  const post = await db.post.create({
-    data: {
-      userId: req.user.id,
-      title: req.title,
-      text: req.text,
-      mediaUrl,
-      thumbUrl,
-    }
-  })
-  return { id: post.id }
+export async function postCreate(req: PostCreateRequest, db: DatabaseClient, storage: Storage): Promise<PostCreateResponse> {
+    const mediaData = storage.getFileData(req.mediaBase64)
+    const thumbData = req.thumbBase64 ? storage.getFileData(req.thumbBase64) : undefined
+    const post = await db.post.create({
+        data: {
+            userId: req.user.id,
+            title: req.title,
+            text: req.text,
+            mediaUrl: mediaData.url,
+            thumbUrl: thumbData?.url
+        }
+    })
+    await storage.upload(mediaData)
+    if (thumbData) await storage.upload(thumbData)
+
+    return { id: post.id }
 }

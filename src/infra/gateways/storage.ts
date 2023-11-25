@@ -1,51 +1,74 @@
-import { decodeBase64File } from '@domain/helpers/decodeBase64File'
 import { S3 } from 'aws-sdk'
+import { MimeTypes } from './mimeTypes'
+import { Errors } from '@domain/helpers'
+import { randomUUID } from 'crypto';
 
-export type UploadFileRequest = {
-  readonly mimeType: string
-  readonly buffer: Buffer
+export type FileData = {
+    id: string;
+    mimeType: string;
+    extension: string;
+    buffer: Buffer;
+    url: string
 }
 
 export type StorageClient = S3
-export class StorageGateway {
-  private static instance: StorageGateway;
-  private client: StorageClient
+export class Storage {
+    private static instance: Storage;
+    private client: StorageClient
 
-  private constructor() {
-    this.client = new S3({
-      region: process.env.BB_S3_REGION,
-      endpoint: `s3.${process.env.BB_S3_REGION}.backblazeb2.com`,
-      s3ForcePathStyle: true,
-    })
-  }
+    private constructor() {
+        this.client = new S3({
+            region: process.env.BB_S3_REGION,
+            endpoint: `s3.${process.env.BB_S3_REGION}.backblazeb2.com`,
+            s3ForcePathStyle: true,
+        })
+    }
 
-  static get(): StorageGateway {
-    if (!this.instance)
-      this.instance = new StorageGateway()
-    return this.instance
-  }
+    static get(): Storage {
+        if (!this.instance)
+            this.instance = new Storage()
+        return this.instance
+    }
 
-  async upload(fileBase64: string): Promise<string> {
-    const key = Date.now().toString()
-    const fileData = decodeBase64File(fileBase64)
-    await this.client
-      .putObject({
-        Bucket: process.env.BB_BUCKET!,
-        Key: key,
-        Body: fileData.buffer,
-        ContentEncoding: 'base64',
-        ContentType: fileData.mimeType
-      })
-      .promise()
-    return `https://${process.env.BB_BUCKET!}.s3.backblazeb2.com/${key}`
-  }
+    getFileData(fileBase64: string, fileId?: string): FileData {
+        if (!fileId) fileId = randomUUID()
+        const matches = fileBase64.match(/^data:([a-zA-Z-+/.]+);base64,(.+)$/)
+        if (matches?.length !== 3)
+            throw Errors.INVALID_FILE()
+        const extension = MimeTypes.extension(matches[1])
+        return {
+            id: fileId,
+            mimeType: matches[1],
+            extension,
+            buffer: Buffer.from(matches[2], 'base64'),
+            url: this.getUrl(fileId, extension)
+        }
+    }
 
-  async delete(key: string): Promise<void> {
-    await this.client
-      .deleteObject({
-        Bucket: process.env.BB_BUCKET!,
-        Key: key,
-      })
-      .promise()
-  }
+    getUrl(id: string, extension: string) {
+        return `https://${process.env.BB_BUCKET!}.s3.backblazeb2.com/${id}.${extension}`
+    }
+
+    async upload(fileData: FileData): Promise<void> {
+        await this.client
+            .putObject({
+                Bucket: process.env.BB_BUCKET!,
+                Key: fileData.id,
+                Body: fileData.buffer,
+                ContentEncoding: 'base64',
+                ContentType: fileData.mimeType
+            })
+            .promise()
+    }
+
+    async delete(url: string): Promise<void> {
+        const split = url.split('/')
+        const key = split[split.length - 1]
+        await this.client
+            .deleteObject({
+                Bucket: process.env.BB_BUCKET!,
+                Key: key,
+            })
+            .promise()
+    }
 }

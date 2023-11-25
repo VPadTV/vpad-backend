@@ -10,25 +10,25 @@ import { IRoute } from "@main/route";
 import { Router } from "express";
 
 export class CommentRoute implements IRoute {
-  register(router: Router): void {
-    router.post('/create/:postId',
-      expressMiddlewareAdapter(isLoggedIn),
-      expressRouterAdapter(async (request: CommentCreateRequest) => {
-        return ok(await commentCreate(request, Database.get()))
-      }))
-    router.get('/:id',
-      expressRouterAdapter(async (request: CommentGetRequest) => {
-        return ok(await commentGet(request, Database.get()))
-      }))
-    router.put('/:id',
-      expressMiddlewareAdapter(isLoggedIn),
-      expressRouterAdapter(async (request: CommentEditRequest) => {
-        return ok(await commentEdit(request, Database.get()))
-      }))
-    router.delete('/:id',
-      expressMiddlewareAdapter(isLoggedIn),
-      expressRouterAdapter(async (request: CommentDeleteRequest) => {
-        return ok(await commentDelete(request, Database.get()))
-      }))
-  }
+    register(router: Router): void {
+        router.post('/create/:postId',
+            expressMiddlewareAdapter(isLoggedIn),
+            expressRouterAdapter(async (request: CommentCreateRequest) => {
+                return ok(await commentCreate(request, Database.get()))
+            }))
+        router.get('/:id',
+            expressRouterAdapter(async (request: CommentGetRequest) => {
+                return ok(await commentGet(request, Database.get()))
+            }))
+        router.put('/:id',
+            expressMiddlewareAdapter(isLoggedIn),
+            expressRouterAdapter(async (request: CommentEditRequest) => {
+                return ok(await commentEdit(request, Database.get()))
+            }))
+        router.delete('/:id',
+            expressMiddlewareAdapter(isLoggedIn),
+            expressRouterAdapter(async (request: CommentDeleteRequest) => {
+                return ok(await commentDelete(request, Database.get()))
+            }))
+    }
 }

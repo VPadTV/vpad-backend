@@ -1,25 +1,27 @@
 import { Errors } from "@domain/helpers"
-import { StorageGateway } from "@infra/gateways"
+import { Storage } from "@infra/gateways"
 import { DatabaseClient } from "@infra/gateways/database"
 import { User } from "@prisma/client"
 
 export type PostDeleteRequest = {
-  user: User
-  id: string
+    user: User
+    id: string
 }
 
 export type PostDeleteResponse = {}
 
-export async function postDelete(req: PostDeleteRequest, db: DatabaseClient, storage: StorageGateway): Promise<PostDeleteResponse> {
-  const post = await db.post.delete({
-    where: { id: req.id, userId: req.user.id }
-  })
+export async function postDelete(req: PostDeleteRequest, db: DatabaseClient, storage: Storage): Promise<PostDeleteResponse> {
+    const post = await db.post.delete({
+        where: { id: req.id, userId: req.user.id }
+    })
 
-  if (!post)
-    throw Errors.NOT_FOUND()
+    if (!post)
+        throw Errors.NOT_FOUND()
 
-  if (post.mediaUrl)
-    await storage.delete(post.mediaUrl)
+    if (post.mediaUrl)
+        await storage.delete(post.mediaUrl)
+    if (post.thumbUrl)
+        await storage.delete(post.thumbUrl)
 
-  return {}
+    return {}
 }

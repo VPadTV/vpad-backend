@@ -1,42 +1,40 @@
 {
-  "compilerOptions": {
-    "paths": {
-      "@docs/*": ["src/docs/*"],
-      "@controllers/*": ["src/routes/*"],
-      "@domain/*": ["src/domain/*"],
-      "@functions/*": ["src/domain/functions/*"],
-      "@infra/*": ["src/infra/*"],
-      "@main/*": ["src/main/*"],
-      "@routes/*": ["src/routes/*"],
-      "@test/*": ["test/*"]
+    "compilerOptions": {
+        "paths": {
+            "@docs/*": ["src/docs/*"],
+            "@controllers/*": ["src/routes/*"],
+            "@domain/*": ["src/domain/*"],
+            "@functions/*": ["src/domain/functions/*"],
+            "@infra/*": ["src/infra/*"],
+            "@main/*": ["src/main/*"],
+            "@routes/*": ["src/routes/*"],
+            "@test/*": ["test/*"]
+        },
+        "module": "es2022",
+        "moduleResolution": "bundler",
+        "target": "esnext",
+        "lib": ["esnext"],
+        "removeComments": false,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "rootDir": ".",
+        "baseUrl": ".",
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+        "outDir": "dist",
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "emitDecoratorMetadata": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "strictNullChecks": true
     },
-    "module": "es2022",
-    "moduleResolution": "bundler",
-    "target": "esnext",
-    "lib": ["esnext"],
-    "removeComments": false,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "rootDir": ".",
-    "baseUrl": ".",
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "outDir": "dist",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "emitDecoratorMetadata": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "strictNullChecks": true
-  },
-  "include": [
-    "./src/**/*"
-  ],
-  "exclude": [
-    "node_modules/**/*",
-    ".vscode/**/*",
-    "dist/**/*",
-    "test/**/*",
-    "prisma"
-  ]
+    "include": ["./src/**/*"],
+    "exclude": [
+        "node_modules/**/*",
+        ".vscode/**/*",
+        "dist/**/*",
+        "test/**/*",
+        "prisma"
+    ]
 }

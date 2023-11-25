@@ -6,9 +6,9 @@ import { PostRoute } from "@controllers/post";
 import { CommentRoute } from "@controllers/comment";
 
 export default {
-  '/user': new UserRoute(),
-  '/admin': new AdminRoute(),
-  '/docs': new DocumentationRoute(),
-  '/post': new PostRoute(),
-  '/comment': new CommentRoute(),
+    '/user': new UserRoute(),
+    '/admin': new AdminRoute(),
+    '/docs': new DocumentationRoute(),
+    '/post': new PostRoute(),
+    '/comment': new CommentRoute(),
 } as { [path: string]: IRoute }

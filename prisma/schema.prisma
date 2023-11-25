@@ -1,82 +1,82 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch"]
+    provider        = "prisma-client-js"
+    previewFeatures = ["fullTextSearch"]
 }
 
 model User {
-  id              String  @id @default(cuid())
-  username        String  @unique
-  nickname        String
-  email           String  @unique
-  profilePhotoUrl String?
-  password        String
-  about           String?
-  contact         String?
+    id              String  @id @default(cuid())
+    username        String  @unique
+    nickname        String
+    email           String  @unique
+    profilePhotoUrl String?
+    password        String
+    about           String?
+    contact         String?
 
-  admin      Boolean   @default(false)
-  banned     Boolean   @default(false)
-  banTimeout DateTime?
+    admin      Boolean   @default(false)
+    banned     Boolean   @default(false)
+    banTimeout DateTime?
 
-  comments Comment[]
-  votes    Votes[]   @relation(name: "userVotes")
+    comments Comment[]
+    votes    Votes[]   @relation(name: "userVotes")
 
-  posts Post[]
+    posts Post[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model Comment {
-  id   String @id @default(cuid())
-  text String
+    id   String @id @default(cuid())
+    text String
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict)
-  userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict)
+    userId String
 
-  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Restrict)
-  postId String @unique
+    post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Restrict)
+    postId String @unique
 
-  parent   Comment?  @relation(name: "chain", fields: [parentId], references: [id], onDelete: Cascade, onUpdate: Restrict)
-  parentId String?
-  children Comment[] @relation(name: "chain")
+    parent   Comment?  @relation(name: "chain", fields: [parentId], references: [id], onDelete: Cascade, onUpdate: Restrict)
+    parentId String?
+    children Comment[] @relation(name: "chain")
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model Post {
-  id       String  @id @default(cuid())
-  title    String
-  text     String
-  mediaUrl String?
-  thumbUrl String?
+    id       String  @id @default(cuid())
+    title    String
+    text     String
+    mediaUrl String?
+    thumbUrl String?
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict)
-  userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict)
+    userId String
 
-  comments Comment[]
-  votes    Votes[]   @relation(name: "postVotes")
+    comments Comment[]
+    votes    Votes[]   @relation(name: "postVotes")
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model Votes {
-  id String @id @default(cuid())
+    id String @id @default(cuid())
 
-  vote Int @db.SmallInt
+    vote Int @db.SmallInt
 
-  user   User   @relation(name: "userVotes", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict)
-  userId String
+    user   User   @relation(name: "userVotes", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict)
+    userId String
 
-  post   Post   @relation(name: "postVotes", fields: [postId], references: [id], onDelete: Cascade, onUpdate: Restrict)
-  postId String
+    post   Post   @relation(name: "postVotes", fields: [postId], references: [id], onDelete: Cascade, onUpdate: Restrict)
+    postId String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
