@@ -30,7 +30,8 @@ export class Storage {
         return this.instance
     }
 
-    getFileData(fileBase64: string, fileId?: string): FileData {
+    getFileData(fileBase64?: string, fileId?: string): FileData | undefined {
+        if (!fileBase64) return undefined
         if (!fileId) fileId = randomUUID()
         const matches = fileBase64.match(/^data:([a-zA-Z-+/.]+);base64,(.+)$/)
         if (matches?.length !== 3)
@@ -49,7 +50,8 @@ export class Storage {
         return `https://${process.env.BB_BUCKET!}.s3.backblazeb2.com/${id}.${extension}`
     }
 
-    async upload(fileData: FileData): Promise<void> {
+    async upload(fileData?: FileData): Promise<void> {
+        if (!fileData) return
         await this.client
             .putObject({
                 Bucket: process.env.BB_BUCKET!,
@@ -61,7 +63,8 @@ export class Storage {
             .promise()
     }
 
-    async delete(url: string): Promise<void> {
+    async delete(url?: string | null): Promise<void> {
+        if (!url) return
         const split = url.split('/')
         const key = split[split.length - 1]
         await this.client

@@ -18,10 +18,8 @@ export async function postEdit(req: PostEditRequest, db: DatabaseClient, storage
     const postFound = await db.post.findFirst({ where: { id: req.id, userId: req.user.id } })
     if (!postFound) throw Errors.NOT_FOUND()
 
-    let mediaData = req.mediaBase64 ?
-        storage.getFileData(req.mediaBase64) : undefined
-    let thumbData = req.thumbBase64 ?
-        storage.getFileData(req.thumbBase64) : undefined
+    let mediaData = storage.getFileData(req.mediaBase64)
+    let thumbData = storage.getFileData(req.thumbBase64)
 
     await db.post.update({
         where: { id: req.id },
@@ -32,11 +30,11 @@ export async function postEdit(req: PostEditRequest, db: DatabaseClient, storage
         }
     })
 
-    if (postFound.mediaUrl) await storage.delete(postFound.mediaUrl)
-    if (postFound.thumbUrl) await storage.delete(postFound.thumbUrl)
+    await storage.delete(postFound.mediaUrl)
+    await storage.delete(postFound.thumbUrl)
 
-    if (mediaData) await storage.upload(mediaData)
-    if (thumbData) await storage.upload(thumbData)
+    await storage.upload(mediaData)
+    await storage.upload(thumbData)
 
     return {}
 }

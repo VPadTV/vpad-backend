@@ -34,10 +34,7 @@ export async function userEdit(req: UserEditRequest, db: DatabaseClient, storage
             throw Errors.INVALID_PASSWORD()
         }
     }
-    let profilePhotoUrl: string | undefined = undefined
-    if (req.profilePhotoBase64) {
-        profilePhotoUrl = await storage.upload(req.profilePhotoBase64) || undefined
-    }
+    let profilePhotoData = req.profilePhotoBase64 ? storage.getFileData(req.profilePhotoBase64) : undefined
 
     const user = await db.user.update(
         {
@@ -47,8 +44,10 @@ export async function userEdit(req: UserEditRequest, db: DatabaseClient, storage
                 nickname: req.nickname,
                 email: req.email,
                 password: req.password && await bcrypt.hash(req.password, 10),
-                profilePhotoUrl: profilePhotoUrl
+                profilePhotoUrl: profilePhotoData?.url
             }
         })
+
+    await storage.upload(profilePhotoData)
     return { id: user.id }
 }

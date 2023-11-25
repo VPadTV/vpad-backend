@@ -16,18 +16,18 @@ export type PostCreateResponse = {
 
 export async function postCreate(req: PostCreateRequest, db: DatabaseClient, storage: Storage): Promise<PostCreateResponse> {
     const mediaData = storage.getFileData(req.mediaBase64)
-    const thumbData = req.thumbBase64 ? storage.getFileData(req.thumbBase64) : undefined
+    const thumbData = storage.getFileData(req.thumbBase64)
     const post = await db.post.create({
         data: {
             userId: req.user.id,
             title: req.title,
             text: req.text,
-            mediaUrl: mediaData.url,
+            mediaUrl: mediaData?.url,
             thumbUrl: thumbData?.url
         }
     })
     await storage.upload(mediaData)
-    if (thumbData) await storage.upload(thumbData)
+    await storage.upload(thumbData)
 
     return { id: post.id }
 }
