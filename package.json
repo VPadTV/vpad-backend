@@ -3,7 +3,7 @@
     "version": "0.0.1",
     "license": "MIT",
     "main": "./lib/src/main/server.prod.js",
-    "type": "commonjs",
+    "type": "module",
     "scripts": {
         "build": "tsc && resolve-tspaths",
         "start": "yarn build && resolve-tspaths && pm2 start lib/src/main/server.prod.js",
