@@ -8,6 +8,7 @@ import { ok } from "@domain/helpers";
 import { middleware, jsonResponse } from "@infra/adapters";
 import { streamResponse } from "@infra/adapters/streamResponse";
 import { Database, Storage } from "@infra/gateways";
+import { fields } from "@infra/middlewares";
 import { isLoggedIn } from "@infra/middlewares/isLoggedIn";
 import { IRoute } from "@main/route";
 import { Router } from "express";
@@ -16,6 +17,7 @@ export class PostRoute implements IRoute {
     register(router: Router): void {
         router.post('/',
             middleware(isLoggedIn),
+            fields(['media', 'thumb']),
             jsonResponse(async (request: PostCreateRequest) => {
                 return ok(await postCreate(request, Database.get(), Storage.get()))
             }))

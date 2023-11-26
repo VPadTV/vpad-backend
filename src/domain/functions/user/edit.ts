@@ -3,6 +3,7 @@ import { emailRegex, nameRegex, passwordRegex } from "@domain/helpers/regex"
 import { DatabaseClient } from "@infra/gateways/database"
 import { Storage } from "@infra/gateways/storage"
 import { FileRawUpload } from "@infra/middlewares"
+import { MediaType } from "@prisma/client"
 import bcrypt from "bcrypt"
 
 export type UserEditRequest = {
@@ -20,10 +21,10 @@ export type UserEditResponse = {
 
 export async function userEdit(req: UserEditRequest, db: DatabaseClient, storage: Storage): Promise<UserEditResponse> {
     if (req.username && !nameRegex().test(req.username)) {
-        throw Errors.INVALID_NAME()
+        throw Errors.INVALID_USERNAME()
     }
     if (req.nickname && !nameRegex().test(req.nickname)) {
-        throw Errors.INVALID_NAME()
+        throw Errors.INVALID_USERNAME()
     }
     if (req.email) {
         if (!emailRegex().test(req.email)) {
@@ -36,6 +37,7 @@ export async function userEdit(req: UserEditRequest, db: DatabaseClient, storage
         }
     }
     let profilePhotoData = req.profilePhoto ? storage.getFileData(req.profilePhoto) : undefined
+    if (profilePhotoData?.type === MediaType.VIDEO) throw Errors.INVALID_FILE()
 
     const user = await db.user.update(
         {

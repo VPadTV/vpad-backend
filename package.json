@@ -24,6 +24,7 @@
         "aws-sdk": "^2.1502.0",
         "backblaze-b2": "^1.7.0",
         "bcrypt": "^5.1.1",
+        "body-parser": "^1.20.2",
         "dotenv": "^16.3.1",
         "express": "^4.18.2",
         "jsonwebtoken": "^9.0.0",

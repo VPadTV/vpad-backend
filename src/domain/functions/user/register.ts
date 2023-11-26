@@ -4,7 +4,8 @@ import { DatabaseClient } from "@infra/gateways/database"
 import bcrypt from "bcrypt"
 
 export type UserRegisterRequest = {
-    name: string
+    username: string
+    nickname?: string
     email: string
     password: string
     about?: string
@@ -15,15 +16,17 @@ export type UserRegisterResponse = {
 }
 
 export async function userRegister(req: UserRegisterRequest, db: DatabaseClient): Promise<UserRegisterResponse> {
-    if (!req.name)
-        throw Errors.MISSING_NAME()
+    if (!req.username)
+        throw Errors.MISSING_USERNAME()
     if (!req.email)
         throw Errors.MISSING_EMAIL()
     if (!req.password)
         throw Errors.MISSING_PASSWORD()
 
-    if (!nameRegex().test(req.name))
-        throw Errors.INVALID_NAME()
+    if (!nameRegex().test(req.username))
+        throw Errors.INVALID_USERNAME()
+    if (req.nickname && !nameRegex().test(req.nickname))
+        throw Errors.INVALID_NICKNAME()
     if (!emailRegex().test(req.email))
         throw Errors.INVALID_EMAIL()
     if (!passwordRegex().test(req.password))
@@ -31,8 +34,8 @@ export async function userRegister(req: UserRegisterRequest, db: DatabaseClient)
 
     const user = await db.user.create({
         data: {
-            username: req.name,
-            nickname: req.name,
+            username: req.username,
+            nickname: req.nickname ?? req.username,
             email: req.email,
             about: req.about ? req.about : undefined,
             password: await bcrypt.hash(req.password, 10)

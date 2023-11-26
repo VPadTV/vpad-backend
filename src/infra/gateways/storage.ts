@@ -7,9 +7,8 @@ import { Readable, ReadableOptions } from "stream";
 import { Errors } from '@domain/helpers';
 
 export type FileUpload = {
-    id: string;
+    key: string;
     mimeType: string;
-    extension: string;
     type: MediaType
     buffer: Buffer;
     url: string
@@ -40,22 +39,21 @@ export class Storage {
         return this.instance
     }
 
-    getUrl(id: string, extension: string) {
-        return `https://${process.env.BB_BUCKET!}.s3.backblazeb2.com/${id}.${extension}`
+    getUrl(key: string) {
+        return `https://f0004.backblazeb2.com/file/${process.env.BB_BUCKET!}/${key}`
     }
 
     getFileData(file?: FileRawUpload): FileUpload | undefined {
         if (!file) return undefined
-        let fileId: string = crypto.randomBytes(16).toString('hex')
         const extension = MimeTypes.extension(file.mimetype)
+        let key: string = crypto.randomBytes(16).toString('hex') + '.' + extension
         const type = MimeTypes.getType(file.mimetype)
         return {
-            id: fileId,
+            key,
             mimeType: file.mimetype,
-            extension,
             type,
             buffer: file.buffer,
-            url: this.getUrl(fileId, extension)
+            url: this.getUrl(key)
         }
     }
 
@@ -64,9 +62,8 @@ export class Storage {
         await this.client
             .putObject({
                 Bucket: process.env.BB_BUCKET!,
-                Key: fileData.id,
+                Key: fileData.key,
                 Body: fileData.buffer,
-                ContentEncoding: 'base64',
                 ContentType: fileData.mimeType
             })
             .promise()

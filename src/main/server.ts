@@ -1,15 +1,12 @@
 import { App } from './app'
-import { cors } from '@infra/middlewares/cors'
 import dotenv from 'dotenv'
 dotenv.config()
 
 const startApplication = async () => {
     try {
-        const expressApplication = new App()
+        const app = new App()
 
-        expressApplication.app.use(cors)
-
-        expressApplication.app.listen(process.env.PORT, () =>
+        app.server.listen(process.env.PORT, () =>
             console.log(`[API] Server running at http://localhost:${process.env.PORT}`)
         )
     } catch (e) {
