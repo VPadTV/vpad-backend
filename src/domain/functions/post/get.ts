@@ -48,7 +48,7 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
     })
     if (!post) throw Errors.NOT_FOUND()
 
-    if (post.minTier) {
+    if (post.minTier && post.minTier.price.greaterThan(0)) {
         if (!req.userTierId) throw Errors.UNAUTHORIZED()
         if (!req.user) throw Errors.UNAUTHORIZED()
         const userTier = await db.subscriptionTier.findFirst({

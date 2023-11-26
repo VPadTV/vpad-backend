@@ -4,7 +4,7 @@ import { DatabaseClient } from "@infra/gateways/database"
 export type SubCreateRequest = {
     id: string
     creatorId: string
-    tierId: string
+    tierId?: string
 }
 
 export type SubCreateResponse = {}

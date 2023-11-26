@@ -118,8 +118,8 @@ model SubscriptionTier {
 model Subscription {
     id String @id @default(cuid())
 
-    tier   SubscriptionTier @relation(fields: [tierId], references: [id], onDelete: Restrict, onUpdate: Restrict)
-    tierId String
+    tier   SubscriptionTier? @relation(fields: [tierId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+    tierId String?
 
     user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict)
     userId String
