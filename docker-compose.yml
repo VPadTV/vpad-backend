@@ -1,7 +1,8 @@
 version: "3.8"
 
 services:
-  db:
+  database:
+    container_name: database
     image: postgres:15-bullseye
     restart: on-failure
     tty: true
