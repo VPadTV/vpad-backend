@@ -71,6 +71,11 @@ model Post {
     comments Comment[]
     votes    Votes[]   @relation(name: "postVotes")
 
+    minTier   SubscriptionTier? @relation(fields: [minTierId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+    minTierId String?
+
+    nsfw Boolean @default(false)
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
@@ -105,6 +110,7 @@ model SubscriptionTier {
 
     price       Decimal
     subscribers Subscription[]
+    Post        Post[]
 
     @@unique([name, creatorId])
 }
