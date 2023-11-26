@@ -14,6 +14,8 @@ export async function subUpdate(req: SubUpdateRequest, db: DatabaseClient): Prom
     if (!req.tierId)
         throw Errors.MISSING_ID()
 
+    // TODO: check payment stuff
+
     db.subscription.update({
         where: { id: req.id },
         data: { tierId: req.tierId }

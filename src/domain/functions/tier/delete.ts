@@ -1,7 +1,9 @@
 import { Errors } from "@domain/helpers"
 import { DatabaseClient } from "@infra/gateways/database"
+import { User } from "@prisma/client"
 
 export type TierDeleteRequest = {
+    user: User
     id: string
 }
 
@@ -12,7 +14,7 @@ export async function tierDelete(req: TierDeleteRequest, db: DatabaseClient): Pr
         throw Errors.MISSING_ID()
 
     await db.subscriptionTier.delete({
-        where: { id: req.id }
+        where: { id: req.id, creatorId: req.user.id }
     })
 
     return {}

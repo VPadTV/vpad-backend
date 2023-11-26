@@ -8,7 +8,7 @@ export type TierUpdateRequest = {
 
 export type TierUpdateResponse = {}
 
-export async function tierCreate(req: TierUpdateRequest, db: DatabaseClient): Promise<TierUpdateResponse> {
+export async function tierUpdate(req: TierUpdateRequest, db: DatabaseClient): Promise<TierUpdateResponse> {
     if (!req.id)
         throw Errors.MISSING_ID()
     if (!req.name)

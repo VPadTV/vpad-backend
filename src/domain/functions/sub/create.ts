@@ -1,8 +1,9 @@
 import { Errors } from "@domain/helpers"
 import { DatabaseClient } from "@infra/gateways/database"
+import { User } from "@prisma/client"
 
 export type SubCreateRequest = {
-    id: string
+    user: User
     creatorId: string
     tierId?: string
 }
@@ -10,14 +11,16 @@ export type SubCreateRequest = {
 export type SubCreateResponse = {}
 
 export async function subCreate(req: SubCreateRequest, db: DatabaseClient): Promise<SubCreateResponse> {
-    if (!req.id)
+    if (!req.user.id)
         throw Errors.MISSING_ID()
     if (!req.creatorId)
         throw Errors.MISSING_ID()
 
+    // TODO: check payment stuff
+
     db.subscription.create({
         data: {
-            userId: req.id,
+            userId: req.user.id,
             tierId: req.tierId
         }
     })
