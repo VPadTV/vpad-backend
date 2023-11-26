@@ -6,7 +6,6 @@ export const adminNoId = {
         tag: "Admin",
         summary: "Returns all admins",
         security: false,
-        path: { id: "string" },
         success: {
             users: [simpleUser]
         },

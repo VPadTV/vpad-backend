@@ -5,13 +5,12 @@ export const adminId = {
         tag: "Admin",
         summary: "Manages admins",
         security: false,
-        path: { id: "string" },
+        path: { id: "clpeceq9h000078m210txowen" },
         body: {
-            id: "string",
             admin: true,
         },
         success: {
-            id: "string",
+            id: "clpeceq9h000078m210txowen",
             admin: true
         },
         400: "`admin` must be `true` or `false`",

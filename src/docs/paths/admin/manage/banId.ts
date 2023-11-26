@@ -6,14 +6,13 @@ export const adminBanId = {
         tag: "Admin",
         summary: "Manages a user ban",
         security: false,
-        path: { id: "string" },
+        path: { id: "clpeceq9h000078m210txowen" },
         body: {
-            id: "string",
             banned: true,
             banTimeout: dateExample
         },
         success: {
-            id: "string",
+            id: "clpeceq9h000078m210txowen",
             banned: true,
             banTimeout: dateExample
         },

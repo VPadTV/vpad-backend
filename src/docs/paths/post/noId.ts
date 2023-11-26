@@ -1,4 +1,4 @@
-import { makeRoute } from "@docs/helpers";
+import { BodyFile, makeRoute } from "@docs/helpers";
 import { simpleUser } from "@docs/schemas/simpleUser";
 
 export const postNoId = {
@@ -7,7 +7,7 @@ export const postNoId = {
         summary: "Gets many posts",
         security: false,
         query: {
-            userId: "string",
+            userid: "clpeceq9h000078m210txowen",
             sortBy: "latest | oldest | high-views | low-views",
             page: 1,
             size: 30,
@@ -19,8 +19,8 @@ export const postNoId = {
             currentPage: 1,
             lastPage: 4,
             data: {
-                id: "string",
-                text: "string",
+                id: "clpeceq9h000078m210txowen",
+                text: "some text",
                 thumbUrl: "string",
                 meta: {
                     user: simpleUser,
@@ -34,12 +34,12 @@ export const postNoId = {
         tag: "Post",
         summary: "Creates a new post",
         body: {
-            text: "string",
-            mediaBase64: "string",
-            thumbBase64: "string",
+            text: "some text",
+            media: BodyFile,
+            thumb: BodyFile,
         },
         success: {
-            id: "string"
+            id: "clpeceq9h000078m210txowen"
         }
     })
 }

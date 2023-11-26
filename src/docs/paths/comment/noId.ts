@@ -8,8 +8,8 @@ export const commentNoId = {
         summary: "Returns many comments",
         security: false,
         query: {
-            postId: "string",
-            parentId: "string",
+            postid: "clpeceq9h000078m210txowen",
+            parentid: "clpeceq9h000078m210txowen",
             sortBy: "latest | oldest",
             page: 1,
             size: 30,
@@ -21,8 +21,8 @@ export const commentNoId = {
             currentPage: 1,
             lastPage: 4,
             data: {
-                id: "string",
-                text: "string",
+                id: "clpeceq9h000078m210txowen",
+                text: "some text",
                 childrenCount: 10,
                 meta: {
                     user: simpleUser,
@@ -37,12 +37,12 @@ export const commentNoId = {
         tag: "Comment",
         summary: "Creates a new comment",
         body: {
-            postId: "string",
-            parentId: "string",
-            text: "string",
+            postid: "clpeceq9h000078m210txowen",
+            parentid: "clpeceq9h000078m210txowen",
+            text: "some text",
         },
         success: {
-            id: "string"
+            id: "clpeceq9h000078m210txowen"
         }
     })
 }

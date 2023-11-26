@@ -1,7 +1,7 @@
 import { Body } from "@docs/helpers";
 
 export const simpleUser: Body = {
-    id: "string",
+    id: "clpeceq9h000078m210txowen",
     nickname: "string",
     profilePhotoUrl: "string",
 }

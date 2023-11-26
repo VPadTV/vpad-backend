@@ -1,6 +1,6 @@
 import AWS from 'aws-sdk'
 import { MimeTypes } from './mimeTypes'
-import { randomBytes } from 'crypto';
+import crypto from 'crypto';
 import { FileRawUpload } from '@infra/middlewares';
 import { MediaType } from '@prisma/client';
 
@@ -38,7 +38,7 @@ export class Storage {
 
     getFileData(file?: FileRawUpload): FileUpload | undefined {
         if (!file) return undefined
-        let fileId: string = randomBytes(16).toString('hex')
+        let fileId: string = crypto.randomBytes(16).toString('hex')
         const extension = MimeTypes.extension(file.mimetype)
         const type = MimeTypes.getType(file.mimetype)
         return {

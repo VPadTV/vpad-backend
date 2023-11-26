@@ -12,7 +12,7 @@ export const userRegister = {
             about: "string",
         },
         success: {
-            id: "string"
+            id: "clpeceq9h000078m210txowen"
         },
         400: "Invalid name, email or password"
     })

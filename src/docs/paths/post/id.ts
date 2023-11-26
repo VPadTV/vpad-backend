@@ -1,4 +1,4 @@
-import { makeRoute } from "@docs/helpers";
+import { BodyFile, makeRoute } from "@docs/helpers";
 import { simpleUser } from "@docs/schemas/simpleUser";
 
 export const postId = {
@@ -6,11 +6,11 @@ export const postId = {
         tag: "Post",
         summary: "Returns post data from id",
         security: false,
-        path: { id: "string" },
+        path: { id: "clpeceq9h000078m210txowen" },
         success: {
-            text: "string",
-            mediaUrl: "string",
-            thumbUrl: "string",
+            text: "some text",
+            mediaUrl: `https://${process.env.BB_BUCKET!}.s3.backblazeb2.com/sdklawejwap.mp4`,
+            thumbUrl: `https://${process.env.BB_BUCKET!}.s3.backblazeb2.com/jerkejrlkej.jpg`,
             meta: {
                 user: simpleUser,
                 likes: 10,
@@ -24,18 +24,18 @@ export const postId = {
     put: makeRoute({
         tag: "Post",
         summary: "Updates post from id, must be logged in",
-        path: { id: "string" },
+        path: { id: "clpeceq9h000078m210txowen" },
         body: {
-            text: "string",
-            mediaBase64: "string",
-            thumbBase64: "string",
+            text: "some text",
+            media: BodyFile,
+            thumb: BodyFile,
         },
         404: "Provided ID didnt resolve to any post",
     }),
     delete: makeRoute({
         tag: "Post",
         summary: "Deletes a post from id, must be logged in",
-        path: { id: "string" },
+        path: { id: "clpeceq9h000078m210txowen" },
         404: "Provided ID didnt resolve to any post",
     })
 }

@@ -7,9 +7,9 @@ export const commentId = {
         tag: "Comment",
         summary: "Returns comment data from id",
         security: false,
-        path: { id: "string" },
+        path: { id: "clpeceq9h000078m210txowen" },
         success: {
-            text: "string",
+            text: "some text",
             childrenCount: 10,
             meta: {
                 user: simpleUser,
@@ -22,9 +22,9 @@ export const commentId = {
     put: makeRoute({
         tag: "Comment",
         summary: "Updates comment from id, must be logged in",
-        path: { id: "string" },
+        path: { id: "clpeceq9h000078m210txowen" },
         body: {
-            text: "string",
+            text: "some text",
             updatedAt: dateExample,
         },
         404: "Provided ID didnt resolve to any comment",
@@ -32,7 +32,7 @@ export const commentId = {
     delete: makeRoute({
         tag: "Comment",
         summary: "Deletes a comment from id, must be logged in",
-        path: { id: "string" },
+        path: { id: "clpeceq9h000078m210txowen" },
         404: "Provided ID didnt resolve to any comment",
     })
 }

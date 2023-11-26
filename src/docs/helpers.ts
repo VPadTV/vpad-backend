@@ -9,6 +9,7 @@ export type SwaggerObject = {
         type: string,
         example?: SwaggerDefinitions
         properties?: SwaggerObject
+        format?: string
         items?: {
             type: 'object',
             properties: SwaggerObject
@@ -33,6 +34,8 @@ export type SwaggerError = {
     }
 }
 
+export const BodyFile = "__bodyfile__"
+
 export type Parameters = {
     [name: string]: string | number
 }
@@ -43,11 +46,17 @@ export type Body = {
     [name: string]: SwaggerDefinitions | Body | [Body]
 }
 
+export enum ContentType {
+    FORM = 'application/x-www-form-urlencoded',
+    MULTIPART = 'multipart/form-data',
+}
+
 export type GenerateRoute = {
     tag: string
     summary: string
     path?: Parameters
     query?: Parameters
+    contentType?: ContentType
     body?: Body
     success?: Body
     security?: boolean
@@ -72,6 +81,11 @@ const makeObject = (args?: Body) => {
             swb[name] = {
                 type: 'object',
                 properties: obj(value as Body)
+            }
+        else if (value === BodyFile)
+            swb[name] = {
+                type: "string",
+                format: "binary"
             }
         else
             swb[name] = {
@@ -144,6 +158,8 @@ export const makeRoute = (args: GenerateRoute) => {
 
     const swErrors = makeErrors(errors) ?? {}
 
+    let contentType = args.contentType ?? ContentType.FORM
+
     return {
         security: security === true ? [{ bearerAuth: [] }] : undefined,
         tags: [tag],
@@ -152,7 +168,7 @@ export const makeRoute = (args: GenerateRoute) => {
         requestBody: swBody ? {
             required: true,
             content: {
-                'application/json': {
+                [contentType]: {
                     schema: {
                         type: 'object',
                         properties: swBody
@@ -173,7 +189,10 @@ export const makeRoute = (args: GenerateRoute) => {
                                     example: "refreshed token",
                                 } : undefined, ...swSuccess
                             }
-                        } : undefined
+                        } : {
+                            type: 'object',
+                            properties: {}
+                        }
                     }
                 }
             },

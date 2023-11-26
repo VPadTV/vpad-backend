@@ -11,7 +11,7 @@ export const userLogin = {
             password: "string"
         },
         success: {
-            id: "string",
+            id: "clpeceq9h000078m210txowen",
             token: "string",
         },
         400: "Must include email or username, incorrect password",
