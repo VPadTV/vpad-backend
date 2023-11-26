@@ -3,9 +3,11 @@ import { SimpleUser } from "@domain/helpers/mappers/user"
 import { Paginate, paginate } from "@domain/helpers/paginate"
 import { DatabaseClient } from "@infra/gateways/database"
 import { User } from "@prisma/client"
+import { Decimal } from "@prisma/client/runtime/library"
 
 export type PostGetManyRequest = {
-    user: User
+    user?: User
+    userTierId?: string
     userId?: string
     sortBy: "latest" | "oldest" | "high-views" | "low-views"
     titleSearch?: string
@@ -36,6 +38,22 @@ export type PostSort = {
 
 export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): Promise<PostGetManyResponse> {
     let orderBy: PostSort
+    let userTierValue = new Decimal(0)
+    if (req.user && req.userTierId) {
+        const userTier = await db.subscriptionTier.findFirst({
+            where: {
+                id: req.userTierId,
+                subscribers: {
+                    some: { userId: req.user.id }
+                },
+            },
+            select: {
+                price: true
+            }
+        })
+        if (userTier)
+            userTierValue = userTier.price
+    }
     switch (req.sortBy) {
         case "low-views":
             orderBy = { votes: { _count: "asc" } }
@@ -61,7 +79,10 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
                 title: req.titleSearch ? {
                     search: req.titleSearch
                 } : undefined,
-                minTier: null,
+                OR: [
+                    { minTier: { price: { lte: userTierValue } } },
+                    { minTier: null },
+                ],
             },
             select: {
                 id: true,

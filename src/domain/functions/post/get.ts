@@ -38,11 +38,7 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
             mediaType: true,
             mediaUrl: true,
             thumbUrl: true,
-            minTier: {
-                select: {
-                    price: true
-                }
-            },
+            minTier: { select: { price: true } },
             user: {
                 select: SimpleUser.selector
             },
