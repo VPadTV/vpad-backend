@@ -2,6 +2,7 @@ import { Errors } from "@domain/helpers"
 import { emailRegex, nameRegex, passwordRegex } from "@domain/helpers/regex"
 import { DatabaseClient } from "@infra/gateways/database"
 import { Storage } from "@infra/gateways/storage"
+import { FileRawUpload } from "@infra/middlewares"
 import bcrypt from "bcrypt"
 
 export type UserEditRequest = {
@@ -10,7 +11,7 @@ export type UserEditRequest = {
     nickname?: string
     email?: string
     password?: string
-    profilePhotoBase64?: string
+    profilePhoto?: FileRawUpload
 }
 
 export type UserEditResponse = {
@@ -34,7 +35,7 @@ export async function userEdit(req: UserEditRequest, db: DatabaseClient, storage
             throw Errors.INVALID_PASSWORD()
         }
     }
-    let profilePhotoData = req.profilePhotoBase64 ? storage.getFileData(req.profilePhotoBase64) : undefined
+    let profilePhotoData = req.profilePhoto ? storage.getFileData(req.profilePhoto) : undefined
 
     const user = await db.user.update(
         {
