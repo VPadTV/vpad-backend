@@ -24,8 +24,7 @@ export const commentId = {
         summary: "Updates comment from id, must be logged in",
         path: { id: "clpeceq9h000078m210txowen" },
         body: {
-            text: "some text",
-            updatedAt: dateExample,
+            text: "some text"
         },
         404: "Provided ID didnt resolve to any comment",
     }),

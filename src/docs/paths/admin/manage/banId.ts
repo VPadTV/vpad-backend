@@ -7,6 +7,7 @@ export const adminBanId = {
         summary: "Manages a user ban",
         security: false,
         path: { id: "clpeceq9h000078m210txowen" },
+        required: ["banned"],
         body: {
             banned: true,
             banTimeout: dateExample

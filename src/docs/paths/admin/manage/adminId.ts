@@ -6,6 +6,7 @@ export const adminId = {
         summary: "Manages admins",
         security: false,
         path: { id: "clpeceq9h000078m210txowen" },
+        required: ["admin"],
         body: {
             admin: true,
         },

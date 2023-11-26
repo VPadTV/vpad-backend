@@ -34,6 +34,7 @@ export const postNoId = {
         tag: "Post",
         summary: "Creates a new post",
         contentType: ContentType.MULTIPART,
+        required: ["text", "media"],
         body: {
             text: "some text",
             media: BodyFile,

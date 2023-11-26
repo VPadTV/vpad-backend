@@ -5,11 +5,13 @@ export const userRegister = {
         tag: "User",
         summary: "Registers a new user",
         security: false,
+        required: ["username", "email", "password"],
         body: {
-            name: "string",
-            email: "string",
-            password: "string",
-            about: "string",
+            username: "some_username",
+            nickname: "some_nickname",
+            email: "email@domain.com",
+            password: "somepass",
+            about: "some about section",
         },
         success: {
             id: "clpeceq9h000078m210txowen"

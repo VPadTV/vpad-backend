@@ -36,9 +36,10 @@ export const commentNoId = {
     post: makeRoute({
         tag: "Comment",
         summary: "Creates a new comment",
+        required: ["postid", "text"],
         body: {
-            postid: "clpeceq9h000078m210txowen",
-            parentid: "clpeceq9h000078m210txowen",
+            postId: "clpeceq9h000078m210txowen",
+            parentId: "clpeceq9h000078m210txowen",
             text: "some text",
         },
         success: {
