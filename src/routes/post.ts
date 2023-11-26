@@ -3,8 +3,10 @@ import { PostDeleteRequest, postDelete } from "@domain/functions/post/delete";
 import { PostEditRequest, postEdit } from "@domain/functions/post/edit";
 import { PostGetRequest, postGet } from "@domain/functions/post/get";
 import { PostGetManyRequest, postGetMany } from "@domain/functions/post/getMany";
+import { PostStreamRequest, postStream } from "@domain/functions/post/stream";
 import { ok } from "@domain/helpers";
 import { middleware, jsonResponse } from "@infra/adapters";
+import { streamResponse } from "@infra/adapters/streamResponse";
 import { Database, Storage } from "@infra/gateways";
 import { isLoggedIn } from "@infra/middlewares/isLoggedIn";
 import { IRoute } from "@main/route";
@@ -24,6 +26,10 @@ export class PostRoute implements IRoute {
         router.get('/:id',
             jsonResponse(async (request: PostGetRequest) => {
                 return ok(await postGet(request, Database.get()))
+            }))
+        router.get('/:id/stream',
+            streamResponse(async (request: PostStreamRequest) => {
+                return postStream(request, Storage.get())
             }))
         router.put('/:id',
             middleware(isLoggedIn),

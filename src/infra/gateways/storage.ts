@@ -1,8 +1,10 @@
-import AWS from 'aws-sdk'
+import AWS, { type S3 } from 'aws-sdk'
 import { MimeTypes } from './mimeTypes'
 import crypto from 'crypto';
 import { FileRawUpload } from '@infra/middlewares';
 import { MediaType } from '@prisma/client';
+import { Readable, ReadableOptions } from "stream";
+import { Errors } from '@domain/helpers';
 
 export type FileUpload = {
     id: string;
@@ -13,7 +15,13 @@ export type FileUpload = {
     url: string
 }
 
-export type StorageClient = AWS.S3
+export type StreamResponse = {
+    stream: SmartStream;
+    ContentLength: number;
+    ContentType: string;
+}
+
+export type StorageClient = S3
 export class Storage {
     private static instance: Storage;
     private client: StorageClient
@@ -74,5 +82,62 @@ export class Storage {
                 Key: key,
             })
             .promise()
+    }
+
+    keyFromUrl(url: string): string {
+        return url.match(/https.*\/(.*)\./)![1]
+    }
+
+    async stream(url: string): Promise<StreamResponse> {
+        const params = {
+            Bucket: process.env.BB_BUCKET!,
+            Key: this.keyFromUrl(url)
+        }
+        const { ContentLength, ContentType } = await this.client.headObject(params).promise()
+        if (!ContentLength || !ContentType) throw Errors.FAILED_TO_DOWNLOAD()
+        const stream = new SmartStream(params, this.client, ContentLength);
+        return {
+            stream,
+            ContentLength,
+            ContentType,
+        }
+    }
+}
+
+export class SmartStream extends Readable {
+    _currentCursorPosition = 0;
+    _s3DataRange = 2048 * 1024;
+    _maxContentLength: number;
+    _s3: S3; // AWS.S3 instance
+    _s3StreamParams: S3.GetObjectRequest;
+
+    constructor(
+        parameters: S3.GetObjectRequest,
+        s3: S3,
+        maxLength: number,
+        nodeReadableStreamOptions?: ReadableOptions
+    ) {
+        super(nodeReadableStreamOptions);
+        this._maxContentLength = maxLength;
+        this._s3 = s3;
+        this._s3StreamParams = parameters;
+    }
+
+    _read() {
+        if (this._currentCursorPosition > this._maxContentLength) {
+            this.push(null);
+        } else {
+            const range = this._currentCursorPosition + this._s3DataRange;
+            const adjustedRange =
+                range < this._maxContentLength ? range : this._maxContentLength;
+            this._s3StreamParams.Range = `bytes=${this._currentCursorPosition}-${adjustedRange}`;
+            this._currentCursorPosition = adjustedRange + 1;
+            this._s3.getObject(this._s3StreamParams, (error, data) => {
+                if (error)
+                    this.destroy(error);
+                else
+                    this.push(data.Body);
+            });
+        }
     }
 }

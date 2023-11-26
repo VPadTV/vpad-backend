@@ -20,6 +20,7 @@ export const Errors = {
     NOT_FOUND: () => notFound("Not Found"),
     IM_A_TEAPOT: () => imATeapot("I'm A Teapot!"),
     BAD_REQUEST: () => badRequest("Bad Request"),
+    FAILED_TO_DOWNLOAD: () => badRequest("Failed to download from URL"),
 
     INVALID_TOKEN: () => badRequest("Invalid Token"),
     INVALID_NAME: () => badRequest("Invalid Name"),
