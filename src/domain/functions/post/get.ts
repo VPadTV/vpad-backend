@@ -6,7 +6,7 @@ import { User } from "@prisma/client"
 export type PostGetRequest = {
     user?: User
     id: string
-    userTierId: string
+    userTierId?: string
 }
 
 export type PostGetResponse = {
@@ -49,6 +49,7 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
     if (!post) throw Errors.NOT_FOUND()
 
     if (post.minTier) {
+        if (!req.userTierId) throw Errors.UNAUTHORIZED()
         if (!req.user) throw Errors.UNAUTHORIZED()
         const userTier = await db.subscriptionTier.findFirst({
             where: {

@@ -6,7 +6,10 @@ export const postId = {
         tag: "Post",
         summary: "Returns post data from id",
         security: false,
-        path: { id: "clpeceq9h000078m210txowen" },
+        path: {
+            id: "clpeceq9h000078m210txowen",
+            userTierId: "clpeceq9h000078m210txowen",
+        },
         success: {
             text: "some text",
             mediaUrl: `https://${process.env.BB_BUCKET!}.s3.backblazeb2.com/sdklawejwap.mp4`,

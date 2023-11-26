@@ -7,7 +7,8 @@ export const postNoId = {
         summary: "Gets many posts",
         security: false,
         query: {
-            userid: "clpeceq9h000078m210txowen",
+            userTierId: "clpeceq9h000078m210txowen",
+            creatorId: "clpeceq9h000078m210txowen",
             sortBy: "latest | oldest | high-views | low-views",
             page: 1,
             size: 30,

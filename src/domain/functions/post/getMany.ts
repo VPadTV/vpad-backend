@@ -8,7 +8,7 @@ import { Decimal } from "@prisma/client/runtime/library"
 export type PostGetManyRequest = {
     user?: User
     userTierId?: string
-    userId?: string
+    creatorId?: string
     sortBy: "latest" | "oldest" | "high-views" | "low-views"
     titleSearch?: string
 
@@ -75,7 +75,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
             skip: offset,
             take: +req.size,
             where: {
-                userId: req.userId ?? undefined,
+                userId: req.creatorId ?? undefined,
                 title: req.titleSearch ? {
                     search: req.titleSearch
                 } : undefined,
@@ -101,7 +101,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
         }),
         db.post.count({
             where: {
-                userId: req.userId ?? undefined
+                userId: req.creatorId ?? undefined
             }
         }),
     ])
