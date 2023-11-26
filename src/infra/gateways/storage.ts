@@ -84,7 +84,7 @@ export class Storage {
             .promise()
     }
 
-    async stream(key: string, _modif: ModifyVideo): Promise<StreamResponse> {
+    async stream(key: string): Promise<StreamResponse> {
         const params = {
             Bucket: process.env.BB_BUCKET!,
             Key: key

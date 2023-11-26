@@ -1,13 +1,19 @@
 import { Errors } from "@domain/helpers"
-import { Storage, StreamResponse } from "@infra/gateways"
+import { SmartStream, Storage } from "@infra/gateways"
 
 export type PostStreamRequest = {
     key: string
+    width?: string
 }
 
-export type PostStreamResponse = StreamResponse
+export type PostStreamResponse = {
+    stream: SmartStream;
+    ContentLength: number;
+    ContentType: string;
+}
 
-export async function postStream({ key }: PostStreamRequest, storage: Storage): Promise<PostStreamResponse> {
+export async function postStream({ key, width }: PostStreamRequest, storage: Storage): Promise<PostStreamResponse> {
     if (!key) throw Errors.NOT_FOUND()
-    return storage.stream(key, { resolution: "" })
+    const response = await storage.stream(key)
+    return response
 }

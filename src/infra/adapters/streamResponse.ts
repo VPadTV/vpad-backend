@@ -1,8 +1,8 @@
+import { PostStreamResponse } from '@domain/functions/post/stream'
 import { HttpError } from '@domain/helpers'
-import { StreamResponse } from '@infra/gateways'
 import { Response, Request } from 'express'
 
-export function streamResponse<T, U extends StreamResponse>(fn: (request: T) => Promise<U>) {
+export function streamResponse<T, U extends PostStreamResponse>(fn: (request: T) => Promise<U>) {
     return async (req: Request, res: Response) => {
         try {
             const {
@@ -15,10 +15,17 @@ export function streamResponse<T, U extends StreamResponse>(fn: (request: T) => 
                 ...res.locals,
             } as T)
             res.writeHead(200, {
-                'Content-Length': ContentLength, // Get the video file size,
+                'Content-Length': ContentLength,
                 'Content-Type': ContentType,
             })
-            stream.pipe(res)
+            const streaming = stream.pipe(res)
+            streaming.on('pipe', () => {
+                console.log("data")
+            })
+            streaming.on('close', () => {
+                console.log("what")
+                res.end()
+            })
         } catch (error) {
             console.error(`<StreamRouteError>: ${error?.message}`)
             console.log(error)
