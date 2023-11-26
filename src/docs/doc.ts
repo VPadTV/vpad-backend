@@ -12,7 +12,7 @@ import { adminBanId } from "./paths/admin/manage/banId";
 export default {
     openapi: "3.0.0",
     info: {
-        title: "Indie Streaming App API",
+        title: "VPAD API",
         version: "0.0.1",
     },
     servers: [
