@@ -1,4 +1,4 @@
-import { BodyFile, makeRoute } from "@docs/helpers";
+import { BodyFile, ContentType, makeRoute } from "@docs/helpers";
 
 export const userId = {
     get: makeRoute({
@@ -20,6 +20,7 @@ export const userId = {
         tag: "User",
         summary: "Updates user from id, must be logged in",
         path: { id: "clpeceq9h000078m210txowen" },
+        contentType: ContentType.MULTIPART,
         body: {
             username: "some_username",
             nickname: "some_nickname",

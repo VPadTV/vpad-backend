@@ -1,4 +1,4 @@
-import { BodyFile, makeRoute } from "@docs/helpers";
+import { BodyFile, ContentType, makeRoute } from "@docs/helpers";
 import { simpleUser } from "@docs/schemas/simpleUser";
 
 export const postId = {
@@ -25,6 +25,7 @@ export const postId = {
         tag: "Post",
         summary: "Updates post from id, must be logged in",
         path: { id: "clpeceq9h000078m210txowen" },
+        contentType: ContentType.MULTIPART,
         body: {
             text: "some text",
             media: BodyFile,

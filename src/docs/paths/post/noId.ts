@@ -1,4 +1,4 @@
-import { BodyFile, makeRoute } from "@docs/helpers";
+import { BodyFile, ContentType, makeRoute } from "@docs/helpers";
 import { simpleUser } from "@docs/schemas/simpleUser";
 
 export const postNoId = {
@@ -33,6 +33,7 @@ export const postNoId = {
     post: makeRoute({
         tag: "Post",
         summary: "Creates a new post",
+        contentType: ContentType.MULTIPART,
         body: {
             text: "some text",
             media: BodyFile,
