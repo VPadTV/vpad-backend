@@ -4,19 +4,16 @@ import { Response, Request } from 'express'
 
 export function streamResponse<T, U extends StreamResponse>(fn: (request: T) => Promise<U>) {
     return async (req: Request, res: Response) => {
-        const body = Array.isArray(req.body) ? { data: req.body } : req.body
-
         try {
             const {
                 stream,
                 ContentLength,
                 ContentType,
             } = await fn({
-                ...body,
                 ...req.params,
                 ...req.query,
                 ...res.locals,
-            })
+            } as T)
             res.writeHead(200, {
                 'Content-Length': ContentLength, // Get the video file size,
                 'Content-Type': ContentType,

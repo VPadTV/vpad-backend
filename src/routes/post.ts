@@ -29,7 +29,7 @@ export class PostRoute implements IRoute {
             jsonResponse(async (request: PostGetRequest) => {
                 return ok(await postGet(request, Database.get()))
             }))
-        router.get('/:id/stream',
+        router.get('/stream/:key',
             streamResponse(async (request: PostStreamRequest) => {
                 return postStream(request, Storage.get())
             }))

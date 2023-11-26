@@ -14,6 +14,10 @@ export type FileUpload = {
     url: string
 }
 
+export type ModifyVideo = {
+    resolution: string
+}
+
 export type StreamResponse = {
     stream: SmartStream;
     ContentLength: number;
@@ -39,21 +43,20 @@ export class Storage {
         return this.instance
     }
 
-    getUrl(key: string) {
-        return `https://f0004.backblazeb2.com/file/${process.env.BB_BUCKET!}/${key}`
+    static getUrl(key: string) {
+        return `https://f004.backblazeb2.com/file/${process.env.BB_BUCKET!}/${key}`
     }
 
     getFileData(file?: FileRawUpload): FileUpload | undefined {
         if (!file) return undefined
-        const extension = MimeTypes.extension(file.mimetype)
-        let key: string = crypto.randomBytes(16).toString('hex') + '.' + extension
+        let key: string = crypto.randomBytes(16).toString('hex')
         const type = MimeTypes.getType(file.mimetype)
         return {
             key,
             mimeType: file.mimetype,
             type,
             buffer: file.buffer,
-            url: this.getUrl(key)
+            url: Storage.getUrl(key)
         }
     }
 
@@ -81,14 +84,10 @@ export class Storage {
             .promise()
     }
 
-    keyFromUrl(url: string): string {
-        return url.match(/https.*\/(.*)\./)![1]
-    }
-
-    async stream(url: string): Promise<StreamResponse> {
+    async stream(key: string, _modif: ModifyVideo): Promise<StreamResponse> {
         const params = {
             Bucket: process.env.BB_BUCKET!,
-            Key: this.keyFromUrl(url)
+            Key: key
         }
         const { ContentLength, ContentType } = await this.client.headObject(params).promise()
         if (!ContentLength || !ContentType) throw Errors.FAILED_TO_DOWNLOAD()
