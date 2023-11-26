@@ -29,6 +29,9 @@ model User {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    tiers       SubscriptionTier[]
+    subscribing Subscription[]
 }
 
 model Comment {
@@ -82,6 +85,38 @@ model Votes {
 
     post   Post   @relation(name: "postVotes", fields: [postId], references: [id], onDelete: Cascade, onUpdate: Restrict)
     postId String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([userId, postId])
+}
+
+model SubscriptionTier {
+    id String @id @default(cuid())
+
+    name String
+
+    creator   User   @relation(fields: [creatorId], references: [id], onDelete: Cascade, onUpdate: Restrict)
+    creatorId String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    price       Decimal
+    subscribers Subscription[]
+
+    @@unique([name, creatorId])
+}
+
+model Subscription {
+    id String @id @default(cuid())
+
+    tier   SubscriptionTier @relation(fields: [tierId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+    tierId String
+
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict)
+    userId String
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
