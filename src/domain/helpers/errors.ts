@@ -21,6 +21,7 @@ export const Errors = {
     IM_A_TEAPOT: () => imATeapot("I'm A Teapot!"),
     BAD_REQUEST: () => badRequest("Bad Request"),
     FAILED_TO_DOWNLOAD: () => badRequest("Failed to download from URL"),
+    LOW_TIER: () => badRequest("Subscription tier too low"),
 
     INVALID_TOKEN: () => badRequest("Invalid Token"),
     INVALID_USERNAME: () => badRequest("Invalid Username"),

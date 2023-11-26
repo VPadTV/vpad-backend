@@ -61,6 +61,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
                 title: req.titleSearch ? {
                     search: req.titleSearch
                 } : undefined,
+                minTier: null,
             },
             select: {
                 id: true,

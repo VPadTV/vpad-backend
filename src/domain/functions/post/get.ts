@@ -6,6 +6,7 @@ import { User } from "@prisma/client"
 export type PostGetRequest = {
     user?: User
     id: string
+    userTierId: string
 }
 
 export type PostGetResponse = {
@@ -27,7 +28,9 @@ export type PostGetResponse = {
 
 export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<PostGetResponse> {
     const post = await db.post.findFirst({
-        where: { id: req.id },
+        where: {
+            id: req.id
+        },
         select: {
             id: true,
             title: true,
@@ -35,6 +38,11 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
             mediaType: true,
             mediaUrl: true,
             thumbUrl: true,
+            minTier: {
+                select: {
+                    price: true
+                }
+            },
             user: {
                 select: SimpleUser.selector
             },
@@ -43,6 +51,25 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
         }
     })
     if (!post) throw Errors.NOT_FOUND()
+
+    if (post.minTier) {
+        if (!req.user) throw Errors.UNAUTHORIZED()
+        const userTier = await db.subscriptionTier.findFirst({
+            where: {
+                id: req.userTierId,
+                subscribers: {
+                    some: { userId: req.user.id }
+                },
+            },
+            select: {
+                price: true
+            }
+        })
+        if (!userTier)
+            throw Errors.BAD_REQUEST()
+        if (userTier?.price < post.minTier.price)
+            throw Errors.LOW_TIER()
+    }
 
     const [likes, dislikes, views, myVote] = await db.$transaction([
         db.votes.count({
