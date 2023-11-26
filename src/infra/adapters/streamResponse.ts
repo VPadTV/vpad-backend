@@ -19,11 +19,7 @@ export function streamResponse<T, U extends PostStreamResponse>(fn: (request: T)
                 'Content-Type': ContentType,
             })
             const streaming = stream.pipe(res)
-            streaming.on('pipe', () => {
-                console.log("data")
-            })
             streaming.on('close', () => {
-                console.log("what")
                 res.end()
             })
         } catch (error) {

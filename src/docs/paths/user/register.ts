@@ -14,7 +14,8 @@ export const userRegister = {
             about: "some about section",
         },
         success: {
-            id: "clpeceq9h000078m210txowen"
+            id: "clpeceq9h000078m210txowen",
+            token: "string",
         },
         400: "Invalid name, email or password"
     })

@@ -8,6 +8,7 @@ import { commentNoId } from "./paths/comment/noId";
 import { adminNoId } from "./paths/admin/noId";
 import { adminId } from "./paths/admin/manage/adminId";
 import { adminBanId } from "./paths/admin/manage/banId";
+import { postStreamKey } from "./paths/post/streamKey";
 
 export default {
     openapi: "3.0.0",
@@ -35,6 +36,7 @@ export default {
         '/user/login': userLogin,
         '/user/register': userRegister,
         '/post/{id}': postId,
+        '/post/stream/{key}': postStreamKey,
         '/post': postNoId,
         '/comment/{id}': commentId,
         '/comment': commentNoId,

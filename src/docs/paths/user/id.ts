@@ -29,9 +29,6 @@ export const userId = {
             about: "some about me, or nothing",
             profilePhoto: BodyFile,
         },
-        success: {
-            id: "clpeceq9h000078m210txowen"
-        },
         400: "Invalid username, nickname, email, password, or whatever",
         404: "Provided ID didnt resolve to any user",
     })

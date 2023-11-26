@@ -59,7 +59,7 @@ export type GenerateRoute = {
     contentType?: ContentType
     body?: Body
     required?: string[]
-    success?: Body
+    success?: Body | 'video'
     security?: boolean
     [error: number]: string
 }
@@ -155,7 +155,38 @@ export const makeRoute = (args: GenerateRoute) => {
 
     const swBody = makeObject(body)
 
-    const swSuccess = makeObject(success)
+    let swSuccess: any
+    if (success === 'video') {
+        swSuccess = {
+            description: 'video',
+            content: {
+                'video/mp4': {
+                    schema: {
+                        type: 'string',
+                        format: 'binary'
+                    }
+                }
+            }
+        }
+    } else {
+        const successObj = makeObject(success)
+        swSuccess = {
+            description: success?.description,
+            content: {
+                'application/json': {
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            token: security ? {
+                                type: "string",
+                                example: "refreshed token",
+                            } : undefined, ...successObj
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     const swErrors = makeErrors(errors) ?? {}
 
@@ -179,26 +210,8 @@ export const makeRoute = (args: GenerateRoute) => {
             }
         } : undefined,
         responses: {
-            200: {
-                description: success?.description,
-                content: {
-                    'application/json': {
-                        schema: swSuccess ? {
-                            type: 'object',
-                            properties: {
-                                token: security ? {
-                                    type: "string",
-                                    example: "refreshed token",
-                                } : undefined, ...swSuccess
-                            }
-                        } : {
-                            type: 'object',
-                            properties: {}
-                        }
-                    }
-                }
-            },
-            ...swErrors
+            200: swSuccess,
+            ...swErrors,
         }
     }
 }

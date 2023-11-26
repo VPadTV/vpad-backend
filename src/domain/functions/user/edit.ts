@@ -15,9 +15,7 @@ export type UserEditRequest = {
     profilePhoto?: FileRawUpload
 }
 
-export type UserEditResponse = {
-    id: string
-}
+export type UserEditResponse = {}
 
 export async function userEdit(req: UserEditRequest, db: DatabaseClient, storage: Storage): Promise<UserEditResponse> {
     if (req.username && !nameRegex().test(req.username)) {
@@ -39,18 +37,18 @@ export async function userEdit(req: UserEditRequest, db: DatabaseClient, storage
     let profilePhotoData = req.profilePhoto ? storage.getFileData(req.profilePhoto) : undefined
     if (profilePhotoData?.type === MediaType.VIDEO) throw Errors.INVALID_FILE()
 
-    const user = await db.user.update(
-        {
-            where: { id: req.id },
-            data: {
-                username: req.username,
-                nickname: req.nickname,
-                email: req.email,
-                password: req.password && await bcrypt.hash(req.password, 10),
-                profilePhotoUrl: profilePhotoData?.url
-            }
-        })
+    await db.user.update({
+        where: { id: req.id },
+        data: {
+            username: req.username,
+            nickname: req.nickname,
+            email: req.email,
+            password: req.password && await bcrypt.hash(req.password, 10),
+            profilePhotoUrl: profilePhotoData?.url
+        }
+    })
 
     await storage.upload(profilePhotoData)
-    return { id: user.id }
+
+    return {}
 }

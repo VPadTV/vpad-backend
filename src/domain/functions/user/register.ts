@@ -1,5 +1,6 @@
 import { Errors } from "@domain/helpers"
 import { emailRegex, nameRegex, passwordRegex } from "@domain/helpers/regex"
+import { JWT } from "@infra/gateways"
 import { DatabaseClient } from "@infra/gateways/database"
 import bcrypt from "bcrypt"
 
@@ -13,6 +14,7 @@ export type UserRegisterRequest = {
 
 export type UserRegisterResponse = {
     id: string
+    token: string
 }
 
 export async function userRegister(req: UserRegisterRequest, db: DatabaseClient): Promise<UserRegisterResponse> {
@@ -41,5 +43,8 @@ export async function userRegister(req: UserRegisterRequest, db: DatabaseClient)
             password: await bcrypt.hash(req.password, 10)
         }
     })
-    return { id: user.id }
+
+    const token = JWT.newToken(user)
+
+    return { id: user.id, token }
 }
