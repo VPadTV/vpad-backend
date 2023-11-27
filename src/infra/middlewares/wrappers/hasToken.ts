@@ -18,7 +18,7 @@ export const tokenMiddleware = async (data: MiddlewareData, func: (user: User) =
     const id = token.sub.split('#')[0]
 
     const db = Database.get()
-    const user = await db.user.findFirst({ where: { id: id } })
+    const user = await db.user.findFirst({ where: { id } })
     if (!user) throw Errors.UNAUTHORIZED()
 
     await func(user)

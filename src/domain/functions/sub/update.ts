@@ -1,7 +1,9 @@
 import { Errors } from "@domain/helpers"
 import { DatabaseClient } from "@infra/gateways/database"
+import { User } from "@prisma/client"
 
 export type SubUpdateRequest = {
+    user: User
     id: string
     tierId: string
 }
@@ -16,9 +18,10 @@ export async function subUpdate(req: SubUpdateRequest, db: DatabaseClient): Prom
 
     // TODO: check payment stuff
 
-    db.subscription.update({
-        where: { id: req.id },
+    await db.subscription.update({
+        where: { id: req.id, userId: req.user.id },
         data: { tierId: req.tierId }
     })
+
     return {}
 }

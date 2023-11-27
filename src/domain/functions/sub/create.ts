@@ -18,11 +18,12 @@ export async function subCreate(req: SubCreateRequest, db: DatabaseClient): Prom
 
     // TODO: check payment stuff
 
-    db.subscription.create({
+    await db.subscription.create({
         data: {
             userId: req.user.id,
             tierId: req.tierId
         }
     })
+
     return {}
 }

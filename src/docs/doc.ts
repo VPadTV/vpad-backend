@@ -9,6 +9,11 @@ import { adminNoId } from "./paths/admin/noId";
 import { adminId } from "./paths/admin/manage/adminId";
 import { adminBanId } from "./paths/admin/manage/banId";
 import { postStreamKey } from "./paths/post/streamKey";
+import { subNoId } from "./paths/sub/noId";
+import { subId } from "./paths/sub/id";
+import { tierNoId } from "./paths/tier/noId";
+import { tierId } from "./paths/tier/id";
+import { tierCreatorId } from "./paths/tier/creatorId";
 
 export default {
     openapi: "3.0.0",
@@ -43,5 +48,10 @@ export default {
         '/admin': adminNoId,
         '/manage/admin/{id}': adminId,
         '/manage/ban/{id}': adminBanId,
+        '/sub': subNoId,
+        '/sub/{id}': subId,
+        '/tier': tierNoId,
+        '/tier/{id}': tierId,
+        '/tier/creator/{creatorId}': tierCreatorId,
     }
 }

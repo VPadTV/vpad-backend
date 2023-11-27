@@ -17,8 +17,7 @@ export class TierRoute implements IRoute {
                 return ok(await tierCreate(request, Database.get()))
             }))
 
-        router.get('/:creatorId',
-            middleware(isLoggedIn),
+        router.get('/creator/:creatorId',
             jsonResponse(async (request: TierGetManyRequest) => {
                 return ok(await tierGetMany(request, Database.get()))
             }))
