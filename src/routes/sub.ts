@@ -7,6 +7,7 @@ import { SubCreateRequest, subCreate } from "@domain/functions/sub/create";
 import { SubUpdateRequest, subUpdate } from "@domain/functions/sub/update";
 import { SubDeleteRequest, subDelete } from "@domain/functions/sub/delete";
 import { isLoggedIn } from "@infra/middlewares";
+import { SubGetRequest, subGet } from "@domain/functions/sub/get";
 
 export class SubRoute implements IRoute {
     register(router: Router): void {
@@ -14,6 +15,12 @@ export class SubRoute implements IRoute {
             middleware(isLoggedIn),
             jsonResponse(async (request: SubCreateRequest) => {
                 return ok(await subCreate(request, Database.get()))
+            }))
+
+        router.get('/:creatorId',
+            middleware(isLoggedIn),
+            jsonResponse(async (request: SubGetRequest) => {
+                return ok(await subGet(request, Database.get()))
             }))
 
         router.put('/:id',

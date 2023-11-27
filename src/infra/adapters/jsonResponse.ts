@@ -26,12 +26,11 @@ export function jsonResponse<T, U extends HttpResponse>(fn: (request: T) => Prom
             })
             return res.status(statusCode).json({ ...data, token: data.token ?? req.params?.token })
         } catch (error) {
-            console.error(`<RouteError>: ${error?.message}`)
-            console.log(error)
-            if (error instanceof HttpError) {
+            console.error(`** Route **`)
+            console.error(error)
+            if (error instanceof HttpError)
                 return res.status(error.code).json({ error: error.message })
-            }
-            return res.status(500).json({ error })
+            return res.status(500).json({ error: error.code ?? error.message })
         }
     }
 }

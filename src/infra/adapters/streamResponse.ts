@@ -23,12 +23,12 @@ export function streamResponse<T, U extends PostStreamResponse>(fn: (request: T)
                 res.end()
             })
         } catch (error) {
-            console.error(`<StreamRouteError>: ${error?.message}`)
-            console.log(error)
+            console.error(`** Streaming **`)
+            console.error(error)
             if (error instanceof HttpError) {
                 return res.status(error.code).json({ error: error.message })
             }
-            return res.status(500).json({ error })
+            return res.status(500).json({ error: error.code ?? error.message })
         }
     }
 }

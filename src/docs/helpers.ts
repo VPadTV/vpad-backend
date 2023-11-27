@@ -57,8 +57,8 @@ export type GenerateRoute = {
     path?: Parameters
     query?: Parameters
     contentType?: ContentType
+    bodyRequired?: string[]
     body?: Body
-    required?: string[]
     success?: Body | 'video'
     security?: boolean
     [error: number]: string
@@ -145,7 +145,7 @@ export const obj = (args: Body) => {
 }
 
 export const makeRoute = (args: GenerateRoute) => {
-    const { tag, summary, path: pathParameters, query: queryParameters, body: body, success, required = [], security = true, ...errors } = args
+    const { tag, summary, path: pathParameters, query: queryParameters, body: body, success, bodyRequired = [], security = true, ...errors } = args
 
     let swParams: SwaggerParameter[] = []
     const swPath = makeParameters("path", pathParameters)
@@ -203,7 +203,7 @@ export const makeRoute = (args: GenerateRoute) => {
                 [contentType]: {
                     schema: {
                         type: 'object',
-                        required,
+                        required: bodyRequired,
                         properties: swBody
                     }
                 }

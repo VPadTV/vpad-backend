@@ -12,7 +12,7 @@ export type PostStreamResponse = {
     ContentType: string;
 }
 
-export async function postStream({ key, width }: PostStreamRequest, storage: Storage): Promise<PostStreamResponse> {
+export async function postStream({ key }: PostStreamRequest, storage: Storage): Promise<PostStreamResponse> {
     if (!key) throw Errors.NOT_FOUND()
     const response = await storage.stream(key)
     return response

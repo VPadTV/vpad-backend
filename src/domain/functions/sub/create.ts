@@ -5,7 +5,7 @@ import { User } from "@prisma/client"
 export type SubCreateRequest = {
     user: User
     creatorId: string
-    tierId?: string
+    tierId: '' | string
 }
 
 export type SubCreateResponse = {}
@@ -21,7 +21,8 @@ export async function subCreate(req: SubCreateRequest, db: DatabaseClient): Prom
     await db.subscription.create({
         data: {
             userId: req.user.id,
-            tierId: req.tierId
+            creatorId: req.creatorId,
+            tierId: req.tierId?.length === 0 ? null : req.tierId
         }
     })
 

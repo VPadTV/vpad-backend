@@ -5,7 +5,7 @@ export const userLogin = {
         tag: "User",
         summary: "Logins as a user using email or username and a password",
         security: false,
-        required: ["password"],
+        bodyRequired: ["password"],
         body: {
             username: "some_username",
             email: "email@domain.com",

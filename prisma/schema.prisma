@@ -31,7 +31,8 @@ model User {
     updatedAt DateTime @updatedAt
 
     tiers       SubscriptionTier[]
-    subscribing Subscription[]
+    subscribing Subscription[]     @relation(name: "user")
+    subscribed  Subscription[]     @relation(name: "creator")
 }
 
 model Comment {
@@ -121,7 +122,10 @@ model Subscription {
     tier   SubscriptionTier? @relation(fields: [tierId], references: [id], onDelete: Restrict, onUpdate: Restrict)
     tierId String?
 
-    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict)
+    creator   User   @relation(name: "creator", fields: [creatorId], references: [id], onDelete: Cascade, onUpdate: Restrict)
+    creatorId String
+
+    user   User   @relation(name: "user", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict)
     userId String
 
     createdAt DateTime @default(now())

@@ -5,7 +5,7 @@ export const userRegister = {
         tag: "User",
         summary: "Registers a new user",
         security: false,
-        required: ["username", "email", "password"],
+        bodyRequired: ["username", "email", "password"],
         body: {
             username: "some_username",
             nickname: "some_nickname",

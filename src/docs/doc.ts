@@ -14,6 +14,7 @@ import { subId } from "./paths/sub/id";
 import { tierNoId } from "./paths/tier/noId";
 import { tierId } from "./paths/tier/id";
 import { tierCreatorId } from "./paths/tier/creatorId";
+import { subCreatorId } from "./paths/sub/creatorId";
 
 export default {
     openapi: "3.0.0",
@@ -40,18 +41,24 @@ export default {
         '/user/{id}': userId,
         '/user/login': userLogin,
         '/user/register': userRegister,
-        '/post/{id}': postId,
-        '/post/stream/{key}': postStreamKey,
-        '/post': postNoId,
-        '/comment/{id}': commentId,
-        '/comment': commentNoId,
-        '/admin': adminNoId,
-        '/manage/admin/{id}': adminId,
-        '/manage/ban/{id}': adminBanId,
-        '/sub': subNoId,
-        '/sub/{id}': subId,
+
         '/tier': tierNoId,
         '/tier/{id}': tierId,
         '/tier/creator/{creatorId}': tierCreatorId,
+
+        '/sub': subNoId,
+        '/sub/{id}': subId,
+        '/sub/{creatorId}': subCreatorId,
+
+        '/post/{id}': postId,
+        '/post/stream/{key}': postStreamKey,
+        '/post': postNoId,
+
+        '/comment/{id}': commentId,
+        '/comment': commentNoId,
+
+        '/admin': adminNoId,
+        '/manage/admin/{id}': adminId,
+        '/manage/ban/{id}': adminBanId,
     }
 }
