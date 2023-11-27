@@ -11,7 +11,7 @@
         "test": "jest --no-cache --coverage --silent --forceExit --runInBand --detectOpenHandles",
         "test-watch": "jest --no-cache --silent=false --runInBand --watch --no-coverage",
         "migrate-dev": "prisma migrate dev && prisma generate",
-        "migrate-deploy": "prisma migrate deploy && prisma generate",
+        "migrate-prod": "prisma migrate deploy && prisma generate",
         "lint": "eslint . --ext js,ts --fix",
         "check": "tsc && resolve-tspaths --noEmit"
     },
