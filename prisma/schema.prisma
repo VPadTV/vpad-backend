@@ -77,6 +77,8 @@ model Post {
 
     nsfw Boolean @default(false)
 
+    tags String[] @default([])
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }

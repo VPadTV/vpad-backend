@@ -16,6 +16,7 @@ export type PostGetResponse = {
     mediaUrl: string
     thumbUrl?: string
     meta: {
+        tags: string[]
         user: SimpleUser
         likes: number
         dislikes: number
@@ -39,6 +40,7 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
             mediaUrl: true,
             thumbUrl: true,
             minTier: { select: { price: true } },
+            tags: true,
             user: {
                 select: SimpleUser.selector
             },
@@ -90,6 +92,7 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
         mediaType: post.mediaType,
         thumbUrl: post.thumbUrl ?? undefined,
         meta: {
+            tags: post.tags,
             user: post.user,
             likes: likes ?? 0,
             dislikes: dislikes ?? 0,
