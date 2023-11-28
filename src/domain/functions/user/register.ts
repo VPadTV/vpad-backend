@@ -27,7 +27,7 @@ export async function userRegister(req: UserRegisterRequest, db: DatabaseClient)
 
     if (!nameRegex().test(req.username))
         throw Errors.INVALID_USERNAME()
-    if (req.nickname && !nameRegex().test(req.nickname))
+    if (req.nickname?.length && !nameRegex().test(req.nickname))
         throw Errors.INVALID_NICKNAME()
     if (!emailRegex().test(req.email))
         throw Errors.INVALID_EMAIL()
@@ -37,7 +37,7 @@ export async function userRegister(req: UserRegisterRequest, db: DatabaseClient)
     const user = await db.user.create({
         data: {
             username: req.username,
-            nickname: req.nickname ?? req.username,
+            nickname: req.nickname?.length ? req.nickname : req.username,
             email: req.email,
             about: req.about ? req.about : undefined,
             password: await bcrypt.hash(req.password, 10)
