@@ -1,4 +1,5 @@
 import { makeRoute } from "@docs/helpers";
+import { exId } from "@docs/schemas/id";
 
 export const subNoId = {
     post: makeRoute({
@@ -6,8 +7,8 @@ export const subNoId = {
         summary: "Creates subscription, must be logged in",
         bodyRequired: ['creatorId'],
         body: {
-            creatorId: "clpeceq9h000078m210txowen",
-            tierId: "clpeceq9h000078m210txowen"
+            creatorId: exId,
+            tierId: exId
         },
         400: "Missing ID",
     })

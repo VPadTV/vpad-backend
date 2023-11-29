@@ -1,17 +1,18 @@
 import { makeRoute } from "@docs/helpers";
+import { exId } from "@docs/schemas/id";
 
 export const adminId = {
     post: makeRoute({
         tag: "Admin",
         summary: "Manages admins",
         security: false,
-        path: { id: "clpeceq9h000078m210txowen" },
+        path: { id: exId },
         bodyRequired: ["admin"],
         body: {
             admin: true,
         },
         success: {
-            id: "clpeceq9h000078m210txowen",
+            id: exId,
             admin: true
         },
         400: "`admin` must be `true` or `false`",

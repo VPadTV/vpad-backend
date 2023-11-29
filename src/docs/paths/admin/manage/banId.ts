@@ -1,19 +1,20 @@
 import { makeRoute } from "@docs/helpers";
 import { dateExample } from "@docs/schemas/dateExample"
+import { exId } from "@docs/schemas/id";
 
 export const adminBanId = {
     post: makeRoute({
         tag: "Admin",
         summary: "Manages a user ban",
         security: false,
-        path: { id: "clpeceq9h000078m210txowen" },
+        path: { id: exId },
         bodyRequired: ["banned"],
         body: {
             banned: true,
             banTimeout: dateExample
         },
         success: {
-            id: "clpeceq9h000078m210txowen",
+            id: exId,
             banned: true,
             banTimeout: dateExample
         },

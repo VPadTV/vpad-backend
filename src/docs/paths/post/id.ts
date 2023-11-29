@@ -1,4 +1,5 @@
 import { BodyFile, ContentType, makeRoute } from "@docs/helpers";
+import { exId } from "@docs/schemas/id";
 import { simpleUser } from "@docs/schemas/simpleUser";
 
 export const postId = {
@@ -7,8 +8,7 @@ export const postId = {
         summary: "Returns post data from id",
         security: false,
         path: {
-            id: "clpeceq9h000078m210txowen",
-            userTierId: "clpeceq9h000078m210txowen",
+            id: exId
         },
         success: {
             text: "some text",
@@ -27,7 +27,7 @@ export const postId = {
     put: makeRoute({
         tag: "Post",
         summary: "Updates post from id, must be logged in",
-        path: { id: "clpeceq9h000078m210txowen" },
+        path: { id: exId },
         contentType: ContentType.MULTIPART,
         body: {
             text: "some text",
@@ -39,7 +39,7 @@ export const postId = {
     delete: makeRoute({
         tag: "Post",
         summary: "Deletes a post from id, must be logged in",
-        path: { id: "clpeceq9h000078m210txowen" },
+        path: { id: exId },
         404: "Provided ID didnt resolve to any post",
     })
 }

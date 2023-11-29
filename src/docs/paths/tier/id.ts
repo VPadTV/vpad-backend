@@ -1,11 +1,12 @@
 import { makeRoute } from "@docs/helpers";
+import { exId } from "@docs/schemas/id";
 
 export const tierId = {
     put: makeRoute({
         tag: "Subscription Tier",
         summary: "Updates subscription tier from id, must be logged in",
-        bodyRequired: ['id', 'name'],
-        path: { id: "clpeceq9h000078m210txowen" },
+        bodyRequired: ['name'],
+        path: { id: exId },
         body: {
             name: "some tier name"
         },
@@ -14,8 +15,7 @@ export const tierId = {
     delete: makeRoute({
         tag: "Subscription Tier",
         summary: "Deletes subscription tier from id, must be logged in",
-        bodyRequired: ['id'],
-        path: { id: "clpeceq9h000078m210txowen" },
+        path: { id: exId },
         400: "Missing ID",
     })
 }

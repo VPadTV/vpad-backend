@@ -6,12 +6,14 @@ export type TierGetManyRequest = {
 }
 
 export type TierGetManyResponse = {
-    name: string
-    price: number
-}[]
+    tiers: {
+        name: string
+        price: number
+    }[]
+}
 
 export async function tierGetMany(req: TierGetManyRequest, db: DatabaseClient): Promise<TierGetManyResponse> {
-    if (!req.creatorId)
+    if (typeof req.creatorId !== 'string')
         throw Errors.MISSING_ID()
 
     const tiers = await db.subscriptionTier.findMany({
@@ -22,8 +24,10 @@ export async function tierGetMany(req: TierGetManyRequest, db: DatabaseClient): 
         }
     })
 
-    return tiers.map(tier => ({
-        name: tier.name,
-        price: tier.price.toNumber()
-    }))
+    return {
+        tiers: tiers.map(tier => ({
+            name: tier.name,
+            price: tier.price.toNumber()
+        }))
+    }
 }

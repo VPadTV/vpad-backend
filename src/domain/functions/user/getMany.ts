@@ -1,5 +1,6 @@
 import { Errors } from "@domain/helpers"
 import { SimpleUser } from "@domain/helpers/mappers/user"
+import { boolify } from "@domain/helpers/boolify"
 import { DatabaseClient } from "@infra/gateways/database"
 
 export type UserGetManyRequest = {
@@ -11,6 +12,7 @@ export type UserGetManyRequest = {
 export type UserGetManyResponse = { users: SimpleUser[] }
 
 export async function userGetMany(req: UserGetManyRequest, db: DatabaseClient): Promise<UserGetManyResponse> {
+    req.banned = boolify(req.banned)
     const users = await db.user.findMany({
         where: {
             username: req.usernameSearch ? {
@@ -19,7 +21,7 @@ export async function userGetMany(req: UserGetManyRequest, db: DatabaseClient): 
             nickname: req.nicknameSearch ? {
                 search: req.nicknameSearch,
             } : undefined,
-            banned: req.banned === true ? true : false,
+            banned: req.banned,
         },
         select: {
             ...SimpleUser.selector,

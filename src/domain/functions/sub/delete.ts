@@ -10,7 +10,7 @@ export type SubDeleteRequest = {
 export type SubDeleteResponse = {}
 
 export async function subDelete(req: SubDeleteRequest, db: DatabaseClient): Promise<SubDeleteResponse> {
-    if (!req.id)
+    if (typeof req.id !== 'string')
         throw Errors.MISSING_ID()
 
     await db.subscription.delete({

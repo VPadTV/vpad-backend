@@ -10,7 +10,7 @@ export type TierDeleteRequest = {
 export type TierDeleteResponse = {}
 
 export async function tierDelete(req: TierDeleteRequest, db: DatabaseClient): Promise<TierDeleteResponse> {
-    if (!req.id)
+    if (typeof req.id !== 'string')
         throw Errors.MISSING_ID()
 
     await db.subscriptionTier.delete({

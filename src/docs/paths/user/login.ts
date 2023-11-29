@@ -1,4 +1,5 @@
 import { makeRoute } from "@docs/helpers";
+import { exId } from "@docs/schemas/id";
 
 export const userLogin = {
     post: makeRoute({
@@ -12,7 +13,7 @@ export const userLogin = {
             password: "somepass",
         },
         success: {
-            id: "clpeceq9h000078m210txowen",
+            id: exId,
             token: "string",
         },
         400: "Must include email or username, incorrect password",

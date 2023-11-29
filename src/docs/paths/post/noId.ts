@@ -1,14 +1,32 @@
 import { BodyFile, ContentType, makeRoute } from "@docs/helpers";
+import { exId } from "@docs/schemas/id";
 import { simpleUser } from "@docs/schemas/simpleUser";
 
 export const postNoId = {
+    post: makeRoute({
+        tag: "Post",
+        summary: "Creates a new post",
+        contentType: ContentType.MULTIPART,
+        bodyRequired: ["title", "text", "media", "tags"],
+        body: {
+            title: "some title",
+            text: "some text",
+            media: BodyFile,
+            thumb: BodyFile,
+            nsfw: false,
+            tags: 'some,tags',
+            minTierId: exId,
+        },
+        success: {
+            id: exId
+        }
+    }),
     get: makeRoute({
         tag: "Post",
         summary: "Gets many posts",
-        security: false,
         query: {
-            userTierId: "clpeceq9h000078m210txowen",
-            creatorId: "clpeceq9h000078m210txowen",
+            userTierId: exId,
+            creatorId: exId,
             sortBy: "latest | oldest | high-views | low-views",
             page: 1,
             size: 30,
@@ -20,30 +38,18 @@ export const postNoId = {
             currentPage: 1,
             lastPage: 4,
             data: {
-                id: "clpeceq9h000078m210txowen",
+                id: exId,
                 text: "some text",
                 thumbUrl: "string",
                 meta: {
+                    nsfw: false,
+                    tags: ['some', 'tags'],
+                    minTierId: exId,
                     user: simpleUser,
                     views: 1000
                 }
             }
         },
         404: "No posts found",
-    }),
-    post: makeRoute({
-        tag: "Post",
-        summary: "Creates a new post",
-        contentType: ContentType.MULTIPART,
-        bodyRequired: ["title", "text", "media"],
-        body: {
-            title: "some title",
-            text: "some text",
-            media: BodyFile,
-            thumb: BodyFile,
-        },
-        success: {
-            id: "clpeceq9h000078m210txowen"
-        }
     })
 }

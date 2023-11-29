@@ -1,6 +1,7 @@
 import { makeRoute } from "@docs/helpers";
 import { dateExample } from "@docs/schemas/dateExample";
 import { simpleUser } from "@docs/schemas/simpleUser";
+import { exId } from "@docs/schemas/id";
 
 export const commentNoId = {
     get: makeRoute({
@@ -8,8 +9,8 @@ export const commentNoId = {
         summary: "Returns many comments",
         security: false,
         query: {
-            postid: "clpeceq9h000078m210txowen",
-            parentid: "clpeceq9h000078m210txowen",
+            postid: exId,
+            parentid: exId,
             sortBy: "latest | oldest",
             page: 1,
             size: 30,
@@ -21,7 +22,7 @@ export const commentNoId = {
             currentPage: 1,
             lastPage: 4,
             data: {
-                id: "clpeceq9h000078m210txowen",
+                id: exId,
                 text: "some text",
                 childrenCount: 10,
                 meta: {
@@ -38,12 +39,12 @@ export const commentNoId = {
         summary: "Creates a new comment",
         bodyRequired: ["postid", "text"],
         body: {
-            postId: "clpeceq9h000078m210txowen",
-            parentId: "clpeceq9h000078m210txowen",
+            postId: exId,
+            parentId: exId,
             text: "some text",
         },
         success: {
-            id: "clpeceq9h000078m210txowen"
+            id: exId
         }
     })
 }

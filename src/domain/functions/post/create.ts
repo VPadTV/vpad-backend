@@ -1,9 +1,11 @@
 import { Errors } from "@domain/helpers"
 import { parseTags } from "@domain/helpers/parseTags"
+import { boolify } from "@domain/helpers/boolify"
+import { validString } from "@domain/helpers/validString"
 import { Storage } from "@infra/gateways"
 import { DatabaseClient } from "@infra/gateways/database"
 import { FileRawUpload } from "@infra/middlewares"
-import { User } from "@prisma/client"
+import { MediaType, User } from "@prisma/client"
 
 export type PostCreateRequest = {
     user: User
@@ -11,7 +13,9 @@ export type PostCreateRequest = {
     text: string
     media: FileRawUpload
     thumb?: FileRawUpload
+    nsfw: boolean
     tags: string
+    minTierId?: string
 }
 
 export type PostCreateResponse = {
@@ -19,25 +23,31 @@ export type PostCreateResponse = {
 }
 
 export async function postCreate(req: PostCreateRequest, db: DatabaseClient, storage: Storage): Promise<PostCreateResponse> {
-    if (!req.title) throw Errors.MISSING_TITLE()
-    if (!req.text) throw Errors.MISSING_TEXT()
+    if (!validString(req.title)) throw Errors.MISSING_TITLE()
+    if (!validString(req.text)) throw Errors.MISSING_TEXT()
     if (!req.media) throw Errors.MISSING_MEDIA()
-    let tags: string[] | false = []
-    if (req.tags && req.tags.length) {
-        tags = parseTags(req.tags.trim())
-        if (tags === false) throw Errors.BAD_REQUEST()
-    }
 
-    const mediaData = storage.getFileData(req.media)!
+    req.nsfw = boolify(req.nsfw)
+    let tags: string[] | false = []
+    tags = parseTags(req.tags.trim())
+    if (tags === false) throw Errors.INVALID_TAGS()
+    req.minTierId = validString(req.minTierId)
+
+    const mediaData = storage.getFileData(req.media)
+    if (!mediaData) throw Errors.INVALID_FILE()
     const thumbData = storage.getFileData(req.thumb)
+    if (thumbData && thumbData.type !== MediaType.IMAGE) throw Errors.INVALID_THUMB()
+
     const post = await db.post.create({
         data: {
             userId: req.user.id,
             title: req.title,
             text: req.text,
-            mediaType: mediaData.type,
             mediaUrl: mediaData.url,
+            mediaType: mediaData.type,
             thumbUrl: thumbData?.url,
+            nsfw: req.nsfw,
+            minTierId: req.minTierId,
             tags,
         }
     })

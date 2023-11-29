@@ -16,6 +16,7 @@ export type UserGetResponse = {
 }
 
 export async function userGet(req: UserGetRequest, db: DatabaseClient): Promise<UserGetResponse> {
+    if (typeof req.id !== 'string') throw Errors.MISSING_ID()
     const user = await db.user.findFirst({ where: { id: req.id } })
     if (!user) {
         throw Errors.NOT_FOUND()

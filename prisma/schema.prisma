@@ -108,14 +108,14 @@ model SubscriptionTier {
     creator   User   @relation(fields: [creatorId], references: [id], onDelete: Cascade, onUpdate: Restrict)
     creatorId String
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
     price       Decimal
     subscribers Subscription[]
     Post        Post[]
 
-    @@unique([name, creatorId])
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([name, creatorId, price])
 }
 
 model Subscription {
@@ -132,4 +132,6 @@ model Subscription {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@unique([creatorId, userId])
 }

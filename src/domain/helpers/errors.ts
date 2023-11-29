@@ -21,6 +21,7 @@ export const Errors = {
     IM_A_TEAPOT: () => imATeapot("I'm A Teapot!"),
     BAD_REQUEST: () => badRequest("Bad Request"),
     FAILED_TO_DOWNLOAD: () => badRequest("Failed to download from URL"),
+
     LOW_TIER: () => badRequest("Subscription tier too low"),
 
     INVALID_TOKEN: () => badRequest("Invalid Token"),
@@ -29,9 +30,15 @@ export const Errors = {
     INVALID_EMAIL: () => badRequest("Invalid Email"),
     INVALID_PASSWORD: () => badRequest("Invalid Password"),
     INVALID_FILE: () => badRequest("Invalid File"),
-    INCORRECT_PASSWORD: () => badRequest("Incorrect Password"),
+    INVALID_TAGS: () => badRequest("Bad Tags"),
     INVALID_PRICE: () => badRequest("Invalid price"),
-    MUST_INCLUDE_EMAIL_OR_USERNAME: () => badRequest("Must Include Email Or Username"),
+    INVALID_THUMB: () => badRequest("Invalid thumbnail"),
+    INVALID_SORT: () => badRequest("Invalid sort"),
+    INVALID_TIER: () => badRequest("Invalid tier"),
+
+    INCORRECT_PASSWORD: () => badRequest("Incorrect Password"),
+
+    MISSING_EMAIL_OR_USERNAME: () => badRequest("Missing Email Or Username"),
     MISSING_TITLE: () => badRequest("Missing title"),
     MISSING_TEXT: () => badRequest("Missing text"),
     MISSING_MEDIA: () => badRequest("Missing media"),

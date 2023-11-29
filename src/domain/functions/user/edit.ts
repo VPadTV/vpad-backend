@@ -18,23 +18,16 @@ export type UserEditRequest = {
 export type UserEditResponse = {}
 
 export async function userEdit(req: UserEditRequest, db: DatabaseClient, storage: Storage): Promise<UserEditResponse> {
-    if (req.username && !nameRegex().test(req.username)) {
+    if (req.username && !nameRegex().test(req.username))
         throw Errors.INVALID_USERNAME()
-    }
-    if (req.nickname && !nameRegex().test(req.nickname)) {
+    if (req.nickname && !nameRegex().test(req.nickname))
         throw Errors.INVALID_USERNAME()
-    }
-    if (req.email) {
-        if (!emailRegex().test(req.email)) {
-            throw Errors.INVALID_EMAIL()
-        }
-    }
-    if (req.password) {
-        if (!passwordRegex().test(req.password)) {
-            throw Errors.INVALID_PASSWORD()
-        }
-    }
-    let profilePhotoData = req.profilePhoto ? storage.getFileData(req.profilePhoto) : undefined
+    if (req.email && !emailRegex().test(req.email))
+        throw Errors.INVALID_EMAIL()
+    if (req.password && !passwordRegex().test(req.password))
+        throw Errors.INVALID_PASSWORD()
+
+    let profilePhotoData = storage.getFileData(req.profilePhoto)
     if (profilePhotoData?.type === MediaType.VIDEO) throw Errors.INVALID_FILE()
 
     await db.user.update({

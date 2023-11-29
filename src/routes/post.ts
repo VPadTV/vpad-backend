@@ -9,6 +9,7 @@ import { middleware, jsonResponse } from "@infra/adapters";
 import { streamResponse } from "@infra/adapters/streamResponse";
 import { Database, Storage } from "@infra/gateways";
 import { fields } from "@infra/middlewares";
+import { optionalToken } from "@infra/middlewares/decodeOptionalToken";
 import { isLoggedIn } from "@infra/middlewares/isLoggedIn";
 import { IRoute } from "@main/route";
 import { Router } from "express";
@@ -22,9 +23,11 @@ export class PostRoute implements IRoute {
                 return ok(await postCreate(request, Database.get(), Storage.get()))
             }))
         router.get('/',
-            jsonResponse(async (request: PostGetManyRequest) => {
-                return ok(await postGetMany(request, Database.get()))
-            }))
+            middleware(optionalToken),
+            jsonResponse(
+                async (request: PostGetManyRequest) => {
+                    return ok(await postGetMany(request, Database.get()))
+                }))
         router.get('/:id',
             jsonResponse(async (request: PostGetRequest) => {
                 return ok(await postGet(request, Database.get()))

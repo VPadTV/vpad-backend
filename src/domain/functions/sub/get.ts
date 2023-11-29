@@ -16,9 +16,7 @@ export type SubGetResponse = {
 } | {}
 
 export async function subGet(req: SubGetRequest, db: DatabaseClient): Promise<SubGetResponse> {
-    if (!req.user.id)
-        throw Errors.MISSING_ID()
-    if (!req.creatorId)
+    if (typeof req.user.id !== 'string' || typeof req.creatorId !== 'string')
         throw Errors.MISSING_ID()
 
     const sub = await db.subscription.findFirst({

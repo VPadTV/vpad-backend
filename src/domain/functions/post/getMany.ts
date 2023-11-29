@@ -22,6 +22,7 @@ export type PostGetManyResponse = Paginate<{
     text: string
     thumbUrl?: string
     meta: {
+        nsfw: boolean
         tags: string[]
         user: SimpleUser
         views: number
@@ -44,17 +45,16 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
         const userTier = await db.subscriptionTier.findFirst({
             where: {
                 id: req.userTierId,
-                subscribers: {
-                    some: { userId: req.user.id }
-                },
+                subscribers: { some: { userId: req.user.id } },
             },
-            select: {
-                price: true
-            }
+            select: { price: true }
         })
         if (userTier)
             userTierValue = userTier.price
+        else
+            throw Errors.INVALID_TIER()
     }
+
     switch (req.sortBy) {
         case "low-views":
             orderBy = { votes: { _count: "asc" } }
@@ -66,9 +66,10 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
             orderBy = { createdAt: "asc" }
             break
         case "latest":
-        default:
             orderBy = { createdAt: "desc" }
             break
+        default:
+            throw Errors.INVALID_SORT()
     }
     const offset = (+req.page - 1) * +req.size
     const [posts, total] = await db.$transaction([
@@ -90,6 +91,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
                 title: true,
                 text: true,
                 thumbUrl: true,
+                nsfw: true,
                 tags: true,
                 user: { select: SimpleUser.selector },
                 createdAt: true,
@@ -116,6 +118,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
         text: post.text,
         thumbUrl: post.thumbUrl ?? undefined,
         meta: {
+            nsfw: post.nsfw,
             tags: post.tags,
             user: post.user,
             views: post._count.votes,

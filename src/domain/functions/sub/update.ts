@@ -11,15 +11,14 @@ export type SubUpdateRequest = {
 export type SubUpdateResponse = {}
 
 export async function subUpdate(req: SubUpdateRequest, db: DatabaseClient): Promise<SubUpdateResponse> {
-    if (!req.id)
-        throw Errors.MISSING_ID()
-    if (!req.tierId)
+    if (typeof req.id !== 'string' || typeof req.tierId !== 'string')
         throw Errors.MISSING_ID()
 
     const tier = await db.subscriptionTier.findFirst({
         where: { id: req.tierId },
         select: { price: true, creatorId: true }
     })
+
     if (!tier) throw Errors.BAD_REQUEST()
 
     // TODO: check payment stuff

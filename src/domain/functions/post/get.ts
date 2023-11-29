@@ -6,7 +6,6 @@ import { User } from "@prisma/client"
 export type PostGetRequest = {
     user?: User
     id: string
-    userTierId?: string
 }
 
 export type PostGetResponse = {
@@ -16,7 +15,13 @@ export type PostGetResponse = {
     mediaUrl: string
     thumbUrl?: string
     meta: {
+        nsfw: boolean
         tags: string[]
+        minTier: {
+            id: string
+            name: string
+            price: number
+        } | undefined
         user: SimpleUser
         likes: number
         dislikes: number
@@ -39,7 +44,8 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
             mediaType: true,
             mediaUrl: true,
             thumbUrl: true,
-            minTier: { select: { price: true } },
+            minTier: { select: { id: true, name: true, price: true } },
+            nsfw: true,
             tags: true,
             user: {
                 select: SimpleUser.selector
@@ -51,11 +57,10 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
     if (!post) throw Errors.NOT_FOUND()
 
     if (post.minTier && post.minTier.price.greaterThan(0)) {
-        if (!req.userTierId) throw Errors.UNAUTHORIZED()
         if (!req.user) throw Errors.UNAUTHORIZED()
         const userTier = await db.subscriptionTier.findFirst({
             where: {
-                id: req.userTierId,
+                creatorId: post.user.id,
                 subscribers: {
                     some: { userId: req.user.id }
                 },
@@ -92,7 +97,13 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
         mediaType: post.mediaType,
         thumbUrl: post.thumbUrl ?? undefined,
         meta: {
+            nsfw: post.nsfw,
             tags: post.tags,
+            minTier: post.minTier ? {
+                id: post.minTier.id,
+                name: post.minTier.name,
+                price: post.minTier.price.toNumber(),
+            } : undefined,
             user: post.user,
             likes: likes ?? 0,
             dislikes: dislikes ?? 0,

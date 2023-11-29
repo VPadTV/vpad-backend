@@ -1,13 +1,14 @@
 import { makeRoute } from "@docs/helpers";
 import { dateExample } from "@docs/schemas/dateExample";
 import { simpleUser } from "@docs/schemas/simpleUser";
+import { exId } from "@docs/schemas/id";
 
 export const commentId = {
     get: makeRoute({
         tag: "Comment",
         summary: "Returns comment data from id",
         security: false,
-        path: { id: "clpeceq9h000078m210txowen" },
+        path: { id: exId },
         success: {
             text: "some text",
             childrenCount: 10,
@@ -22,7 +23,7 @@ export const commentId = {
     put: makeRoute({
         tag: "Comment",
         summary: "Updates comment from id, must be logged in",
-        path: { id: "clpeceq9h000078m210txowen" },
+        path: { id: exId },
         body: {
             text: "some text"
         },
@@ -31,7 +32,7 @@ export const commentId = {
     delete: makeRoute({
         tag: "Comment",
         summary: "Deletes a comment from id, must be logged in",
-        path: { id: "clpeceq9h000078m210txowen" },
+        path: { id: exId },
         404: "Provided ID didnt resolve to any comment",
     })
 }

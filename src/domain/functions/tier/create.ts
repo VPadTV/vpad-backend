@@ -1,4 +1,6 @@
 import { Errors } from "@domain/helpers"
+import { numify } from "@domain/helpers/numify"
+import { validString } from "@domain/helpers/validString"
 import { DatabaseClient } from "@infra/gateways/database"
 import { User } from "@prisma/client"
 import { Decimal } from "@prisma/client/runtime/library"
@@ -6,7 +8,7 @@ import { Decimal } from "@prisma/client/runtime/library"
 export type TierCreateRequest = {
     user: User
     name: string
-    price: number
+    price: string
 }
 
 export type TierCreateResponse = {
@@ -14,18 +16,19 @@ export type TierCreateResponse = {
 }
 
 export async function tierCreate(req: TierCreateRequest, db: DatabaseClient): Promise<TierCreateResponse> {
-    if (!req.user.id)
+    if (typeof req.user.id !== 'string')
         throw Errors.MISSING_ID()
-    if (!req.name)
+    if (!validString(req.name))
         throw Errors.MISSING_NAME()
-    if (!req.price)
+    const price = numify(req.price)
+    if (price === false)
         throw Errors.MISSING_PRICE()
 
     const tier = await db.subscriptionTier.create({
         data: {
             creatorId: req.user.id,
             name: req.name,
-            price: new Decimal(req.price),
+            price: new Decimal(price),
         },
         select: { id: true }
     })

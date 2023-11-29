@@ -3,14 +3,14 @@ import { MiddlewareData } from '@infra/adapters'
 import { JWT, Database } from '@infra/gateways'
 import { User } from '@prisma/client'
 
-export type TokenMiddlewareResponse = {
-    user: User,
+export type OptionalTokenMiddlewareResponse = {
+    user?: User,
     token?: string
 }
 
-export const tokenMiddleware = async (data: MiddlewareData, func: (user: User) => Promise<void>): Promise<TokenMiddlewareResponse> => {
+export const optionalToken = async (data: MiddlewareData): Promise<OptionalTokenMiddlewareResponse> => {
     const { authorization } = data;
-    if (!authorization) throw Errors.MISSING_TOKEN()
+    if (!authorization) return {}
 
     const bearerToken = authorization.replace('Bearer ', '')
 
@@ -19,7 +19,7 @@ export const tokenMiddleware = async (data: MiddlewareData, func: (user: User) =
         return {
             user:
                 (await db.user.findFirst({
-                    where: { id: 'clpfo94g50000p45kz6srv7d0' }
+                    where: { id: 'clpjzt1hs0000xq19mvh2gdck' }
                 }))!
         }
     }
@@ -37,8 +37,6 @@ export const tokenMiddleware = async (data: MiddlewareData, func: (user: User) =
     const db = Database.get()
     const user = await db.user.findFirst({ where: { id } })
     if (!user) throw Errors.UNAUTHORIZED()
-
-    await func(user)
 
     // if it expires in less than a day
     if (token.exp - now < 24 * 60 * 60 * 1000)

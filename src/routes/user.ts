@@ -22,7 +22,6 @@ export class UserRoute implements IRoute {
             }))
 
         router.get('/:id',
-            middleware(isLoggedIn),
             jsonResponse(async (request: UserGetRequest) => {
                 return ok(await userGet(request, Database.get()))
             }))

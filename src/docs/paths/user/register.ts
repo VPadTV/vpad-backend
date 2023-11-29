@@ -1,4 +1,5 @@
 import { makeRoute } from "@docs/helpers";
+import { exId } from "@docs/schemas/id";
 
 export const userRegister = {
     post: makeRoute({
@@ -14,7 +15,7 @@ export const userRegister = {
             about: "some about section",
         },
         success: {
-            id: "clpeceq9h000078m210txowen",
+            id: exId,
             token: "string",
         },
         400: "Invalid name, email or password"

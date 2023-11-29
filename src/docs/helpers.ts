@@ -13,6 +13,9 @@ export type SwaggerObject = {
         items?: {
             type: 'object',
             properties: SwaggerObject
+        } | {
+            type: string,
+            example: SwaggerDefinitions
         }
     }
 }
@@ -43,7 +46,7 @@ export type Parameters = {
 type SwaggerDefinitions = string | number | boolean
 
 export type Body = {
-    [name: string]: SwaggerDefinitions | Body | [Body]
+    [name: string]: SwaggerDefinitions | Body | SwaggerDefinitions[] | [Body]
 }
 
 export enum ContentType {
@@ -70,18 +73,30 @@ const makeObject = (args?: Body) => {
     let swb: SwaggerObject = {}
     for (const name in args) {
         const value = args[name]
-        if (Array.isArray(value))
-            swb[name] = {
-                type: 'array',
-                items: {
-                    type: 'object',
-                    properties: obj(value[0]),
+        if (Array.isArray(value)) {
+            let arrValue = value[0]
+            if (typeof arrValue === 'object') {
+                swb[name] = {
+                    type: 'array',
+                    items: {
+                        type: 'object',
+                        properties: obj(arrValue)
+                    }
+                }
+            } else {
+                swb[name] = {
+                    type: 'array',
+                    items: {
+                        type: typeof arrValue,
+                        example: arrValue
+                    }
                 }
             }
+        }
         else if (typeof value === 'object')
             swb[name] = {
                 type: 'object',
-                properties: obj(value as Body)
+                properties: obj(value)
             }
         else if (value === BodyFile)
             swb[name] = {
@@ -145,7 +160,7 @@ export const obj = (args: Body) => {
 }
 
 export const makeRoute = (args: GenerateRoute) => {
-    const { tag, summary, path: pathParameters, query: queryParameters, body: body, success, bodyRequired = [], security = true, ...errors } = args
+    const { tag, summary, path: pathParameters, query: queryParameters, body, success, bodyRequired = [], security = true, ...errors } = args
 
     let swParams: SwaggerParameter[] = []
     const swPath = makeParameters("path", pathParameters)

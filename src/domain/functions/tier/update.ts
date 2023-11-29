@@ -1,4 +1,5 @@
 import { Errors } from "@domain/helpers"
+import { validString } from "@domain/helpers/validString"
 import { DatabaseClient } from "@infra/gateways/database"
 import { User } from "@prisma/client"
 
@@ -11,9 +12,9 @@ export type TierUpdateRequest = {
 export type TierUpdateResponse = {}
 
 export async function tierUpdate(req: TierUpdateRequest, db: DatabaseClient): Promise<TierUpdateResponse> {
-    if (!req.id)
+    if (typeof req.id !== 'string')
         throw Errors.MISSING_ID()
-    if (!req.name)
+    if (!validString(req.name))
         throw Errors.MISSING_NAME()
 
     await db.subscriptionTier.update({
