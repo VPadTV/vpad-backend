@@ -15,6 +15,7 @@ import { tierNoId } from "./paths/tier/noId";
 import { tierId } from "./paths/tier/id";
 import { tierCreatorId } from "./paths/tier/creatorId";
 import { subCreatorId } from "./paths/sub/creatorId";
+import { votePostId } from "./paths/vote/postId";
 
 export default {
     openapi: "3.0.0",
@@ -53,6 +54,7 @@ export default {
         '/post/{id}': postId,
         '/post/stream/{key}': postStreamKey,
         '/post': postNoId,
+        '/vote/{postId}': votePostId,
 
         '/comment/{id}': commentId,
         '/comment': commentNoId,

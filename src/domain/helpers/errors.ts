@@ -49,5 +49,7 @@ export const Errors = {
     MISSING_PRICE: () => badRequest("Missing price"),
     MISSING_EMAIL: () => badRequest("Missing email"),
     MISSING_PASSWORD: () => badRequest("Missing password"),
+    MISSING_VOTE: () => badRequest("Missing vote"),
+
     BANNED: () => forbidden("Banned"),
 }

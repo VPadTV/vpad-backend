@@ -6,6 +6,7 @@ import { PostRoute } from "@controllers/post";
 import { CommentRoute } from "@controllers/comment";
 import { TierRoute } from "@controllers/tier";
 import { SubRoute } from "@controllers/sub";
+import { VoteRoute } from "@controllers/vote";
 
 export default {
     '/user': new UserRoute(),
@@ -15,4 +16,5 @@ export default {
     '/comment': new CommentRoute(),
     '/tier': new TierRoute(),
     '/sub': new SubRoute(),
+    '/vote': new VoteRoute(),
 } as { [path: string]: IRoute }
