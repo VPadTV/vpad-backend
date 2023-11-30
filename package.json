@@ -5,13 +5,12 @@
     "main": "./dist/src/main/server.prod.js",
     "type": "commonjs",
     "scripts": {
-        "build": "tsc && resolve-tspaths && prisma generate",
+        "build": "tsc && resolve-tspaths && prisma migrate dev",
         "start": "node dist/src/main/server.js",
         "dev": "nodemon --exec tsx ./src/main/server.ts",
         "test": "jest --no-cache --coverage --silent --forceExit --runInBand --detectOpenHandles",
         "test-watch": "jest --no-cache --silent=false --runInBand --watch --no-coverage",
-        "migrate-dev": "prisma migrate dev && prisma generate",
-        "migrate-prod": "prisma migrate deploy && prisma generate",
+        "migrate": "prisma migrate dev",
         "lint": "eslint . --ext js,ts --fix",
         "check": "tsc && resolve-tspaths --noEmit",
         "docker-build": "docker compose up server --no-deps --build --no-start"
