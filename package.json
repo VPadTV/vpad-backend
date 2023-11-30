@@ -5,7 +5,7 @@
     "main": "./dist/src/main/server.prod.js",
     "type": "commonjs",
     "scripts": {
-        "build": "tsc && resolve-tspaths && prisma migrate dev",
+        "build": "tsc && resolve-tspaths && prisma migrate prod",
         "start": "node dist/src/main/server.js",
         "dev": "nodemon --exec tsx ./src/main/server.ts",
         "test": "jest --no-cache --coverage --silent --forceExit --runInBand --detectOpenHandles",
