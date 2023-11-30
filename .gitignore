@@ -2,7 +2,6 @@ node_modules
 # Keep environment variables out of version control
 .env
 coverage
-prisma/migrations
 yarn-error.log
 testData.txt
 dist
