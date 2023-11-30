@@ -1,8 +1,4 @@
 {
-    "ts-node": {
-        "esm": true,
-        "module": "ESNext"
-    },
     "compilerOptions": {
         "paths": {
             "@docs/*": ["src/docs/*"],
@@ -14,9 +10,9 @@
             "@routes/*": ["src/routes/*"],
             "@test/*": ["test/*"]
         },
-        "lib": ["ESNext"],
-        "target": "ESNext",
-        "moduleResolution": "Bundler",
+        "lib": ["ES5"],
+        "target": "ES5",
+        "moduleResolution": "Node",
         "allowSyntheticDefaultImports": true,
         "removeComments": false,
         "sourceMap": true,

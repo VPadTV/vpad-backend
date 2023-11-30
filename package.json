@@ -3,9 +3,9 @@
     "version": "0.0.1",
     "license": "MIT",
     "main": "./dist/src/main/server.prod.js",
-    "type": "module",
+    "type": "commonjs",
     "scripts": {
-        "build": "tsc && resolve-tspaths",
+        "build": "tsc && resolve-tspaths && prisma generate",
         "start": "node dist/src/main/server.js",
         "dev": "nodemon --exec tsx ./src/main/server.ts",
         "test": "jest --no-cache --coverage --silent --forceExit --runInBand --detectOpenHandles",
@@ -14,7 +14,9 @@
         "migrate-prod": "prisma migrate deploy && prisma generate",
         "lint": "eslint . --ext js,ts --fix",
         "check": "tsc && resolve-tspaths --noEmit",
-        "docker-build": "docker compose up server --no-deps --build --no-start"
+        "docker-build": "docker compose up server --no-deps --build --no-start",
+
+        "postinstall": "yarn build"
     },
     "dependencies": {
         "@prisma/client": "5.6.0",
