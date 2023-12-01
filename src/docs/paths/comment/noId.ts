@@ -9,8 +9,8 @@ export const commentNoId = {
         summary: "Returns many comments",
         security: false,
         query: {
-            postid: exId,
-            parentid: exId,
+            postId: exId,
+            parentId: exId,
             sortBy: "latest | oldest",
             page: 1,
             size: 30,

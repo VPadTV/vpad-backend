@@ -2,7 +2,7 @@ import { makeRoute } from "@docs/helpers";
 import { exId } from "@docs/schemas/id";
 
 export const adminId = {
-    post: makeRoute({
+    put: makeRoute({
         tag: "Admin",
         summary: "Manages admins",
         security: false,

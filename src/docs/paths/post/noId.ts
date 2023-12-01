@@ -28,6 +28,7 @@ export const postNoId = {
             userTierId: exId,
             creatorId: exId,
             sortBy: "latest | oldest | high-views | low-views",
+            search: "search terms",
             page: 1,
             size: 30,
         },

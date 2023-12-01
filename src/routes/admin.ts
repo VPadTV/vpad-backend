@@ -17,12 +17,12 @@ export class AdminRoute implements IRoute {
                 return ok(await adminGetMany(request, Database.get()))
             }))
 
-        router.post('/manage/admin/:id',
+        router.put('/manage/admin/:id',
             jsonResponse(async (request: AdminManageRequest) => {
                 return ok(await adminManage(request, Database.get()))
             }))
 
-        router.post('/manage/ban/:id',
+        router.put('/manage/ban/:id',
             jsonResponse(async (request: AdminManageBanRequest) => {
                 return ok(await adminManageBan(request, Database.get()))
             }))
