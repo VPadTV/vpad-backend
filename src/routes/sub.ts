@@ -1,4 +1,4 @@
-import { middleware, jsonResponse } from "@infra/adapters";
+import { middleware, json } from "@infra/adapters";
 import { IRoute } from "@main/route";
 import { Router } from "express";
 import { ok } from "@domain/helpers";
@@ -13,25 +13,25 @@ export class SubRoute implements IRoute {
     register(router: Router): void {
         router.post('/',
             middleware(isLoggedIn),
-            jsonResponse(async (request: SubCreateRequest) => {
+            json(async (request: SubCreateRequest) => {
                 return ok(await subCreate(request, Database.get()))
             }))
 
         router.get('/:creatorId',
             middleware(isLoggedIn),
-            jsonResponse(async (request: SubGetRequest) => {
+            json(async (request: SubGetRequest) => {
                 return ok(await subGet(request, Database.get()))
             }))
 
         router.put('/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request: SubUpdateRequest) => {
+            json(async (request: SubUpdateRequest) => {
                 return ok(await subUpdate(request, Database.get()))
             }))
 
         router.delete('/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request: SubDeleteRequest) => {
+            json(async (request: SubDeleteRequest) => {
                 return ok(await subDelete(request, Database.get()))
             }))
     }

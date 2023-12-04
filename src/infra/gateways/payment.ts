@@ -68,4 +68,10 @@ export class Payment {
             paymentIntent: session.payment_intent?.toString()!,
         }
     }
+
+    async getWebhookEvent(body: string | Buffer, signature: string) {
+        const secret = process.env.STRIPE_SECRET
+        if (!secret) throw Errors.SERVER()
+        return this.client.webhooks.constructEvent(body, signature, secret)
+    }
 }

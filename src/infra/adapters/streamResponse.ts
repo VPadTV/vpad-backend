@@ -2,7 +2,7 @@ import { PostStreamResponse } from '@domain/functions/post/stream'
 import { HttpError } from '@domain/helpers'
 import { Response, Request } from 'express'
 
-export function streamResponse<T, U extends PostStreamResponse>(fn: (request: T) => Promise<U>) {
+export function streamResponse<U extends PostStreamResponse>(fn: (request: any) => Promise<U>) {
     return async (req: Request, res: Response) => {
         try {
             const {
@@ -13,7 +13,7 @@ export function streamResponse<T, U extends PostStreamResponse>(fn: (request: T)
                 ...req.params,
                 ...req.query,
                 ...res.locals,
-            } as T)
+            })
             res.writeHead(200, {
                 'Content-Length': ContentLength,
                 'Content-Type': ContentType,

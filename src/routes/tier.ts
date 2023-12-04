@@ -1,4 +1,4 @@
-import { middleware, jsonResponse } from "@infra/adapters";
+import { middleware, json } from "@infra/adapters";
 import { IRoute } from "@main/route";
 import { Router } from "express";
 import { ok } from "@domain/helpers";
@@ -13,24 +13,24 @@ export class TierRoute implements IRoute {
     register(router: Router): void {
         router.post('/',
             middleware(isLoggedIn),
-            jsonResponse(async (request: TierCreateRequest) => {
+            json(async (request: TierCreateRequest) => {
                 return ok(await tierCreate(request, Database.get()))
             }))
 
         router.get('/creator/:creatorId',
-            jsonResponse(async (request: TierGetManyRequest) => {
+            json(async (request: TierGetManyRequest) => {
                 return ok(await tierGetMany(request, Database.get()))
             }))
 
         router.put('/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request: TierUpdateRequest) => {
+            json(async (request: TierUpdateRequest) => {
                 return ok(await tierUpdate(request, Database.get()))
             }))
 
         router.delete('/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request: TierDeleteRequest) => {
+            json(async (request: TierDeleteRequest) => {
                 return ok(await tierDelete(request, Database.get()))
             }))
     }

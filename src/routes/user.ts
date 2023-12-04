@@ -1,4 +1,4 @@
-import { middleware, jsonResponse } from "@infra/adapters";
+import { middleware, json } from "@infra/adapters";
 import { IRoute } from "@main/route";
 import { Router } from "express";
 import { ok } from "@domain/helpers";
@@ -12,23 +12,23 @@ import { Database, Storage } from "@infra/gateways";
 export class UserRoute implements IRoute {
     register(router: Router): void {
         router.post('/register',
-            jsonResponse(async (request: UserRegisterRequest) => {
+            json(async (request: UserRegisterRequest) => {
                 return ok(await userRegister(request, Database.get()))
             }))
 
         router.post('/login',
-            jsonResponse(async (request: UserLoginRequest) => {
+            json(async (request: UserLoginRequest) => {
                 return ok(await userLogin(request, Database.get()))
             }))
 
         router.get('/:id',
-            jsonResponse(async (request: UserGetRequest) => {
+            json(async (request: UserGetRequest) => {
                 return ok(await userGet(request, Database.get()))
             }))
 
         router.put('/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request: UserEditRequest) => {
+            json(async (request: UserEditRequest) => {
                 return ok(await userEdit(request, Database.get(), Storage.get()))
             }))
     }

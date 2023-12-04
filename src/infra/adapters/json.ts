@@ -11,13 +11,14 @@ const transformFiles = (multerFiles: MulterFiles) => {
     return files
 }
 
-export function jsonResponse<T, U extends HttpResponse>(fn: (request: T) => Promise<U>) {
+export function json<T extends HttpResponse>(fn: (request: any) => Promise<T>) {
     return async (req: Request, res: Response) => {
         const body = Array.isArray(req.body) ? { data: req.body } : req.body
         const files = transformFiles(req.files as MulterFiles)
 
         try {
             const { statusCode, data } = await fn({
+                headers: req.headers,
                 ...body,
                 ...files,
                 ...req.params,
@@ -26,7 +27,7 @@ export function jsonResponse<T, U extends HttpResponse>(fn: (request: T) => Prom
             })
             return res.status(statusCode).json({ ...data, token: data.token ?? req.params?.token })
         } catch (error) {
-            console.error(`** Route **`)
+            console.error(`** JSON Route **`)
             console.error(error)
             if (error instanceof HttpError)
                 return res.status(error.code).json({ error: error.message })
