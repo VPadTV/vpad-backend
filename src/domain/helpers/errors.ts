@@ -12,6 +12,8 @@ export const forbidden = (message: string): HttpError => new HttpError(message, 
 export const notFound = (message: string): HttpError => new HttpError(message, 404)
 export const imATeapot = (message: string): HttpError => new HttpError(message, 418)
 
+export const serverError = (message: string): HttpError => new HttpError(message, 500)
+
 export const Errors = {
     MISSING_TOKEN: () => unauthorized("Missing Token"),
     UNAUTHORIZED: () => unauthorized("Unauthorized"),
@@ -21,6 +23,8 @@ export const Errors = {
     IM_A_TEAPOT: () => imATeapot("I'm A Teapot!"),
     BAD_REQUEST: () => badRequest("Bad Request"),
     FAILED_TO_DOWNLOAD: () => badRequest("Failed to download from URL"),
+
+    SERVER: () => serverError("Internal Server Error"),
 
     LOW_TIER: () => badRequest("Subscription tier too low"),
 
