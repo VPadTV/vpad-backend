@@ -10,7 +10,10 @@ export class App {
         this.server = express()
         // this.server.use(express.json({ limit: '10mb' }))
         this.server.use(bodyParser.urlencoded({ extended: true }));
-        this.server.use(cors({ origin: 'http://localhost:5173' }))
+        this.server.use(cors({
+            origin: 'http://localhost:5173',
+            credentials: true
+        }))
 
         for (let path in routes) {
             const router = express.Router()
