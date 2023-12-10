@@ -1,4 +1,5 @@
 import { Errors } from "@domain/helpers";
+import { PrismaClient } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 import Stripe from "stripe";
 
@@ -8,13 +9,14 @@ export type CheckoutData = {
 }
 
 export type CreateCheckout = {
-    type: 'payment' | 'subscription'
+    type: 'donation' | 'subscription'
     product: {
         price: Decimal // Decimal(100) = $1.00
         name: string
     }
     quantity: [number, number]
     email: string
+    destinationAccountId: string
 }
 
 export class Payment {
@@ -33,11 +35,36 @@ export class Payment {
         return this.instance
     }
 
+    async createAccount(email: string): Promise<string> {
+        const account = await this.client.accounts.create({
+            type: 'express',
+            email: email,
+        })
+        return account.id
+    }
+
+    async getAccountLink(accountId: string, linkType: 'create' | 'update'): Promise<string> {
+        let type: 'account_onboarding' | 'account_update';
+        if (linkType === 'create') type = 'account_onboarding'
+        else type = 'account_update'
+        const link = await this.client.accountLinks.create({
+            account: accountId,
+            type,
+            refresh_url: process.env.FRONT_URL! + '/pay/reauth',
+            return_url: process.env.FRONT_URL! + '/pay/return',
+        })
+        return link.url
+    }
+
     async createSession(data: CreateCheckout): Promise<CheckoutData> {
+        let mode: 'payment' | 'subscription'
+        if (data.type === 'donation') mode = 'payment'
+        else mode = 'subscription'
+
+        const fee = data.product.price.mul(new Decimal(process.env.FEE!)).toNumber()
+
         const session = await this.client.checkout.sessions.create({
-            cancel_url: process.env.FRONT_URL! + '/pay/cancel',
-            success_url: process.env.FRONT_URL! + '/pay/success',
-            mode: data.type,
+            mode,
             customer_email: data.email,
             // automatic_tax: { enabled: true },
             // billing_address_collection: 'auto',
@@ -61,7 +88,15 @@ export class Payment {
                         maximum: data.quantity[1] ?? 1,
                     }
                 }
-            ]
+            ],
+            payment_intent_data: {
+                application_fee_amount: fee,
+                transfer_data: {
+                    destination: data.destinationAccountId,
+                }
+            },
+            cancel_url: process.env.FRONT_URL! + '/pay/cancel',
+            success_url: process.env.FRONT_URL! + '/pay/success',
         })
         return {
             url: session.url!,

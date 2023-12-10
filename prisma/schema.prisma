@@ -18,6 +18,8 @@ model User {
     about           String?
     contact         String?
 
+    stripeAccountId String? @unique
+
     admin      Boolean   @default(false)
     banned     Boolean   @default(false)
     banTimeout DateTime?

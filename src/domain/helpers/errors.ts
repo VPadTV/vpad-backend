@@ -19,7 +19,7 @@ export const Errors = {
     UNAUTHORIZED: () => unauthorized("Unauthorized"),
     EXPIRED_TOKEN: () => unauthorized("Expired Token"),
     FORBIDDEN: () => forbidden("Forbidden"),
-    NOT_FOUND: () => notFound("Not Found"),
+    NOT_FOUND: (m?: string) => notFound(m ? `${m} Not Found` : "Not Found"),
     IM_A_TEAPOT: () => imATeapot("I'm A Teapot!"),
     BAD_REQUEST: () => badRequest("Bad Request"),
     FAILED_TO_DOWNLOAD: () => badRequest("Failed to download from URL"),
@@ -39,6 +39,7 @@ export const Errors = {
     INVALID_THUMB: () => badRequest("Invalid thumbnail"),
     INVALID_SORT: () => badRequest("Invalid sort"),
     INVALID_TIER: () => badRequest("Invalid tier"),
+    NO_ACCOUNT: () => badRequest("No valid account"),
 
     INCORRECT_PASSWORD: () => badRequest("Incorrect Password"),
 
