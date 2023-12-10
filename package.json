@@ -12,7 +12,7 @@
         "test-watch": "jest --no-cache --silent=false --runInBand --watch --no-coverage",
         "migrate": "prisma migrate dev",
         "lint": "eslint . --ext js,ts --fix",
-        "check": "tsc && resolve-tspaths --noEmit",
+        "check": "tsc --noEmit && resolve-tspaths --noEmit",
         "docker-build": "docker compose up server --no-deps --build --no-start"
     },
     "dependencies": {
