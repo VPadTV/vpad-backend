@@ -8,6 +8,7 @@ import { User } from "@prisma/client"
 
 export type PostEditRequest = {
     user: User
+    authorIds: string[]
     id: string
     text?: string
     media?: FileRawUpload
@@ -22,15 +23,23 @@ export type PostEditResponse = {}
 export async function postEdit(req: PostEditRequest, db: DatabaseClient, storage: Storage): Promise<PostEditResponse> {
     if (!req.id) throw Errors.MISSING_ID()
 
-    if (boolify(req.nsfw) === null) req.nsfw = false
+    req.nsfw = boolify(req.nsfw)
     let tags: string[] | false = []
+
     if (req.tags && req.tags.length) {
         tags = parseTags(req.tags.trim())
         if (tags === false) throw Errors.INVALID_TAGS()
     }
-    if (!req.minTierId?.length) req.minTierId = undefined
 
-    const postFound = await db.post.findFirst({ where: { id: req.id, userId: req.user.id } })
+    if (!req.minTierId?.length) req.minTierId = undefined
+    if (req.minTierId && req.authorIds.length) throw Errors.CANT_BE_PAID_AND_COLLABORATION()
+
+    const postFound = await db.post.findFirst({
+        where: {
+            id: req.id, authors: { some: { id: req.id } }
+        }
+    })
+
     if (!postFound) throw Errors.NOT_FOUND()
 
     let mediaData = storage.getFileData(req.media)
@@ -39,6 +48,9 @@ export async function postEdit(req: PostEditRequest, db: DatabaseClient, storage
     await db.post.update({
         where: { id: req.id },
         data: {
+            authors: {
+                connect: req.authorIds.map(id => ({ id }))
+            },
             text: req.text ?? undefined,
             mediaType: mediaData?.type,
             mediaUrl: mediaData?.url,

@@ -24,7 +24,7 @@ export type PostGetManyResponse = Paginate<{
     meta: {
         nsfw: boolean
         tags: string[]
-        user: SimpleUser
+        authors: SimpleUser[]
         views: number
         createdAt: string
     }
@@ -72,20 +72,25 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
             throw Errors.INVALID_SORT()
     }
     const offset = (+req.page - 1) * +req.size
+    const where = {
+        authors: {
+            some: {
+                id: req.creatorId ?? undefined
+            },
+        },
+        title: req.titleSearch ? {
+            search: req.titleSearch
+        } : undefined,
+        OR: [
+            { minTier: { price: { lte: userTierValue } } },
+            { minTier: null },
+        ],
+    }
     const [posts, total] = await db.$transaction([
         db.post.findMany({
             skip: offset,
             take: +req.size,
-            where: {
-                userId: req.creatorId ?? undefined,
-                title: req.titleSearch ? {
-                    search: req.titleSearch
-                } : undefined,
-                OR: [
-                    { minTier: { price: { lte: userTierValue } } },
-                    { minTier: null },
-                ],
-            },
+            where,
             select: {
                 id: true,
                 title: true,
@@ -93,7 +98,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
                 thumbUrl: true,
                 nsfw: true,
                 tags: true,
-                user: { select: SimpleUser.selector },
+                authors: { select: SimpleUser.selector },
                 createdAt: true,
                 _count: {
                     select: {
@@ -103,11 +108,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
             },
             orderBy
         }),
-        db.post.count({
-            where: {
-                userId: req.creatorId ?? undefined
-            }
-        }),
+        db.post.count({ where }),
     ])
 
     if (!posts || posts.length === 0) throw Errors.NOT_FOUND()
@@ -120,7 +121,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
         meta: {
             nsfw: post.nsfw,
             tags: post.tags,
-            user: post.user,
+            authors: post.authors,
             views: post._count.votes,
             createdAt: post.createdAt.toISOString(),
         }

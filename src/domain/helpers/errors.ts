@@ -35,6 +35,7 @@ export const Errors = {
     INVALID_THUMB: () => badRequest("Invalid thumbnail"),
     INVALID_SORT: () => badRequest("Invalid sort"),
     INVALID_TIER: () => badRequest("Invalid tier"),
+    CANT_BE_PAID_AND_COLLABORATION: () => badRequest("Post can't be both paid and collaborative"),
 
     INCORRECT_PASSWORD: () => badRequest("Incorrect Password"),
 

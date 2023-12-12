@@ -40,7 +40,7 @@ export async function postCreate(req: PostCreateRequest, db: DatabaseClient, sto
 
     const post = await db.post.create({
         data: {
-            userId: req.user.id,
+            authors: { connect: { id: req.user.id } },
             title: req.title,
             text: req.text,
             mediaUrl: mediaData.url,

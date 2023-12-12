@@ -66,8 +66,7 @@ model Post {
     mediaType MediaType
     thumbUrl  String?
 
-    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict)
-    userId String
+    authors User[]
 
     comments Comment[]
     votes    Votes[]   @relation(name: "postVotes")
