@@ -8,7 +8,6 @@ import { User } from "@prisma/client"
 
 export type PostEditRequest = {
     user: User
-    authorIds: string[]
     id: string
     text?: string
     media?: FileRawUpload
@@ -32,7 +31,6 @@ export async function postEdit(req: PostEditRequest, db: DatabaseClient, storage
     }
 
     if (!req.minTierId?.length) req.minTierId = undefined
-    if (req.minTierId && req.authorIds.length) throw Errors.CANT_BE_PAID_AND_COLLABORATION()
 
     const postFound = await db.post.findFirst({
         where: {
@@ -48,9 +46,6 @@ export async function postEdit(req: PostEditRequest, db: DatabaseClient, storage
     await db.post.update({
         where: { id: req.id },
         data: {
-            authors: {
-                connect: req.authorIds.map(id => ({ id }))
-            },
             text: req.text ?? undefined,
             mediaType: mediaData?.type,
             mediaUrl: mediaData?.url,

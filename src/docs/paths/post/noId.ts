@@ -9,6 +9,7 @@ export const postNoId = {
         contentType: ContentType.MULTIPART,
         bodyRequired: ["title", "text", "media", "tags"],
         body: {
+            otherAuthorIds: [exId, exId],
             title: "some title",
             text: "some text",
             media: BodyFile,
@@ -46,7 +47,7 @@ export const postNoId = {
                     nsfw: false,
                     tags: ['some', 'tags'],
                     minTierId: exId,
-                    user: simpleUser,
+                    authors: [simpleUser],
                     views: 1000
                 }
             }
