@@ -1,4 +1,5 @@
-import { HttpError, HttpResponse } from '@domain/helpers'
+import { PayWebhookRequest } from '@domain/functions/pay/webhook'
+import { HttpError } from '@domain/helpers'
 import { Response, Request } from 'express'
 import { IncomingHttpHeaders } from 'http'
 
@@ -8,19 +9,16 @@ export type RawRequest = {
     [key: string]: any,
 }
 
-export function raw<T extends HttpResponse>(fn: (request: any) => Promise<T>) {
+export function webhook(fn: (request: PayWebhookRequest) => Promise<void>) {
     return async (req: Request, res: Response) => {
         try {
-            const { statusCode, data } = await fn({
-                headers: req.headers,
-                body: req.body,
-                ...req.params,
-                ...req.query,
-                ...res.locals,
+            await fn({
+                signature: req.headers['stripe-signature'] as string | undefined,
+                raw: req.body,
             })
-            return res.status(statusCode).json({ ...data })
+            return res.status(200).send()
         } catch (error) {
-            console.error(`** Raw Route **`)
+            console.error(`** Webhook Route **`)
             console.error(error)
             if (error instanceof HttpError)
                 return res.status(error.code).json({ error: error.message })

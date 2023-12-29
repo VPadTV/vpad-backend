@@ -104,9 +104,7 @@ export class Payment {
         }
     }
 
-    async getWebhookEvent(body: string | Buffer, signature: string) {
-        const secret = process.env.STRIPE_SECRET
-        if (!secret) throw Errors.SERVER()
+    async getWebhookEvent(body: Buffer, secret: string, signature: string) {
         return this.client.webhooks.constructEvent(body, signature, secret)
     }
 }

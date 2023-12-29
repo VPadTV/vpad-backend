@@ -1,23 +1,20 @@
 import { Errors } from "@domain/helpers"
 import { DatabaseClient } from "@infra/gateways/database"
 import { Payment } from "@infra/gateways/payment"
-import { User } from "@prisma/client"
 
 export type PayWebhookRequest = {
-    user: User
-    headers: { 'stripe-signature'?: string }
-    body: any
+    signature?: string
+    raw: Buffer
 }
 
-export type PayWebhookResponse = {
-}
-
-export async function payWebhook(req: PayWebhookRequest, db: DatabaseClient, pay: Payment): Promise<PayWebhookResponse> {
+export async function payWebhook(req: PayWebhookRequest, db: DatabaseClient, pay: Payment): Promise<void> {
     const secret = process.env.STRIPE_SECRET
-    const signature = req.headers["stripe-signature"]
+    const signature = req.signature
     if (!secret || !signature) throw Errors.UNAUTHORIZED()
 
-    const event = await pay.getWebhookEvent(JSON.stringify(req.body), signature)
+    const event = await pay.getWebhookEvent(req.raw, secret, signature)
+
+    console.log(event)
 
     switch (event.type) {
         case 'payment_intent.succeeded':
@@ -35,6 +32,4 @@ export async function payWebhook(req: PayWebhookRequest, db: DatabaseClient, pay
             // Unexpected event type
             console.error(`Unhandled event type ${event.type}.`);
     }
-
-    return {}
 }
