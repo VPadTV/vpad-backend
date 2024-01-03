@@ -80,7 +80,7 @@ const makeObject = (args?: Body) => {
                     type: 'array',
                     items: {
                         type: 'object',
-                        properties: obj(arrValue)
+                        properties: makeObject(arrValue)!
                     }
                 }
             } else {
@@ -96,7 +96,7 @@ const makeObject = (args?: Body) => {
         else if (typeof value === 'object')
             swb[name] = {
                 type: 'object',
-                properties: obj(value)
+                properties: makeObject(value)!
             }
         else if (value === BodyFile)
             swb[name] = {
@@ -153,10 +153,6 @@ const makeErrors = (errors?: { [error: number]: string }) => {
         }
     }
     return swe
-}
-
-export const obj = (args: Body) => {
-    return makeObject(args)!
 }
 
 export const makeRoute = (args: GenerateRoute) => {
