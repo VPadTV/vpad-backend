@@ -1,12 +1,12 @@
-import { middleware, json } from "@infra/adapters"
-import { IRoute } from "@main/route"
-import { Router } from "express"
-import { ok } from "@domain/helpers"
-import { Database } from "@infra/gateways"
-import { AdminManageBanRequest, adminManageBan } from "@domain/functions/admin/manageBan"
-import { isAdmin } from "@infra/middlewares/isAdmin"
-import { AdminGetManyRequest, adminGetMany } from "@domain/functions/admin/getMany"
-import { AdminManageRequest, adminManage } from "@domain/functions/admin/manage"
+import { middleware, json } from '@infra/adapters'
+import { IRoute } from '@main/route'
+import { Router } from 'express'
+import { ok } from '@helpers/http'
+import { Database } from '@infra/gateways'
+import { AdminManageBanRequest, adminManageBan } from '@functions/admin/manageBan'
+import { isAdmin } from '@infra/middlewares/isAdmin'
+import { AdminGetManyRequest, adminGetMany } from '@functions/admin/getMany'
+import { AdminManageRequest, adminManage } from '@functions/admin/manage'
 
 export class AdminRoute implements IRoute {
     register(router: Router): void {

@@ -1,5 +1,5 @@
-import { PayWebhookRequest } from '@domain/functions/pay/webhook'
-import { HttpError } from '@domain/helpers'
+import { PayWebhookRequest } from '@functions/pay/webhook'
+import { HttpError } from '@helpers/http'
 import { Response, Request } from 'express'
 import { IncomingHttpHeaders } from 'http'
 
@@ -22,7 +22,8 @@ export function webhook(fn: (request: PayWebhookRequest) => Promise<void>) {
             console.error(error)
             if (error instanceof HttpError)
                 return res.status(error.code).json({ error: error.message })
-            return res.status(500).json({ error: error.code ?? error.message })
+            else if (error instanceof Error)
+                return res.status(500).json({ error: error.message })
         }
     }
 }

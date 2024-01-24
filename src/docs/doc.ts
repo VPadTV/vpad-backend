@@ -1,41 +1,41 @@
-import { userRegister } from "./paths/user/register";
-import { userId } from "./paths/user/id";
-import { userLogin } from "./paths/user/login";
-import { postId } from "./paths/post/id";
-import { postNoId } from "./paths/post/noId";
-import { commentId } from "./paths/comment/id";
-import { commentNoId } from "./paths/comment/noId";
-import { adminNoId } from "./paths/admin/noId";
-import { adminId } from "./paths/admin/manage/adminId";
-import { adminBanId } from "./paths/admin/manage/banId";
-import { postStreamKey } from "./paths/post/streamKey";
-import { subNoId } from "./paths/sub/noId";
-import { subId } from "./paths/sub/id";
-import { tierNoId } from "./paths/tier/noId";
-import { tierId } from "./paths/tier/id";
-import { tierCreatorId } from "./paths/tier/creatorId";
-import { subCreatorId } from "./paths/sub/creatorId";
-import { votePostId } from "./paths/vote/postId";
-import { payNoId } from "./paths/pay/noId";
+import { userRegister } from './paths/user/register';
+import { userId } from './paths/user/id';
+import { userLogin } from './paths/user/login';
+import { postId } from './paths/post/id';
+import { postNoId } from './paths/post/noId';
+import { commentId } from './paths/comment/id';
+import { commentNoId } from './paths/comment/noId';
+import { adminNoId } from './paths/admin/noId';
+import { adminId } from './paths/admin/manage/adminId';
+import { adminBanId } from './paths/admin/manage/banId';
+import { postStreamKey } from './paths/post/streamKey';
+import { subNoId } from './paths/sub/noId';
+import { subId } from './paths/sub/id';
+import { tierNoId } from './paths/tier/noId';
+import { tierId } from './paths/tier/id';
+import { tierCreatorId } from './paths/tier/creatorId';
+import { subCreatorId } from './paths/sub/creatorId';
+import { votePostId } from './paths/vote/postId';
+import { payNoId } from './paths/pay/noId';
 
 export default {
-    openapi: "3.0.0",
+    openapi: '3.0.0',
     info: {
-        title: "VPAD API",
-        version: "0.0.1",
+        title: 'VPAD API',
+        version: '0.0.1',
     },
     servers: [
         {
-            url: "http://localhost:3000",
-            description: "Local server",
+            url: 'http://localhost:3000',
+            description: 'Local server',
         }
     ],
     components: {
         securitySchemes: {
             bearerAuth: {
-                type: "http",
-                scheme: "bearer",
-                bearerFormat: "JWT"
+                type: 'http',
+                scheme: 'bearer',
+                bearerFormat: 'JWT'
             },
         },
     },

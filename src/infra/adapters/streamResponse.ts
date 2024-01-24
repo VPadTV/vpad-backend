@@ -1,5 +1,5 @@
-import { PostStreamResponse } from '@domain/functions/post/stream'
-import { HttpError } from '@domain/helpers'
+import { PostStreamResponse } from '@functions/post/stream'
+import { HttpError } from '@helpers/http'
 import { Response, Request } from 'express'
 
 export function streamResponse<U extends PostStreamResponse>(fn: (request: any) => Promise<U>) {
@@ -25,10 +25,11 @@ export function streamResponse<U extends PostStreamResponse>(fn: (request: any) 
         } catch (error) {
             console.error(`** Streaming **`)
             console.error(error)
-            if (error instanceof HttpError) {
+            if (error instanceof HttpError)
                 return res.status(error.code).json({ error: error.message })
-            }
-            return res.status(500).json({ error: error.code ?? error.message })
+            else if (error instanceof Error)
+                return res.status(500).json({ error: error.message })
+            return res.status(418).json({ error: 'how did you get here?' })
         }
     }
 }

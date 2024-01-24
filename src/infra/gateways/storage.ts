@@ -3,8 +3,8 @@ import { MimeTypes } from './mimeTypes'
 import crypto from 'crypto';
 import { FileRawUpload } from '@infra/middlewares';
 import { MediaType } from '@prisma/client';
-import { Readable, ReadableOptions } from "stream";
-import { Errors } from '@domain/helpers';
+import { Readable, ReadableOptions } from 'stream';
+import { Errors } from '@helpers/http';
 
 export type FileUpload = {
     key: string;

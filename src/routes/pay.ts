@@ -1,13 +1,13 @@
-import { middleware, json } from "@infra/adapters";
-import { IRoute } from "@main/route";
-import express, { Router } from "express";
-import { ok } from "@domain/helpers";
-import { isLoggedIn } from "@infra/middlewares";
-import { PayDonateRequest, payCreate } from "@domain/functions/pay/donate";
-import { Payment } from "@infra/gateways/payment";
-import { Database } from "@infra/gateways";
-import { PayWebhookRequest, payWebhook } from "@domain/functions/pay/webhook";
-import { webhook } from "@infra/adapters/webhook";
+import { middleware, json } from '@infra/adapters';
+import { IRoute } from '@main/route';
+import express, { Router } from 'express';
+import { ok } from '@helpers/http';
+import { isLoggedIn } from '@infra/middlewares';
+import { PayDonateRequest, payCreate } from '@functions/pay/donate';
+import { Payment } from '@infra/gateways/payment';
+import { Database } from '@infra/gateways';
+import { PayWebhookRequest, payWebhook } from '@functions/pay/webhook';
+import { webhook } from '@infra/adapters/webhook';
 
 export class PayRoute implements IRoute {
     register(router: Router): void {

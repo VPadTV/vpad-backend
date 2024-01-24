@@ -1,23 +1,23 @@
-import { makeRoute } from "@docs/helpers";
-import { exId } from "@docs/schemas/id";
+import { makeRoute } from '@docs/helpers';
+import { exId } from '@docs/schemas/id';
 
 export const userRegister = {
     post: makeRoute({
-        tag: "User",
-        summary: "Registers a new user",
+        tag: 'User',
+        summary: 'Registers a new user',
         security: false,
-        bodyRequired: ["username", "email", "password"],
+        bodyRequired: ['username', 'email', 'password'],
         body: {
-            username: "some_username",
-            nickname: "some_nickname",
-            email: "email@domain.com",
-            password: "somepass",
-            about: "some about section",
+            username: 'some_username',
+            nickname: 'some_nickname',
+            email: 'email@domain.com',
+            password: 'somepass',
+            about: 'some about section',
         },
         success: {
             id: exId,
-            token: "string",
+            token: 'string',
         },
-        400: "Invalid name, email or password"
+        400: 'Invalid name, email or password'
     })
 }

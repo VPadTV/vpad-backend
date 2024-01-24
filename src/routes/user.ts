@@ -1,13 +1,13 @@
-import { middleware, json } from "@infra/adapters";
-import { IRoute } from "@main/route";
-import { Router } from "express";
-import { ok } from "@domain/helpers";
-import { isLoggedIn } from "@infra/middlewares/isLoggedIn";
-import { UserGetRequest, userGet } from "@domain/functions/user/get";
-import { UserLoginRequest, userLogin } from "@domain/functions/user/login";
-import { UserRegisterRequest, userRegister } from "@domain/functions/user/register";
-import { UserEditRequest, userEdit } from "@domain/functions/user/edit";
-import { Database, Storage } from "@infra/gateways";
+import { middleware, json } from '@infra/adapters';
+import { IRoute } from '@main/route';
+import { Router } from 'express';
+import { ok } from '@helpers/http';
+import { isLoggedIn } from '@infra/middlewares/isLoggedIn';
+import { UserGetRequest, userGet } from '@functions/user/get';
+import { UserLoginRequest, userLogin } from '@functions/user/login';
+import { UserRegisterRequest, userRegister } from '@functions/user/register';
+import { UserEditRequest, userEdit } from '@functions/user/edit';
+import { Database, Storage } from '@infra/gateways';
 
 export class UserRoute implements IRoute {
     register(router: Router): void {

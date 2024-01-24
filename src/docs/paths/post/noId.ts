@@ -1,16 +1,16 @@
-import { BodyFile, ContentType, makeRoute } from "@docs/helpers";
-import { exId } from "@docs/schemas/id";
-import { simpleUser } from "@docs/schemas/simpleUser";
+import { BodyFile, ContentType, makeRoute } from '@docs/helpers';
+import { exId } from '@docs/schemas/id';
+import { simpleUser } from '@docs/schemas/simpleUser';
 
 export const postNoId = {
     post: makeRoute({
-        tag: "Post",
-        summary: "Creates a new post",
+        tag: 'Post',
+        summary: 'Creates a new post',
         contentType: ContentType.MULTIPART,
-        bodyRequired: ["title", "text", "media", "tags"],
+        bodyRequired: ['title', 'text', 'media', 'tags'],
         body: {
-            title: "some title",
-            text: "some text",
+            title: 'some title',
+            text: 'some text',
             media: BodyFile,
             thumb: BodyFile,
             nsfw: false,
@@ -22,13 +22,13 @@ export const postNoId = {
         }
     }),
     get: makeRoute({
-        tag: "Post",
-        summary: "Gets many posts",
+        tag: 'Post',
+        summary: 'Gets many posts',
         query: {
             userTierId: exId,
             creatorId: exId,
-            sortBy: "latest | oldest | high-views | low-views",
-            search: "search terms",
+            sortBy: 'latest | oldest | high-views | low-views',
+            search: 'search terms',
             page: 1,
             size: 30,
         },
@@ -40,8 +40,8 @@ export const postNoId = {
             lastPage: 4,
             data: {
                 id: exId,
-                text: "some text",
-                thumbUrl: "string",
+                text: 'some text',
+                thumbUrl: 'string',
                 meta: {
                     nsfw: false,
                     tags: ['some', 'tags'],
@@ -51,6 +51,6 @@ export const postNoId = {
                 }
             }
         },
-        404: "No posts found",
+        404: 'No posts found',
     })
 }

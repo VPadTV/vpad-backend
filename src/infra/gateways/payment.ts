@@ -1,7 +1,6 @@
-import { Errors } from "@domain/helpers";
-import { PrismaClient } from "@prisma/client";
-import { Decimal } from "@prisma/client/runtime/library";
-import Stripe from "stripe";
+import { Errors } from '@helpers/http';
+import { Decimal } from '@prisma/client/runtime/library';
+import Stripe from 'stripe';
 
 export type CheckoutData = {
     url: string

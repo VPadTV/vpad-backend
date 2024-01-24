@@ -1,6 +1,6 @@
 export type SwaggerParameter = {
     name: string
-    in: "query" | "path"
+    in: 'query' | 'path'
     schema: { type: string, example?: string | number }
 }
 
@@ -37,7 +37,7 @@ export type SwaggerError = {
     }
 }
 
-export const BodyFile = "__bodyfile__"
+export const BodyFile = '__bodyfile__'
 
 export type Parameters = {
     [name: string]: string | number
@@ -100,8 +100,8 @@ const makeObject = (args?: Body) => {
             }
         else if (value === BodyFile)
             swb[name] = {
-                type: "string",
-                format: "binary"
+                type: 'string',
+                format: 'binary'
             }
         else
             swb[name] = {
@@ -112,7 +112,7 @@ const makeObject = (args?: Body) => {
     return swb
 }
 
-const makeParameters = (type: "query" | "path", args?: Parameters) => {
+const makeParameters = (type: 'query' | 'path', args?: Parameters) => {
     if (!args) return undefined;
 
     let swp: SwaggerParameter[] = []
@@ -159,9 +159,9 @@ export const makeRoute = (args: GenerateRoute) => {
     const { tag, summary, path: pathParameters, query: queryParameters, body, success, bodyRequired = [], security = true, ...errors } = args
 
     let swParams: SwaggerParameter[] = []
-    const swPath = makeParameters("path", pathParameters)
+    const swPath = makeParameters('path', pathParameters)
     if (swPath) swParams.push(...swPath)
-    const swQuery = makeParameters("query", queryParameters) ?? []
+    const swQuery = makeParameters('query', queryParameters) ?? []
     if (swQuery) swParams.push(...swQuery)
 
     const swBody = makeObject(body)
@@ -189,8 +189,8 @@ export const makeRoute = (args: GenerateRoute) => {
                         type: 'object',
                         properties: {
                             token: security ? {
-                                type: "string",
-                                example: "refreshed token",
+                                type: 'string',
+                                example: 'refreshed token',
                             } : undefined, ...successObj
                         }
                     }

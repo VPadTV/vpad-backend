@@ -1,4 +1,4 @@
-import { HttpError, HttpResponse } from '@domain/helpers'
+import { HttpError, HttpResponse } from '@helpers/http'
 import { Response, Request } from 'express'
 
 type MulterFiles = { [fieldname: string]: Express.Multer.File[] }
@@ -31,7 +31,9 @@ export function json<T extends HttpResponse>(fn: (request: any) => Promise<T>) {
             console.error(error)
             if (error instanceof HttpError)
                 return res.status(error.code).json({ error: error.message })
-            return res.status(500).json({ error: error.code ?? error.message })
+            else if (error instanceof Error)
+                return res.status(500).json({ error: error.message })
+            return res.status(418).json({ error: 'how did you get here?' })
         }
     }
 }

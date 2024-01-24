@@ -1,4 +1,4 @@
-import { Errors } from '@domain/helpers'
+import { Errors } from '@helpers/http'
 import { MediaType } from '@prisma/client'
 import mimeTypes from 'mime-types'
 export class MimeTypes {
@@ -11,6 +11,6 @@ export class MimeTypes {
     }
 
     static extension(mimeType: string): string {
-        return mimeTypes.extension(mimeType) || ""
+        return mimeTypes.extension(mimeType) || ''
     }
 }

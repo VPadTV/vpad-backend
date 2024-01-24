@@ -1,13 +1,13 @@
-import { CommentCreateRequest, commentCreate } from "@domain/functions/comment/create";
-import { CommentDeleteRequest, commentDelete } from "@domain/functions/comment/delete";
-import { CommentEditRequest, commentEdit } from "@domain/functions/comment/edit";
-import { CommentGetRequest, commentGet } from "@domain/functions/comment/get";
-import { middleware, json } from "@infra/adapters";
-import { isLoggedIn } from "@infra/middlewares/isLoggedIn";
-import { ok } from "@domain/helpers";
-import { Database } from "@infra/gateways";
-import { IRoute } from "@main/route";
-import { Router } from "express";
+import { CommentCreateRequest, commentCreate } from '@functions/comment/create';
+import { CommentDeleteRequest, commentDelete } from '@functions/comment/delete';
+import { CommentEditRequest, commentEdit } from '@functions/comment/edit';
+import { CommentGetRequest, commentGet } from '@functions/comment/get';
+import { middleware, json } from '@infra/adapters';
+import { isLoggedIn } from '@infra/middlewares/isLoggedIn';
+import { ok } from '@helpers/http';
+import { Database } from '@infra/gateways';
+import { IRoute } from '@main/route';
+import { Router } from 'express';
 
 export class CommentRoute implements IRoute {
     register(router: Router): void {

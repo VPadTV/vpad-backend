@@ -1,4 +1,4 @@
-import { HttpError } from '@domain/helpers/errors'
+import { HttpError } from '@helpers/http'
 import { Response, Request, NextFunction } from 'express'
 
 export type MiddlewareData = {
@@ -23,7 +23,9 @@ export function middleware(fn: (request: MiddlewareData) => Promise<any>) {
             console.error(error)
             if (error instanceof HttpError)
                 return res.status(error.code).json({ error: error.message })
-            return res.status(500).json({ error: error.code ?? error.message })
+            else if (error instanceof Error)
+                return res.status(500).json({ error: error.message })
+            return res.status(418).json({ error: 'how did you get here?' })
         }
     }
 }

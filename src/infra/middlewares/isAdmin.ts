@@ -1,4 +1,4 @@
-import { Errors } from '@domain/helpers'
+import { Errors } from '@helpers/http'
 import { MiddlewareData } from '@infra/adapters'
 import { tokenWrapper } from './wrappers/tokenWrapper'
 

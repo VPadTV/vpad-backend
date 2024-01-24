@@ -1,10 +1,10 @@
-import { VoteSetRequest, voteSet } from "@domain/functions/vote/set";
-import { ok } from "@domain/helpers";
-import { middleware, json } from "@infra/adapters";
-import { Database } from "@infra/gateways";
-import { isLoggedIn } from "@infra/middlewares/isLoggedIn";
-import { IRoute } from "@main/route";
-import { Router } from "express";
+import { VoteSetRequest, voteSet } from '@functions/vote/set';
+import { ok } from '@helpers/http';
+import { middleware, json } from '@infra/adapters';
+import { Database } from '@infra/gateways';
+import { isLoggedIn } from '@infra/middlewares/isLoggedIn';
+import { IRoute } from '@main/route';
+import { Router } from 'express';
 
 export class VoteRoute implements IRoute {
     register(router: Router): void {

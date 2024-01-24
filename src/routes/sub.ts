@@ -1,13 +1,13 @@
-import { middleware, json } from "@infra/adapters";
-import { IRoute } from "@main/route";
-import { Router } from "express";
-import { ok } from "@domain/helpers";
-import { Database } from "@infra/gateways";
-import { SubCreateRequest, subCreate } from "@domain/functions/sub/create";
-import { SubUpdateRequest, subUpdate } from "@domain/functions/sub/update";
-import { SubDeleteRequest, subDelete } from "@domain/functions/sub/delete";
-import { isLoggedIn } from "@infra/middlewares";
-import { SubGetRequest, subGet } from "@domain/functions/sub/get";
+import { middleware, json } from '@infra/adapters';
+import { IRoute } from '@main/route';
+import { Router } from 'express';
+import { ok } from '@helpers/http';
+import { Database } from '@infra/gateways';
+import { SubCreateRequest, subCreate } from '@functions/sub/create';
+import { SubUpdateRequest, subUpdate } from '@functions/sub/update';
+import { SubDeleteRequest, subDelete } from '@functions/sub/delete';
+import { isLoggedIn } from '@infra/middlewares';
+import { SubGetRequest, subGet } from '@functions/sub/get';
 
 export class SubRoute implements IRoute {
     register(router: Router): void {

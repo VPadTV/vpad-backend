@@ -1,13 +1,13 @@
-import { middleware, json } from "@infra/adapters";
-import { IRoute } from "@main/route";
-import { Router } from "express";
-import { ok } from "@domain/helpers";
-import { Database } from "@infra/gateways";
-import { isLoggedIn } from "@infra/middlewares";
-import { TierCreateRequest, tierCreate } from "@domain/functions/tier/create";
-import { TierUpdateRequest, tierUpdate } from "@domain/functions/tier/update";
-import { TierDeleteRequest, tierDelete } from "@domain/functions/tier/delete";
-import { TierGetManyRequest, tierGetMany } from "@domain/functions/tier/getMany";
+import { middleware, json } from '@infra/adapters';
+import { IRoute } from '@main/route';
+import { Router } from 'express';
+import { ok } from '@helpers/http';
+import { Database } from '@infra/gateways';
+import { isLoggedIn } from '@infra/middlewares';
+import { TierCreateRequest, tierCreate } from '@functions/tier/create';
+import { TierUpdateRequest, tierUpdate } from '@functions/tier/update';
+import { TierDeleteRequest, tierDelete } from '@functions/tier/delete';
+import { TierGetManyRequest, tierGetMany } from '@functions/tier/getMany';
 
 export class TierRoute implements IRoute {
     register(router: Router): void {
