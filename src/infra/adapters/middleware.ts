@@ -13,8 +13,8 @@ export function middleware(fn: (request: MiddlewareData) => Promise<any>) {
                 authorization: req.headers.authorization as string,
                 params: req.params
             })
-            req.params = {
-                ...req.params,
+            req.middleware = {
+                ...req.middleware,
                 ...data
             }
             next()

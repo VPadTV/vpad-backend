@@ -24,6 +24,7 @@ export function json<T extends HttpResponse>(fn: (request: any) => Promise<T>) {
                 ...req.params,
                 ...req.query,
                 ...res.locals,
+                ...req.middleware,
             })
             return res.status(statusCode).json({ ...data, token: data.token ?? req.params?.token })
         } catch (error) {
