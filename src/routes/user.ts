@@ -8,6 +8,7 @@ import { UserLoginRequest, userLogin } from '@functions/user/login';
 import { UserRegisterRequest, userRegister } from '@functions/user/register';
 import { UserEditRequest, userEdit } from '@functions/user/edit';
 import { Database, Storage } from '@infra/gateways';
+import { fields } from '@infra/middlewares';
 
 export class UserRoute implements IRoute {
     register(router: Router): void {
@@ -28,6 +29,7 @@ export class UserRoute implements IRoute {
 
         router.put('/:id',
             middleware(isLoggedIn),
+            fields(['profilePhoto']),
             json(async (request: UserEditRequest) => {
                 return ok(await userEdit(request, Database.get(), Storage.get()))
             }))
