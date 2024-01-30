@@ -15,7 +15,7 @@ export const postId = {
             mediaUrl: `https://${process.env.BB_BUCKET!}.s3.backblazeb2.com/sdklawejwap.mp4`,
             thumbUrl: `https://${process.env.BB_BUCKET!}.s3.backblazeb2.com/jerkejrlkej.jpg`,
             meta: {
-                user: simpleUser,
+                authors: [simpleUser],
                 likes: 10,
                 dislikes: 20,
                 views: 40,

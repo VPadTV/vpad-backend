@@ -72,22 +72,25 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
             throw Errors.INVALID_SORT()
     }
     const offset = (+req.page - 1) * +req.size
+    const where = {
+        authors: {
+            some: {
+                id: req.creatorId ?? undefined
+            },
+        },
+        title: req.titleSearch ? {
+            search: req.titleSearch
+        } : undefined,
+        OR: [
+            { minTier: { price: { lte: userTierValue } } },
+            { minTier: null },
+        ],
+    }
     const [posts, total] = await db.$transaction([
         db.post.findMany({
             skip: offset,
             take: +req.size,
-            where: {
-                authors: {
-                    some: { id: req.creatorId ?? undefined }
-                },
-                title: req.titleSearch ? {
-                    search: req.titleSearch
-                } : undefined,
-                OR: [
-                    { minTier: { price: { lte: userTierValue } } },
-                    { minTier: null },
-                ],
-            },
+            where,
             select: {
                 id: true,
                 title: true,
@@ -105,13 +108,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
             },
             orderBy
         }),
-        db.post.count({
-            where: {
-                authors: {
-                    some: { id: req.creatorId ?? undefined }
-                }
-            }
-        }),
+        db.post.count({ where }),
     ])
 
     if (!posts || posts.length === 0) throw Errors.NOT_FOUND()

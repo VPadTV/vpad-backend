@@ -40,8 +40,7 @@ export const commentNoId = {
         bodyRequired: ['postid', 'text'],
         body: {
             postId: exId,
-            parentId: exId,
-            text: 'some text',
+            text: "some text",
         },
         success: {
             id: exId

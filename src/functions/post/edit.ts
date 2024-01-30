@@ -22,20 +22,22 @@ export type PostEditResponse = {}
 export async function postEdit(req: PostEditRequest, db: DatabaseClient, storage: Storage): Promise<PostEditResponse> {
     if (!req.id) throw Errors.MISSING_ID()
 
-    if (boolify(req.nsfw) === null) req.nsfw = false
+    req.nsfw = boolify(req.nsfw)
     let tags: string[] | false = []
+
     if (req.tags && req.tags.length) {
         tags = parseTags(req.tags.trim())
         if (tags === false) throw Errors.INVALID_TAGS()
     }
+
     if (!req.minTierId?.length) req.minTierId = undefined
 
     const postFound = await db.post.findFirst({
         where: {
-            id: req.id,
-            authors: { some: { id: req.user.id } }
+            id: req.id, authors: { some: { id: req.id } }
         }
     })
+
     if (!postFound) throw Errors.NOT_FOUND()
 
     let mediaData = storage.getFileData(req.media)

@@ -9,6 +9,7 @@ import { MediaType, User } from '@prisma/client'
 
 export type PostCreateRequest = {
     user: User
+    otherAuthorIds: string[]
     title: string
     text: string
     media: FileRawUpload
@@ -41,9 +42,8 @@ export async function postCreate(req: PostCreateRequest, db: DatabaseClient, sto
     const post = await db.post.create({
         data: {
             authors: {
-                connect: {
-                    id: req.user.id
-                }
+                connect: [{ id: req.user.id }]
+                    .concat(req.otherAuthorIds?.map(id => ({ id })) ?? [])
             },
             title: req.title,
             text: req.text,

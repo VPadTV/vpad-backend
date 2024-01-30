@@ -22,7 +22,7 @@ export type PostGetResponse = {
             name: string
             price: number
         } | undefined
-        authors: SimpleUser[]
+        authors: [SimpleUser]
         likes: number
         dislikes: number
         views: number
@@ -56,12 +56,14 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
     })
     if (!post) throw Errors.NOT_FOUND()
 
+    const author = post.authors[0]
+
     if (post.minTier && post.minTier.price.greaterThan(0)) {
         // TODO: Fix `post.authors[0]` check.
         if (!req.user) throw Errors.UNAUTHORIZED()
         const userTier = await db.subscriptionTier.findFirst({
             where: {
-                creatorId: post.authors[0].id,
+                creatorId: author.id,
                 subscribers: {
                     some: { userId: req.user.id }
                 },
@@ -105,7 +107,7 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
                 name: post.minTier.name,
                 price: post.minTier.price.toNumber(),
             } : undefined,
-            authors: post.authors,
+            authors: [author],
             likes: likes ?? 0,
             dislikes: dislikes ?? 0,
             views: views ?? 0,

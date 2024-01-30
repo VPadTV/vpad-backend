@@ -156,7 +156,7 @@ const makeErrors = (errors?: { [error: number]: string }) => {
 }
 
 export const makeRoute = (args: GenerateRoute) => {
-    const { tag, summary, path: pathParameters, query: queryParameters, body, success, bodyRequired = [], security = true, ...errors } = args
+    const { tag, summary, path: pathParameters, query: queryParameters, body, contentType, success, bodyRequired = [], security = true, ...errors } = args
 
     let swParams: SwaggerParameter[] = []
     const swPath = makeParameters('path', pathParameters)
@@ -201,8 +201,6 @@ export const makeRoute = (args: GenerateRoute) => {
 
     const swErrors = makeErrors(errors) ?? {}
 
-    let contentType = args.contentType ?? ContentType.FORM
-
     return {
         security: security === true ? [{ bearerAuth: [] }] : undefined,
         tags: [tag],
@@ -211,7 +209,7 @@ export const makeRoute = (args: GenerateRoute) => {
         requestBody: swBody ? {
             required: true,
             content: {
-                [contentType]: {
+                [contentType ?? ContentType.FORM]: {
                     schema: {
                         type: 'object',
                         required: bodyRequired,
