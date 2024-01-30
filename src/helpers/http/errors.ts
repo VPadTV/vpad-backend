@@ -30,6 +30,7 @@ export const Errors = {
 
     INVALID_TOKEN: () => badRequest('Invalid Token'),
     INVALID_USERNAME: () => badRequest('Invalid Username'),
+    USERNAME_ALREADY_EXISTS: () => badRequest('Username Already Exists'),
     INVALID_NICKNAME: () => badRequest('Invalid Nickname'),
     INVALID_EMAIL: () => badRequest('Invalid Email'),
     INVALID_PASSWORD: () => badRequest('Invalid Password'),

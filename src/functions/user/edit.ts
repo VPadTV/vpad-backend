@@ -19,17 +19,20 @@ export type UserEditRequest = {
 export type UserEditResponse = {}
 
 export async function userEdit(req: UserEditRequest, db: DatabaseClient, storage: Storage): Promise<UserEditResponse> {
-    if (req.username && !usernameRegex().test(req.username))
+    if (req.username != null && !usernameRegex().test(req.username))
         throw Errors.INVALID_USERNAME()
-    if (req.nickname && !nicknameRegex().test(req.nickname))
+    if (req.nickname != null && !nicknameRegex().test(req.nickname))
         throw Errors.INVALID_NICKNAME()
-    if (req.email && !emailRegex().test(req.email))
+    if (req.email != null && !emailRegex().test(req.email))
         throw Errors.INVALID_EMAIL()
-    if (req.password && !passwordRegex().test(req.password))
+    if (req.password != null && !passwordRegex().test(req.password))
         throw Errors.INVALID_PASSWORD()
 
     let profilePhotoData = storage.getFileData(req.profilePhoto)
     if (profilePhotoData?.type === MediaType.VIDEO) throw Errors.INVALID_FILE()
+
+    const found = await db.user.findFirst({ where: { username: req.username } })
+    if (found && found.id !== req.id) throw Errors.USERNAME_ALREADY_EXISTS()
 
     await db.user.update({
         where: { id: req.id },

@@ -33,7 +33,7 @@ export function json<T extends HttpResponse>(fn: (request: any) => Promise<T>) {
             if (error instanceof HttpError)
                 return res.status(error.code).json({ error: error.message })
             else if (error instanceof Error)
-                return res.status(500).json({ error: error.message })
+                return res.status(500).json({ error: 'Internal Server Error ' })
             return res.status(418).json({ error: 'how did you get here?' })
         }
     }
