@@ -8,8 +8,7 @@ export const userLogin = {
         security: false,
         bodyRequired: ['password'],
         body: {
-            username: 'some_username',
-            email: 'email@domain.com',
+            emailOrUsername: 'some_username',
             password: 'somepass',
         },
         success: {

@@ -1,5 +1,5 @@
 import { Errors } from '@helpers/http'
-import { emailRegex, nameRegex, passwordRegex } from '@helpers/regex'
+import { emailRegex, usernameRegex, passwordRegex, nicknameRegex } from '@helpers/regex'
 import { DatabaseClient } from '@infra/gateways/database'
 import { Storage } from '@infra/gateways/storage'
 import { FileRawUpload } from '@infra/middlewares'
@@ -12,16 +12,17 @@ export type UserEditRequest = {
     nickname?: string
     email?: string
     password?: string
+    about?: string
     profilePhoto?: FileRawUpload
 }
 
 export type UserEditResponse = {}
 
 export async function userEdit(req: UserEditRequest, db: DatabaseClient, storage: Storage): Promise<UserEditResponse> {
-    if (req.username && !nameRegex().test(req.username))
+    if (req.username && !usernameRegex().test(req.username))
         throw Errors.INVALID_USERNAME()
-    if (req.nickname && !nameRegex().test(req.nickname))
-        throw Errors.INVALID_USERNAME()
+    if (req.nickname && !nicknameRegex().test(req.nickname))
+        throw Errors.INVALID_NICKNAME()
     if (req.email && !emailRegex().test(req.email))
         throw Errors.INVALID_EMAIL()
     if (req.password && !passwordRegex().test(req.password))
@@ -37,6 +38,7 @@ export async function userEdit(req: UserEditRequest, db: DatabaseClient, storage
             nickname: req.nickname,
             email: req.email,
             password: req.password && await bcrypt.hash(req.password, 10),
+            about: req.about,
             profilePhotoUrl: profilePhotoData?.url
         }
     })

@@ -1,5 +1,5 @@
 import { Errors } from '@helpers/http'
-import { emailRegex, nameRegex, passwordRegex } from '@helpers/regex'
+import { emailRegex, usernameRegex, passwordRegex } from '@helpers/regex'
 import { JWT } from '@infra/gateways'
 import { DatabaseClient } from '@infra/gateways/database'
 import bcrypt from 'bcrypt'
@@ -25,9 +25,9 @@ export async function userRegister(req: UserRegisterRequest, db: DatabaseClient)
     if (!req.password)
         throw Errors.MISSING_PASSWORD()
 
-    if (!nameRegex().test(req.username))
+    if (!usernameRegex().test(req.username))
         throw Errors.INVALID_USERNAME()
-    if (req.nickname?.length && !nameRegex().test(req.nickname))
+    if (req.nickname?.length && !usernameRegex().test(req.nickname))
         throw Errors.INVALID_NICKNAME()
     if (!emailRegex().test(req.email))
         throw Errors.INVALID_EMAIL()

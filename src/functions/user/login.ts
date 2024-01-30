@@ -6,8 +6,7 @@ import bcrypt from 'bcrypt'
 import { userIsBanned } from './isBanned'
 
 export type UserLoginRequest = {
-    email?: string
-    username?: string
+    emailOrUsername: string
     password: string
 }
 
@@ -18,13 +17,14 @@ export type UserLoginResponse = {
 
 export async function userLogin(req: UserLoginRequest, db: DatabaseClient): Promise<UserLoginResponse> {
     let user: User | null
-    if (req.email)
+    if (req.emailOrUsername)
         user = await db.user.findFirst({
-            where: { email: req.email }
-        })
-    else if (req.username)
-        user = await db.user.findFirst({
-            where: { username: req.username }
+            where: {
+                OR: [
+                    { email: req.emailOrUsername },
+                    { username: req.emailOrUsername },
+                ]
+            }
         })
     else
         throw Errors.MISSING_EMAIL_OR_USERNAME()
