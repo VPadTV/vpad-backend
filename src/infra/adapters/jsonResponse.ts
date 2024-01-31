@@ -1,5 +1,6 @@
 import { HttpError, HttpResponse } from '@domain/helpers'
 import { Response, Request } from 'express'
+import {parseBody} from "@infra/middlewares/parseBody";
 
 type MulterFiles = { [fieldname: string]: Express.Multer.File[] }
 type RequestFiles = { [fieldname: string]: Express.Multer.File }
@@ -11,9 +12,9 @@ const transformFiles = (multerFiles: MulterFiles) => {
     return files
 }
 
-export function jsonResponse<T, U extends HttpResponse>(fn: (request: T) => Promise<U>) {
+export function jsonResponse<T, R extends HttpResponse>(fn: (request: T) => Promise<R>) {
     return async (req: Request, res: Response) => {
-        const body = Array.isArray(req.body) ? { data: req.body } : req.body
+        const body = Array.isArray(parseBody(req.body)) ? { data: parseBody(req.body) } : parseBody(req.body)
         const files = transformFiles(req.files as MulterFiles)
 
         try {
