@@ -1,7 +1,8 @@
 export const parseBody = (body: unknown) => {
     let nbody: any;
-    if(typeof body === "string") {
-        switch(body) {
+    if (!body) return undefined;
+    if (typeof body === "string") {
+        switch (body) {
             case "undefined":
                 nbody = undefined;
                 break;
@@ -18,21 +19,22 @@ export const parseBody = (body: unknown) => {
                 nbody = undefined;
                 break;
             default:
-                if(!isNaN(parseFloat(body))) {
+                if (!isNaN(parseFloat(body))) {
                     nbody = parseFloat(body)
                 }
                 break;
         }
-    } else if(typeof body === "object") {
-        if(Array.isArray(body)) {
+    } else if (typeof body === "object") {
+        if (Array.isArray(body)) {
             nbody = [];
-            for(let el of body) {
+            for (let el of body) {
                 nbody.push(parseBody(el));
             }
         } else {
+            const bodyObj = body as { [key: string]: unknown }
             nbody = {};
-            for(const k in body) {
-                nbody[k] = parseBody(body[k])
+            for (const k in bodyObj) {
+                nbody[k] = parseBody(bodyObj[k])
             }
         }
     } else {

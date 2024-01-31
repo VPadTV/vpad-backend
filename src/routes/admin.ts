@@ -1,4 +1,4 @@
-import { middleware, json } from '@infra/adapters'
+import { middleware, jsonResponse } from '@infra/adapters'
 import { IRoute } from '@main/route'
 import { Router } from 'express'
 import { ok } from '@helpers/http'
@@ -13,17 +13,17 @@ export class AdminRoute implements IRoute {
         router.use(middleware(isAdmin))
 
         router.get('/',
-            json(async (request: AdminGetManyRequest) => {
+            jsonResponse(async (request: AdminGetManyRequest) => {
                 return ok(await adminGetMany(request, Database.get()))
             }))
 
         router.put('/manage/admin/:id',
-            json(async (request: AdminManageRequest) => {
+            jsonResponse(async (request: AdminManageRequest) => {
                 return ok(await adminManage(request, Database.get()))
             }))
 
         router.put('/manage/ban/:id',
-            json(async (request: AdminManageBanRequest) => {
+            jsonResponse(async (request: AdminManageBanRequest) => {
                 return ok(await adminManageBan(request, Database.get()))
             }))
     }

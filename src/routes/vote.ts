@@ -1,6 +1,6 @@
 import { VoteSetRequest, voteSet } from '@functions/vote/set';
 import { ok } from '@helpers/http';
-import { middleware, json } from '@infra/adapters';
+import { middleware, jsonResponse } from '@infra/adapters';
 import { Database } from '@infra/gateways';
 import { isLoggedIn } from '@infra/middlewares/isLoggedIn';
 import { IRoute } from '@main/route';
@@ -10,7 +10,7 @@ export class VoteRoute implements IRoute {
     register(router: Router): void {
         router.put('/:postId',
             middleware(isLoggedIn),
-            json(async (request: VoteSetRequest) => {
+            jsonResponse(async (request: VoteSetRequest) => {
                 return ok(await voteSet(request, Database.get()))
             }))
     }

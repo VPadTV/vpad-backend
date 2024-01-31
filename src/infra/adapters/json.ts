@@ -14,17 +14,18 @@ const transformFiles = (multerFiles: MulterFiles) => {
 
 export function jsonResponse<T, R extends HttpResponse>(fn: (request: T) => Promise<R>) {
     return async (req: Request, res: Response) => {
-        const body = Array.isArray(parseBody(req.body)) ? { data: parseBody(req.body) } : parseBody(req.body)
+        const body = Array.isArray(req.body) ? { data: req.body } : req.body
         const files = transformFiles(req.files as MulterFiles)
 
         try {
             const { statusCode, data } = await fn({
                 headers: req.headers,
-                ...body,
                 ...files,
-                ...req.params,
-                ...req.query,
-                ...res.locals,
+                ...parseBody({
+                    ...body,
+                    ...req.params,
+                    ...req.query,
+                }),
                 ...req.middleware,
             })
             return res.status(statusCode).json({ ...data, token: data.token ?? req.params?.token })

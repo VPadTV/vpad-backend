@@ -1,4 +1,4 @@
-import { middleware, json } from '@infra/adapters';
+import { middleware, jsonResponse } from '@infra/adapters';
 import { IRoute } from '@main/route';
 import express, { Router } from 'express';
 import { ok } from '@helpers/http';
@@ -13,7 +13,7 @@ export class PayRoute implements IRoute {
     register(router: Router): void {
         router.post('/',
             middleware(isLoggedIn),
-            json(async (request: PayDonateRequest) => {
+            jsonResponse(async (request: PayDonateRequest) => {
                 return ok(await payCreate(request, Database.get(), Payment.get()))
             }))
 
