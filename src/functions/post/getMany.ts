@@ -74,12 +74,13 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
             throw Errors.INVALID_SORT()
     }
     const offset = (+req.page - 1) * +req.size
+    let authorsCheck
+    if (req.creatorId && req.creatorId.trim().length > 0)
+        authorsCheck = {
+            some: { id: req.creatorId },
+        }
     const where = {
-        authors: {
-            some: {
-                id: req.creatorId ?? undefined
-            },
-        },
+        authors: authorsCheck,
         title: req.titleSearch ? {
             search: req.titleSearch
         } : undefined,
