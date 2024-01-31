@@ -21,6 +21,8 @@ export const parseBody = (body: unknown) => {
             default:
                 if (!isNaN(parseFloat(body))) {
                     nbody = parseFloat(body)
+                } else {
+                    nbody = body;
                 }
                 break;
         }
