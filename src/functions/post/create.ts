@@ -26,6 +26,7 @@ export type PostCreateResponse = {
 export async function postCreate(req: PostCreateRequest, db: DatabaseClient, storage: Storage): Promise<PostCreateResponse> {
     if (!validString(req.title)) throw Errors.MISSING_TITLE()
     if (!validString(req.text)) throw Errors.MISSING_TEXT()
+    if (!validString(req.tags)) throw Errors.MISSING_TAGS()
     if (!req.media) throw Errors.MISSING_MEDIA()
 
     req.nsfw = boolify(req.nsfw)

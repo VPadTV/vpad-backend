@@ -2,7 +2,7 @@ import { Errors } from '@helpers/http'
 import { SimpleUser } from '@infra/mappers/user'
 import { Paginate, paginate } from '@helpers/paginate'
 import { DatabaseClient } from '@infra/gateways/database'
-import { User } from '@prisma/client'
+import { MediaType, User } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
 
 export type PostGetManyRequest = {
@@ -20,6 +20,8 @@ export type PostGetManyResponse = Paginate<{
     id: string
     title: string
     text: string
+    mediaUrl: string
+    mediaType: MediaType,
     thumbUrl?: string
     meta: {
         nsfw: boolean
@@ -95,6 +97,8 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
                 id: true,
                 title: true,
                 text: true,
+                mediaType: true,
+                mediaUrl: true,
                 thumbUrl: true,
                 nsfw: true,
                 tags: true,
@@ -117,6 +121,8 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
         id: post.id,
         title: post.title,
         text: post.text,
+        mediaUrl: post.mediaUrl,
+        mediaType: post.mediaType,
         thumbUrl: post.thumbUrl ?? undefined,
         meta: {
             nsfw: post.nsfw,

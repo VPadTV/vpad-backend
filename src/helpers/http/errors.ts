@@ -47,6 +47,7 @@ export const Errors = {
     MISSING_EMAIL_OR_USERNAME: () => badRequest('Missing Email Or Username'),
     MISSING_TITLE: () => badRequest('Missing title'),
     MISSING_TEXT: () => badRequest('Missing text'),
+    MISSING_TAGS: () => badRequest('Missing tags'),
     MISSING_MEDIA: () => badRequest('Missing media'),
     MISSING_ID: () => badRequest('Missing ID'),
     MISSING_ADMIN: () => badRequest('Missing admin (must be true or false)'),
