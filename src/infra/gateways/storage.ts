@@ -3,8 +3,9 @@ import { MimeTypes } from './mimeTypes'
 import crypto from 'crypto';
 import { FileRawUpload } from '@infra/middlewares';
 import { MediaType } from '@prisma/client';
-import { Readable, ReadableOptions } from 'stream';
+import { TransformOptions, Transform} from 'stream';
 import { Errors } from '@helpers/http';
+import {resize} from "@functions/video/resize";
 
 export type FileUpload = {
     key: string;
@@ -84,7 +85,7 @@ export class Storage {
             .promise()
     }
 
-    async stream(key: string): Promise<StreamResponse> {
+    async stream(key: string, width: string = "1280"): Promise<StreamResponse> {
         const params = {
             Bucket: process.env.BB_BUCKET!,
             Key: key
@@ -93,14 +94,14 @@ export class Storage {
         if (!ContentLength || !ContentType) throw Errors.FAILED_TO_DOWNLOAD()
         const stream = new SmartStream(params, this.client, ContentLength);
         return {
-            stream,
+            stream: await resize(width, stream),
             ContentLength,
             ContentType,
         }
     }
 }
 
-export class SmartStream extends Readable {
+export class SmartStream extends Transform {
     _currentCursorPosition = 0;
     _s3DataRange = 2048 * 1024;
     _maxContentLength: number;
@@ -111,7 +112,7 @@ export class SmartStream extends Readable {
         parameters: S3.GetObjectRequest,
         s3: S3,
         maxLength: number,
-        nodeReadableStreamOptions?: ReadableOptions
+        nodeReadableStreamOptions?: TransformOptions
     ) {
         super(nodeReadableStreamOptions);
         this._maxContentLength = maxLength;
