@@ -22,7 +22,7 @@ export const convert = (req: PostCreateRequest): Promise<Readable> => {
                         console.log("read finished !")
                             res(Readable.from(buf))
                     })
-                .output(rs)
+                .output(rs).run()
 
         })
     } else {
