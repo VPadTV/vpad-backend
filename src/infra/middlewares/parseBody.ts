@@ -1,45 +1,48 @@
-export const parseBody = (body: unknown) => {
-    let nbody: any;
-    if (!body) return undefined;
-    if (typeof body === "string") {
-        switch (body) {
+import { numify } from "@helpers/numify";
+
+export const parseBody = (obj: unknown) => {
+    let newObj: any;
+    if (!obj) return undefined;
+    if (typeof obj === "string") {
+        obj = obj.trim()
+        switch (obj) {
             case "undefined":
-                nbody = undefined;
+                newObj = undefined;
                 break;
             case "true":
-                nbody = true;
+                newObj = true;
                 break;
             case "false":
-                nbody = false;
+                newObj = false;
                 break;
             case "null":
-                nbody = null;
+                newObj = null;
                 break;
             case "":
-                nbody = undefined;
+                newObj = undefined;
                 break;
             default:
-                if (!isNaN(parseFloat(body))) {
-                    nbody = parseFloat(body)
+                const asNum = numify(obj)
+                if (asNum) {
+                    newObj = asNum
                     break;
                 }
-                nbody = body
         }
-    } else if (typeof body === "object") {
-        if (Array.isArray(body)) {
-            nbody = [];
-            for (let el of body) {
-                nbody.push(parseBody(el));
+    } else if (typeof obj === "object") {
+        if (Array.isArray(obj)) {
+            newObj = [];
+            for (let el of obj) {
+                newObj.push(parseBody(el));
             }
         } else {
-            const bodyObj = body as { [key: string]: unknown }
-            nbody = {};
+            const bodyObj = obj as { [key: string]: unknown }
+            newObj = {};
             for (const k in bodyObj) {
-                nbody[k] = parseBody(bodyObj[k])
+                newObj[k] = parseBody(bodyObj[k])
             }
         }
     } else {
-        nbody = body;
+        newObj = obj;
     }
-    return nbody;
+    return newObj;
 }

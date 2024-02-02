@@ -11,6 +11,7 @@ export type PostGetManyRequest = {
     creatorId?: string
     sortBy: 'latest' | 'oldest' | 'high-views' | 'low-views'
     titleSearch?: string
+    nsfw?: boolean
 
     page: number
     size: number
@@ -79,21 +80,41 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
         authorsCheck = {
             some: { id: req.creatorId },
         }
-    const where = {
+    const where: any = {
         authors: authorsCheck,
-        title: req.titleSearch ? {
-            search: req.titleSearch
-        } : undefined,
         OR: [
             { minTier: { price: { lte: userTierValue } } },
             { minTier: null },
         ],
+        AND: [
+            {
+                OR: [
+
+                ]
+            }
+        ]
     }
+
+    if (req.titleSearch) {
+        const words = req.titleSearch.split(' ').map((wd) => wd.trim());
+        words.forEach((word) => {
+            where.AND[0].OR.push({
+                title: {
+                    contains: word,
+                    mode: 'insensitive'
+                }
+            })
+        })
+    }
+
     const [posts, total] = await db.$transaction([
         db.post.findMany({
             skip: offset,
             take: +req.size,
-            where,
+            where: {
+                ...where,
+                nsfw: req.nsfw ?? false,
+            },
             select: {
                 id: true,
                 title: true,
@@ -115,8 +136,6 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
         }),
         db.post.count({ where }),
     ])
-
-    if (!posts || posts.length === 0) throw Errors.NOT_FOUND()
 
     return paginate(total, +req.page, offset, +req.size, posts.map(post => ({
         id: post.id,

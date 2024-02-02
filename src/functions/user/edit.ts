@@ -1,7 +1,7 @@
 import { Errors } from '@helpers/http'
 import { emailRegex, usernameRegex, passwordRegex, nicknameRegex } from '@helpers/regex'
 import { DatabaseClient } from '@infra/gateways/database'
-import { Storage } from '@infra/gateways/storage'
+import { ImageType, Storage } from '@infra/gateways/storage'
 import { FileRawUpload } from '@infra/middlewares'
 import { MediaType } from '@prisma/client'
 import bcrypt from 'bcrypt'
@@ -28,7 +28,7 @@ export async function userEdit(req: UserEditRequest, db: DatabaseClient, storage
     if (req.password != null && !passwordRegex().test(req.password))
         throw Errors.INVALID_PASSWORD()
 
-    let profilePhotoData = storage.getFileData(req.profilePhoto)
+    let profilePhotoData = await storage.getFileData(req.profilePhoto, ImageType.THUMBNAIL)
     if (profilePhotoData?.type === MediaType.VIDEO) throw Errors.INVALID_FILE()
 
     const found = await db.user.findFirst({ where: { username: req.username } })

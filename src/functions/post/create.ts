@@ -2,7 +2,7 @@ import { Errors } from '@helpers/http'
 import { parseTags } from '@helpers/parseTags'
 import { boolify } from '@helpers/boolify'
 import { validString } from '@helpers/validString'
-import { Storage } from '@infra/gateways'
+import { ImageType, Storage } from '@infra/gateways'
 import { DatabaseClient } from '@infra/gateways/database'
 import { FileRawUpload } from '@infra/middlewares'
 import { MediaType, User } from '@prisma/client'
@@ -35,16 +35,18 @@ export async function postCreate(req: PostCreateRequest, db: DatabaseClient, sto
     if (tags === false) throw Errors.INVALID_TAGS()
     req.minTierId = validString(req.minTierId)
 
-    const mediaData = storage.getFileData(req.media)
+    const mediaData = await storage.getFileData(req.media, ImageType.MEDIA)
     if (!mediaData) throw Errors.INVALID_FILE()
-    const thumbData = storage.getFileData(req.thumb)
+    const thumbData = await storage.getFileData(req.thumb, ImageType.THUMBNAIL)
     if (thumbData && thumbData.type !== MediaType.IMAGE) throw Errors.INVALID_THUMB()
 
     const post = await db.post.create({
         data: {
             authors: {
-                connect: [{ id: req.user.id }]
-                    .concat(req.otherAuthorIds?.map(id => ({ id })) ?? [])
+                connect: [
+                    { id: req.user.id },
+                    ...req.otherAuthorIds?.map(id => ({ id }))
+                ]
             },
             title: req.title,
             text: req.text,

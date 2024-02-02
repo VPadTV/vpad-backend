@@ -14,16 +14,6 @@ export const tokenWrapper = async (data: MiddlewareData, func: (user: User) => P
 
     const bearerToken = authorization.replace('Bearer ', '')
 
-    if (bearerToken === 'sex') {
-        const db = Database.get()
-        return {
-            user:
-                (await db.user.findFirst({
-                    where: { id: 'clpjzt1hs0000xq19mvh2gdck' }
-                }))!
-        }
-    }
-
 
     const token = JWT.decode(bearerToken)
     if (!token || !token.sub || !token.exp)

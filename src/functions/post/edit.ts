@@ -1,7 +1,7 @@
 import { parseTags } from '@helpers/parseTags'
 import { boolify } from '@helpers/boolify'
 import { Errors } from '@helpers/http'
-import { Storage } from '@infra/gateways'
+import { ImageType, Storage } from '@infra/gateways'
 import { DatabaseClient } from '@infra/gateways/database'
 import { FileRawUpload } from '@infra/middlewares'
 import { User } from '@prisma/client'
@@ -40,8 +40,8 @@ export async function postEdit(req: PostEditRequest, db: DatabaseClient, storage
 
     if (!postFound) throw Errors.NOT_FOUND()
 
-    let mediaData = storage.getFileData(req.media)
-    let thumbData = storage.getFileData(req.thumb)
+    let mediaData = await storage.getFileData(req.media, ImageType.MEDIA)
+    let thumbData = await storage.getFileData(req.thumb, ImageType.THUMBNAIL)
 
     await db.post.update({
         where: { id: req.id },

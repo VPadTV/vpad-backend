@@ -44,6 +44,7 @@
         "prisma": "^5.6.0",
         "resolve-tspaths": "^0.8.17",
         "semver": "^7.5.2",
+        "sharp": "^0.33.2",
         "stripe": "^14.7.0",
         "swagger-ui-express": "^5.0.0",
         "ts-jest": "^29.1.1",

@@ -5,6 +5,7 @@ import { FileRawUpload } from '@infra/middlewares';
 import { MediaType } from '@prisma/client';
 import { Readable, ReadableOptions } from 'stream';
 import { Errors } from '@helpers/http';
+import sharp from 'sharp';
 
 export type FileUpload = {
     key: string;
@@ -22,6 +23,13 @@ export type StreamResponse = {
     stream: SmartStream;
     ContentLength: number;
     ContentType: string;
+}
+
+
+// in pixels
+export enum ImageType {
+    MEDIA = 2000,
+    THUMBNAIL = 300
 }
 
 export type StorageClient = S3
@@ -47,7 +55,18 @@ export class Storage {
         return `https://f004.backblazeb2.com/file/${process.env.BB_BUCKET!}/${key}`
     }
 
-    getFileData(file?: FileRawUpload): FileUpload | undefined {
+    async processAndResizeImage(buf: Buffer, imageType: ImageType): Promise<Buffer> {
+        return sharp(buf)
+            .resize({
+                width: imageType,
+                height: imageType,
+                fit: 'inside'
+            })
+            .webp()
+            .toBuffer()
+    }
+
+    async getFileData(file: FileRawUpload | undefined, imageType: ImageType): Promise<FileUpload | undefined> {
         if (!file) return undefined
         let key: string = crypto.randomBytes(16).toString('hex')
         const type = MimeTypes.getType(file.mimetype)
@@ -55,7 +74,7 @@ export class Storage {
             key,
             mimeType: file.mimetype,
             type,
-            buffer: file.buffer,
+            buffer: await this.processAndResizeImage(file.buffer, imageType),
             url: Storage.getUrl(key)
         }
     }
