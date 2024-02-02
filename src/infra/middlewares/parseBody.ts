@@ -27,6 +27,7 @@ export const parseBody = (obj: unknown) => {
                     newObj = asNum
                     break;
                 }
+                newObj = obj
         }
     } else if (typeof obj === "object") {
         if (Array.isArray(obj)) {

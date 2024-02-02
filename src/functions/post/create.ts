@@ -9,7 +9,7 @@ import { MediaType, User } from '@prisma/client'
 
 export type PostCreateRequest = {
     user: User
-    otherAuthorIds: string[]
+    otherAuthorIds?: string[]
     title: string
     text: string
     media: FileRawUpload
@@ -35,17 +35,19 @@ export async function postCreate(req: PostCreateRequest, db: DatabaseClient, sto
     if (tags === false) throw Errors.INVALID_TAGS()
     req.minTierId = validString(req.minTierId)
 
+
     const mediaData = await storage.getFileData(req.media, ImageType.MEDIA)
     if (!mediaData) throw Errors.INVALID_FILE()
     const thumbData = await storage.getFileData(req.thumb, ImageType.THUMBNAIL)
     if (thumbData && thumbData.type !== MediaType.IMAGE) throw Errors.INVALID_THUMB()
 
+    const otherAuthorIds = req.otherAuthorIds?.map(id => ({ id }))
     const post = await db.post.create({
         data: {
             authors: {
                 connect: [
                     { id: req.user.id },
-                    ...req.otherAuthorIds?.map(id => ({ id }))
+                    ...otherAuthorIds ?? []
                 ]
             },
             title: req.title,

@@ -70,11 +70,18 @@ export class Storage {
         if (!file) return undefined
         let key: string = crypto.randomBytes(16).toString('hex')
         const type = MimeTypes.getType(file.mimetype)
+        let processed: Buffer | undefined
+        if (type === MediaType.IMAGE) {
+            processed = await this.processAndResizeImage(file.buffer, imageType)
+        } else {
+            // process video here
+            processed = file.buffer
+        }
         return {
             key,
             mimeType: file.mimetype,
             type,
-            buffer: await this.processAndResizeImage(file.buffer, imageType),
+            buffer: processed,
             url: Storage.getUrl(key)
         }
     }
