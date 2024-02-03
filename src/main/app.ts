@@ -19,7 +19,7 @@ export class App {
         this.server.use(limiter)
         this.server.use(bodyParser.urlencoded({ extended: true }));
         this.server.use((req, res, next) => {
-            if (req.method === 'get' || process.env.OPEN_FOR_POST) {
+            if (req.method.toLowerCase() === 'get' || process.env.OPEN_FOR_POST) {
                 next()
             } else {
                 res.status(401).send({ error: 'Server is read-only right now' })
