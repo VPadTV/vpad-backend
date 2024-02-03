@@ -4,7 +4,7 @@ import { Errors } from '@helpers/http'
 import { ImageType, Storage } from '@infra/gateways'
 import { DatabaseClient } from '@infra/gateways/database'
 import { FileRawUpload } from '@infra/middlewares'
-import { User } from '@prisma/client'
+import { MediaType, User } from '@prisma/client'
 
 export type PostEditRequest = {
     user: User
@@ -41,7 +41,8 @@ export async function postEdit(req: PostEditRequest, db: DatabaseClient, storage
     if (!postFound) throw Errors.NOT_FOUND()
 
     let mediaData = await storage.getFileData(req.media, ImageType.MEDIA)
-    let thumbData = await storage.getFileData(req.thumb, ImageType.THUMBNAIL)
+    let thumbData = await storage.getFileData(req.thumb ?? req.media, ImageType.THUMBNAIL)
+    if (thumbData && thumbData.type !== MediaType.IMAGE) throw Errors.INVALID_THUMB()
 
     await db.post.update({
         where: { id: req.id },

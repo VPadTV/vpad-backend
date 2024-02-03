@@ -28,7 +28,7 @@ export function streamResponse<U extends PostStreamResponse>(fn: (request: any) 
             if (error instanceof HttpError)
                 return res.status(error.code).send({ error: error.message })
             else if (error instanceof Error)
-                return res.status(500).send({ error: error.message })
+                return res.status(500).send({ error: 'Internal Server Error' })
             return res.status(418).send({ error: 'how did you get here?' })
         }
     }

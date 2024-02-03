@@ -36,10 +36,11 @@ export async function postCreate(req: PostCreateRequest, db: DatabaseClient, sto
     req.minTierId = validString(req.minTierId)
 
 
-    const thumbData = await storage.getFileData(req.thumb, ImageType.THUMBNAIL)
-    if (thumbData && thumbData.type !== MediaType.IMAGE) throw Errors.INVALID_THUMB()
     const mediaData = await storage.getFileData(req.media, ImageType.MEDIA)
     if (!mediaData) throw Errors.INVALID_FILE()
+
+    let thumbData = await storage.getFileData(req.thumb ?? req.media, ImageType.THUMBNAIL)
+    if (!thumbData || (thumbData && thumbData.type !== MediaType.IMAGE)) throw Errors.INVALID_THUMB()
 
     const otherAuthorIds = req.otherAuthorIds?.map(id => ({ id }))
     const post = await db.post.create({
@@ -57,8 +58,8 @@ export async function postCreate(req: PostCreateRequest, db: DatabaseClient, sto
             thumbUrl: thumbData?.url,
             nsfw: req.nsfw,
             minTierId: req.minTierId,
-            thumbnailWidth: thumbData?.size.width ?? mediaData.size.width,
-            thumbnailHeight: thumbData?.size.height ?? mediaData.size.height,
+            thumbnailWidth: thumbData.size.width,
+            thumbnailHeight: thumbData.size.height,
             tags,
         }
     })

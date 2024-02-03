@@ -21,7 +21,7 @@
 //             console.error(`** Webhook Route **`)
 //             console.error(error)
 //             if (error instanceof HttpError)
-//                 return res.status(error.code).json({ error: error.message })
+//                 return res.status(error.code).json({ error: 'Internal Server Error' })
 //             else if (error instanceof Error)
 //                 return res.status(500).json({ error: error.message })
 //         }
