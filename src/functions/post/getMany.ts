@@ -25,6 +25,8 @@ export type PostGetManyResponse = Paginate<{
     mediaType: MediaType,
     thumbUrl?: string
     meta: {
+        width?: number,
+        height?: number,
         nsfw: boolean
         tags: string[]
         authors: SimpleUser[]
@@ -125,6 +127,8 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
                 nsfw: true,
                 tags: true,
                 authors: { select: SimpleUser.selector },
+                thumbnailWidth: true,
+                thumbnailHeight: true,
                 createdAt: true,
                 _count: {
                     select: {
@@ -145,6 +149,8 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
         mediaType: post.mediaType,
         thumbUrl: post.thumbUrl ?? undefined,
         meta: {
+            width: post.thumbnailWidth ?? undefined,
+            height: post.thumbnailHeight ?? undefined,
             nsfw: post.nsfw,
             tags: post.tags,
             authors: post.authors,

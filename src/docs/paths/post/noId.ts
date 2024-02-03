@@ -44,6 +44,8 @@ export const postNoId = {
                 text: 'some text',
                 thumbUrl: 'string',
                 meta: {
+                    width: 300,
+                    height: 300,
                     nsfw: false,
                     tags: ['some', 'tags'],
                     minTierId: exId,

@@ -68,6 +68,9 @@ model Post {
     mediaType MediaType
     thumbUrl  String?
 
+    thumbnailWidth  Int?
+    thumbnailHeight Int?
+
     authors User[]
 
     comments Comment[]

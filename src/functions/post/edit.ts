@@ -50,6 +50,8 @@ export async function postEdit(req: PostEditRequest, db: DatabaseClient, storage
             mediaType: mediaData?.type,
             mediaUrl: mediaData?.url,
             thumbUrl: thumbData?.url,
+            thumbnailWidth: thumbData?.size.width ?? mediaData?.size.width,
+            thumbnailHeight: thumbData?.size.height ?? mediaData?.size.height,
             nsfw: req.nsfw,
             tags,
             minTierId: req.minTierId

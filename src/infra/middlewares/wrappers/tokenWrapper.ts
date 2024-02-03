@@ -13,8 +13,6 @@ export const tokenWrapper = async (data: MiddlewareData, func: (user: User) => P
     if (!authorization) throw Errors.MISSING_TOKEN()
 
     const bearerToken = authorization.replace('Bearer ', '')
-
-
     const token = JWT.decode(bearerToken)
     if (!token || !token.sub || !token.exp)
         throw Errors.INVALID_TOKEN()

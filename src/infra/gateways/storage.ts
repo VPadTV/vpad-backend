@@ -12,7 +12,8 @@ export type FileUpload = {
     mimeType: string;
     type: MediaType
     buffer: Buffer;
-    url: string
+    url: string;
+    size: { width?: number, height?: number }
 }
 
 export type ModifyVideo = {
@@ -70,9 +71,16 @@ export class Storage {
         if (!file) return undefined
         let key: string = crypto.randomBytes(16).toString('hex')
         const type = MimeTypes.getType(file.mimetype)
+        let width
+        let height
         let processed: Buffer | undefined
         if (type === MediaType.IMAGE) {
             processed = await this.processAndResizeImage(file.buffer, imageType)
+            const meta = await sharp(processed).metadata()
+            if (meta) {
+                width = meta.width
+                height = meta.height
+            }
         } else {
             // process video here
             processed = file.buffer
@@ -82,7 +90,10 @@ export class Storage {
             mimeType: file.mimetype,
             type,
             buffer: processed,
-            url: Storage.getUrl(key)
+            url: Storage.getUrl(key),
+            size: {
+                width, height
+            }
         }
     }
 
