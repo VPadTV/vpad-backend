@@ -1,4 +1,4 @@
-import { Errors } from "@domain/helpers"
+import { Errors } from "@helpers/http"
 import { Storage } from "@infra/gateways"
 import { DatabaseClient } from "@infra/gateways/database"
 import { User } from "@prisma/client"

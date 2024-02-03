@@ -16,11 +16,10 @@ export class App {
 
     constructor() {
         this.server = express()
-        // this.server.use(express.json({ limit: '10mb' }))
-        // this.server.use(limiter)
+        this.server.use(limiter)
         this.server.use(bodyParser.urlencoded({ extended: true }));
         this.server.use((req, res, next) => {
-            if (req.method !== 'get' && process.env.OPEN_FOR_POST) {
+            if (req.method === 'get' || process.env.OPEN_FOR_POST) {
                 next()
             } else {
                 res.status(401).send({ error: 'Server is read-only right now' })
