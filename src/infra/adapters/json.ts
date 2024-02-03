@@ -33,10 +33,10 @@ export function jsonResponse<T, R extends HttpResponse>(fn: (request: T) => Prom
             console.error(`** JSON Route **`)
             console.error(error)
             if (error instanceof HttpError)
-                return res.status(error.code).json({ error: error.message })
+                return res.status(error.code).send({ error: error.message })
             else if (error instanceof Error)
-                return res.status(500).json({ error: 'Internal Server Error ' })
-            return res.status(418).json({ error: 'how did you get here?' })
+                return res.status(500).send({ error: 'Internal Server Error ' })
+            return res.status(418).send({ error: 'how did you get here?' })
         }
     }
 }
