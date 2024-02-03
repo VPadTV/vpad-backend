@@ -89,7 +89,7 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
             where: { postId: post.id },
         }),
         db.votes.findFirst({
-            where: { postId: post.id, userId: req.user?.id }
+            where: { postId: post.id, userId: req.user?.id ?? '' }
         })
     ])
 

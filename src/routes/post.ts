@@ -28,6 +28,7 @@ export class PostRoute implements IRoute {
                 return ok(await postGetMany(request, Database.get()))
             }))
         router.get('/:id',
+            middleware(optionalToken),
             jsonResponse(async (request: PostGetRequest) => {
                 return ok(await postGet(request, Database.get()))
             }))
