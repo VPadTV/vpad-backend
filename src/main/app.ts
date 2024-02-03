@@ -1,7 +1,7 @@
 import express from 'express'
 import routes from './routes';
 import bodyParser from 'body-parser';
-// import cors from 'cors'
+import cors from 'cors'
 import { rateLimit } from 'express-rate-limit'
 
 const limiter = rateLimit({
@@ -18,6 +18,7 @@ export class App {
         this.server = express()
         this.server.use(limiter)
         this.server.use(bodyParser.urlencoded({ extended: true }));
+        this.server.use(cors())
         this.server.use((req, res, next) => {
             if (req.method.toLowerCase() === 'get' || process.env.OPEN_FOR_POST) {
                 next()
