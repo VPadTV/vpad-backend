@@ -9,9 +9,23 @@ export type PostDeleteRequest = {
     id: string
 }
 
-export type PostDeleteResponse = {}
+export enum PostDeleteStatus {
+    POST_DELETED = 'Post Deleted',
+    AUTHOR_REMOVED = 'Author Removed'
+}
+export type PostDeleteResponse = {
+    status: PostDeleteStatus
+}
 
 export async function postDelete(req: PostDeleteRequest, db: DatabaseClient, storage: Storage): Promise<PostDeleteResponse> {
+    const found = await db.post.findFirst({
+        select: { id: true },
+        where: { id: req.id, authors: { some: { id: req.user.id } } }
+    })
+
+    if (!found)
+        throw Errors.NOT_FOUND()
+
     const post = await db.post.update({
         select: {
             id: true, mediaUrl: true, thumbUrl: true,
@@ -25,17 +39,18 @@ export async function postDelete(req: PostDeleteRequest, db: DatabaseClient, sto
         }
     })
 
-    if (!post)
-        throw Errors.NOT_FOUND()
-
+    let status = PostDeleteStatus.AUTHOR_REMOVED
     if (post.authors.length < 1) {
         await db.post.delete({ where: { id: post.id } })
         if (post.mediaUrl)
             await storage.delete(post.mediaUrl)
         if (post.thumbUrl)
             await storage.delete(post.thumbUrl)
+        status = PostDeleteStatus.POST_DELETED
     }
 
 
-    return {}
+    return {
+        status
+    }
 }

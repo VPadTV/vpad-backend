@@ -1,6 +1,7 @@
 import { BodyFile, ContentType, makeRoute } from '@docs/helpers';
 import { exId } from '@docs/schemas/id';
 import { simpleUser } from '@docs/schemas/simpleUser';
+import { PostDeleteStatus } from '@functions/post/delete';
 
 export const postId = {
     get: makeRoute({
@@ -40,6 +41,9 @@ export const postId = {
         tag: 'Post',
         summary: 'Deletes a post from id, must be logged in',
         path: { id: exId },
+        success: {
+            status: Object.values(PostDeleteStatus).join(", ")
+        },
         404: 'Provided ID didnt resolve to any post',
     })
 }

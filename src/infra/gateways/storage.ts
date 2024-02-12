@@ -57,12 +57,15 @@ export class Storage {
     }
 
     async processAndResizeImage(buf: Buffer, imageType: ImageType): Promise<Buffer> {
-        return sharp(buf)
-            .resize({
+        let instance = sharp(buf)
+        const meta = await instance.metadata()
+        if ((meta.width && meta.width > imageType) || (meta.height && meta.height > imageType))
+            instance = instance.resize({
                 width: imageType,
                 height: imageType,
-                fit: 'inside'
+                fit: 'inside',
             })
+        return instance
             .webp()
             .toBuffer()
     }
@@ -113,12 +116,13 @@ export class Storage {
         if (!url) return
         const split = url.split('/')
         const key = split[split.length - 1]
-        await this.client
+        const r = await this.client
             .deleteObject({
                 Bucket: process.env.BB_BUCKET!,
                 Key: key,
             })
             .promise()
+        console.log(r);
     }
 
     async stream(key: string): Promise<StreamResponse> {
