@@ -1,8 +1,8 @@
 export class HttpError extends Error {
-    code: number
-    constructor(message: string, code?: number) {
+    status: number
+    constructor(message: string, status?: number) {
         super(message)
-        this.code = code ?? 500
+        this.status = status ?? 500
     }
 }
 
@@ -15,48 +15,48 @@ export const imATeapot = (message: string): HttpError => new HttpError(message, 
 export const serverError = (message: string): HttpError => new HttpError(message, 500)
 
 export const Errors = {
-    MISSING_TOKEN: () => unauthorized('Missing Token'),
-    UNAUTHORIZED: () => unauthorized('Unauthorized'),
-    EXPIRED_TOKEN: () => unauthorized('Expired Token'),
-    FORBIDDEN: () => forbidden('Forbidden'),
-    NOT_FOUND: (m?: string) => notFound(m ? `${m} Not Found` : 'Not Found'),
-    IM_A_TEAPOT: () => imATeapot('I\'m A Teapot!'),
-    BAD_REQUEST: () => badRequest('Bad Request'),
-    FAILED_TO_DOWNLOAD: () => badRequest('Failed to download from URL'),
+    MISSING_TOKEN: () => unauthorized("MISSING_TOKEN"),
+    UNAUTHORIZED: () => unauthorized("UNAUTHORIZED"),
+    EXPIRED_TOKEN: () => unauthorized("EXPIRED_TOKEN"),
+    FORBIDDEN: () => forbidden("FORBIDDEN"),
+    NOT_FOUND: () => notFound("NOT_FOUND"),
+    IM_A_TEAPOT: () => imATeapot("IM_A_TEAPOT"),
+    BAD_REQUEST: () => badRequest("BAD_REQUEST"),
+    FAILED_TO_DOWNLOAD: () => badRequest("FAILED_TO_DOWNLOAD"),
 
-    SERVER: () => serverError('Internal Server Error'),
+    LOW_TIER: () => badRequest("LOW_TIER"),
 
-    LOW_TIER: () => badRequest('Subscription tier too low'),
+    INVALID_TOKEN: () => badRequest("INVALID_TOKEN"),
+    INVALID_USERNAME: () => badRequest("INVALID_USERNAME"),
+    USERNAME_ALREADY_EXISTS: () => badRequest("USERNAME_ALREADY_EXISTS"),
+    INVALID_NICKNAME: () => badRequest("INVALID_NICKNAME"),
+    INVALID_EMAIL: () => badRequest("INVALID_EMAIL"),
+    INVALID_PASSWORD: () => badRequest("INVALID_PASSWORD"),
+    INVALID_FILE: () => badRequest("INVALID_FILE"),
+    INVALID_TAGS: () => badRequest("INVALID_TAGS"),
+    INVALID_PRICE: () => badRequest("INVALID_PRICE"),
+    INVALID_THUMB: () => badRequest("INVALID_THUMB"),
+    INVALID_SORT: () => badRequest("INVALID_SORT"),
+    INVALID_TIER: () => badRequest("INVALID_TIER"),
+    NO_ACCOUNT: () => badRequest("NO_ACCOUNT"),
 
-    INVALID_TOKEN: () => badRequest('Invalid Token'),
-    INVALID_USERNAME: () => badRequest('Invalid Username'),
-    USERNAME_ALREADY_EXISTS: () => badRequest('Username Already Exists'),
-    INVALID_NICKNAME: () => badRequest('Invalid Nickname'),
-    INVALID_EMAIL: () => badRequest('Invalid Email'),
-    INVALID_PASSWORD: () => badRequest('Invalid Password'),
-    INVALID_FILE: () => badRequest('Invalid File'),
-    INVALID_TAGS: () => badRequest('Bad Tags'),
-    INVALID_PRICE: () => badRequest('Invalid price'),
-    INVALID_THUMB: () => badRequest('Invalid thumbnail'),
-    INVALID_SORT: () => badRequest('Invalid sort'),
-    INVALID_TIER: () => badRequest('Invalid tier'),
-    NO_ACCOUNT: () => badRequest('No valid account'),
+    INCORRECT_PASSWORD: () => badRequest("INCORRECT_PASSWORD"),
 
-    INCORRECT_PASSWORD: () => badRequest('Incorrect Password'),
+    MISSING_EMAIL_OR_USERNAME: () => badRequest("MISSING_EMAIL_OR_USERNAME"),
+    MISSING_TITLE: () => badRequest("MISSING_TITLE"),
+    MISSING_TEXT: () => badRequest("MISSING_TEXT"),
+    MISSING_TAGS: () => badRequest("MISSING_TAGS"),
+    MISSING_MEDIA: () => badRequest("MISSING_MEDIA"),
+    MISSING_ID: () => badRequest("MISSING_ID"),
+    MISSING_ADMIN: () => badRequest("BAD_REQUEST"),
+    MISSING_USERNAME: () => badRequest("MISSING_USERNAME"),
+    MISSING_NAME: () => badRequest("MISSING_NAME"),
+    MISSING_PRICE: () => badRequest("MISSING_PRICE"),
+    MISSING_EMAIL: () => badRequest("MISSING_EMAIL"),
+    MISSING_PASSWORD: () => badRequest("MISSING_PASSWORD"),
+    MISSING_VOTE: () => badRequest("MISSING_VOTE"),
 
-    MISSING_EMAIL_OR_USERNAME: () => badRequest('Missing Email Or Username'),
-    MISSING_TITLE: () => badRequest('Missing title'),
-    MISSING_TEXT: () => badRequest('Missing text'),
-    MISSING_TAGS: () => badRequest('Missing tags'),
-    MISSING_MEDIA: () => badRequest('Missing media'),
-    MISSING_ID: () => badRequest('Missing ID'),
-    MISSING_ADMIN: () => badRequest('Missing admin (must be true or false)'),
-    MISSING_USERNAME: () => badRequest('Missing username'),
-    MISSING_NAME: () => badRequest('Missing name'),
-    MISSING_PRICE: () => badRequest('Missing price'),
-    MISSING_EMAIL: () => badRequest('Missing email'),
-    MISSING_PASSWORD: () => badRequest('Missing password'),
-    MISSING_VOTE: () => badRequest('Missing vote'),
+    BANNED: () => forbidden("BANNED"),
 
-    BANNED: () => forbidden('Banned'),
+    INTERNAL_SERVER_ERROR: () => serverError("INTERNAL_SERVER_ERROR")
 }

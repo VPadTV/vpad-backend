@@ -22,10 +22,8 @@ export function middleware(fn: (request: MiddlewareData) => Promise<any>) {
             console.error(`** Middleware **`)
             console.error(error)
             if (error instanceof HttpError)
-                return res.status(error.code).send({ error: error.message })
-            else if (error instanceof Error)
-                return res.status(500).send({ error: 'Internal Server Error' })
-            return res.status(418).send({ error: 'how did you get here?' })
+                return res.status(error.status).send({ error: error.message })
+            return res.status(500).send({ error: 'Internal Server Error' })
         }
     }
 }

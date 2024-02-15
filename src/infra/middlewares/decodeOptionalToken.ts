@@ -27,8 +27,8 @@ export const optionalToken = async (data: MiddlewareData): Promise<OptionalToken
     const user = await db.user.findFirst({ where: { id } })
     if (!user) throw Errors.UNAUTHORIZED()
 
-    // if it expires in less than a day
-    if (token.exp - now < 24 * 60 * 60 * 1000)
+    // if it expires in less than a week
+    if (token.exp - now < 24 * 60 * 60 * 1000 * 7)
         return { user, token: JWT.newToken(user) }
 
     return { user }

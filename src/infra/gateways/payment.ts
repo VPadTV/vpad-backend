@@ -24,7 +24,7 @@ export class Payment {
     private constructor() {
         const key = process.env.STRIPE_KEY
         if (!key)
-            throw Errors.SERVER()
+            throw Errors.INTERNAL_SERVER_ERROR()
         this.client = new Stripe(key)
     }
 
