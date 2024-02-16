@@ -9,7 +9,7 @@ module.exports = {
         coverageDirectory: 'coverage',
         coveragePathIgnorePatterns: ['coverage', 'node_modules'],
         collectCoverageFrom: [
-            'src/domain/functions/**/*',
+            'src/functions/**/*',
             'src/infra/gateways/jwt.ts',
         ],
         coverageReporters: ['json', 'text', 'lcov', 'clover'],

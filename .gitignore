@@ -1,6 +1,7 @@
 node_modules
 # Keep environment variables out of version control
 .env
+.dev.env
 coverage
 yarn-error.log
 testData.txt

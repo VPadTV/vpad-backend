@@ -14,6 +14,7 @@ export const imATeapot = (message: string): HttpError => new HttpError(message, 
 
 export const serverError = (message: string): HttpError => new HttpError(message, 500)
 
+
 export const Errors = {
     MISSING_TOKEN: () => unauthorized("MISSING_TOKEN"),
     UNAUTHORIZED: () => unauthorized("UNAUTHORIZED"),
@@ -27,6 +28,7 @@ export const Errors = {
     LOW_TIER: () => badRequest("LOW_TIER"),
 
     INVALID_TOKEN: () => badRequest("INVALID_TOKEN"),
+    INVALID_ID: () => badRequest("INVALID_ID"),
     INVALID_USERNAME: () => badRequest("INVALID_USERNAME"),
     USERNAME_ALREADY_EXISTS: () => badRequest("USERNAME_ALREADY_EXISTS"),
     INVALID_NICKNAME: () => badRequest("INVALID_NICKNAME"),

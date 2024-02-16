@@ -63,7 +63,7 @@ enum MediaType {
 model Post {
     id        String    @id @default(cuid())
     title     String
-    text      String
+    text      String?
     mediaUrl  String
     mediaType MediaType
     thumbUrl  String?
