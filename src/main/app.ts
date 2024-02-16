@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors'
 import { rateLimit } from 'express-rate-limit'
 import { boolify } from '@helpers/boolify';
+import { lockServer } from '@infra/middlewares/lock';
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -21,13 +22,7 @@ export class App {
         this.server.use(limiter)
         this.server.use(bodyParser.urlencoded({ extended: true }));
         this.server.use(cors())
-        this.server.use((req, res, next) => {
-            if (req.method.toLowerCase() === 'get' || boolify(process.env.OPEN_FOR_POST)) {
-                next()
-            } else {
-                res.status(401).send({ error: 'Server is read-only right now' })
-            }
-        })
+        this.server.use(lockServer('SERVER_READ_ONLY'))
 
         for (let path in routes) {
             const router = express.Router()

@@ -60,5 +60,8 @@ export const Errors = {
 
     BANNED: () => forbidden("BANNED"),
 
-    INTERNAL_SERVER_ERROR: () => serverError("INTERNAL_SERVER_ERROR")
+    INTERNAL_SERVER_ERROR: () => serverError("INTERNAL_SERVER_ERROR"),
+
+    SERVER_READ_ONLY: () => forbidden('SERVER_READ_ONLY'),
+    ROUTE_LOCKED: () => forbidden('ROUTE_LOCKED'),
 }
