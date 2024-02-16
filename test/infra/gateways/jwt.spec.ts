@@ -1,13 +1,13 @@
-import { JwtGateway } from "@infra/gateways"
-import { User } from "@prisma/client"
+import { JwtGateway } from '@infra/gateways'
+import { User } from '@prisma/client'
 // import Jwt from 'jsonwebtoken'
 
 // jest.mock('jsonwebtoken')
 
 
 const mockUser = {
-    id: "default",
-    username: "sussybaka",
+    id: 'default',
+    username: 'sussybaka',
 } as User
 
 // beforeEach(() => {

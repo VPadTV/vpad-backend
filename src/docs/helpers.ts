@@ -1,6 +1,6 @@
 export type SwaggerParameter = {
     name: string
-    in: "query" | "path"
+    in: 'query' | 'path'
     schema: { type: string, example?: string | number }
 }
 
@@ -37,7 +37,7 @@ export type SwaggerError = {
     }
 }
 
-export const BodyFile = "__bodyfile__"
+export const BodyFile = '__bodyfile__'
 
 export type Parameters = {
     [name: string]: string | number
@@ -80,7 +80,7 @@ const makeObject = (args?: Body) => {
                     type: 'array',
                     items: {
                         type: 'object',
-                        properties: obj(arrValue)
+                        properties: makeObject(arrValue)!
                     }
                 }
             } else {
@@ -96,12 +96,12 @@ const makeObject = (args?: Body) => {
         else if (typeof value === 'object')
             swb[name] = {
                 type: 'object',
-                properties: obj(value)
+                properties: makeObject(value)!
             }
         else if (value === BodyFile)
             swb[name] = {
-                type: "string",
-                format: "binary"
+                type: 'string',
+                format: 'binary'
             }
         else
             swb[name] = {
@@ -112,7 +112,7 @@ const makeObject = (args?: Body) => {
     return swb
 }
 
-const makeParameters = (type: "query" | "path", args?: Parameters) => {
+const makeParameters = (type: 'query' | 'path', args?: Parameters) => {
     if (!args) return undefined;
 
     let swp: SwaggerParameter[] = []
@@ -155,17 +155,13 @@ const makeErrors = (errors?: { [error: number]: string }) => {
     return swe
 }
 
-export const obj = (args: Body) => {
-    return makeObject(args)!
-}
-
 export const makeRoute = (args: GenerateRoute) => {
-    const { tag, summary, path: pathParameters, query: queryParameters, body, success, bodyRequired = [], security = true, ...errors } = args
+    const { tag, summary, path: pathParameters, query: queryParameters, body, contentType, success, bodyRequired = [], security = true, ...errors } = args
 
     let swParams: SwaggerParameter[] = []
-    const swPath = makeParameters("path", pathParameters)
+    const swPath = makeParameters('path', pathParameters)
     if (swPath) swParams.push(...swPath)
-    const swQuery = makeParameters("query", queryParameters) ?? []
+    const swQuery = makeParameters('query', queryParameters) ?? []
     if (swQuery) swParams.push(...swQuery)
 
     const swBody = makeObject(body)
@@ -193,8 +189,8 @@ export const makeRoute = (args: GenerateRoute) => {
                         type: 'object',
                         properties: {
                             token: security ? {
-                                type: "string",
-                                example: "refreshed token",
+                                type: 'string',
+                                example: 'refreshed token',
                             } : undefined, ...successObj
                         }
                     }
@@ -205,8 +201,6 @@ export const makeRoute = (args: GenerateRoute) => {
 
     const swErrors = makeErrors(errors) ?? {}
 
-    let contentType = args.contentType ?? ContentType.FORM
-
     return {
         security: security === true ? [{ bearerAuth: [] }] : undefined,
         tags: [tag],
@@ -215,7 +209,7 @@ export const makeRoute = (args: GenerateRoute) => {
         requestBody: swBody ? {
             required: true,
             content: {
-                [contentType]: {
+                [contentType ?? ContentType.FORM]: {
                     schema: {
                         type: 'object',
                         required: bodyRequired,

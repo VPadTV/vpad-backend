@@ -3,15 +3,17 @@ import { MimeTypes } from './mimeTypes'
 import crypto from 'crypto';
 import { FileRawUpload } from '@infra/middlewares';
 import { MediaType } from '@prisma/client';
-import { Readable, ReadableOptions } from "stream";
-import { Errors } from '@domain/helpers';
+import { Readable, ReadableOptions } from 'stream';
+import { Errors } from '@helpers/http';
+import sharp from 'sharp';
 
 export type FileUpload = {
     key: string;
     mimeType: string;
     type: MediaType
     buffer: Buffer;
-    url: string
+    url: string;
+    size: { width?: number, height?: number }
 }
 
 export type ModifyVideo = {
@@ -22,6 +24,13 @@ export type StreamResponse = {
     stream: SmartStream;
     ContentLength: number;
     ContentType: string;
+}
+
+
+// in pixels
+export enum ImageType {
+    MEDIA = 2000,
+    THUMBNAIL = 300
 }
 
 export type StorageClient = S3
@@ -47,16 +56,47 @@ export class Storage {
         return `https://f004.backblazeb2.com/file/${process.env.BB_BUCKET!}/${key}`
     }
 
-    getFileData(file?: FileRawUpload): FileUpload | undefined {
+    async processAndResizeImage(buf: Buffer, imageType: ImageType): Promise<Buffer> {
+        let instance = sharp(buf)
+        const meta = await instance.metadata()
+        if ((meta.width && meta.width > imageType) || (meta.height && meta.height > imageType))
+            instance = instance.resize({
+                width: imageType,
+                height: imageType,
+                fit: 'inside',
+            })
+        return instance
+            .webp()
+            .toBuffer()
+    }
+
+    async getFileData(file: FileRawUpload | undefined, imageType: ImageType): Promise<FileUpload | undefined> {
         if (!file) return undefined
         let key: string = crypto.randomBytes(16).toString('hex')
         const type = MimeTypes.getType(file.mimetype)
+        let width
+        let height
+        let processed: Buffer | undefined
+        if (type === MediaType.IMAGE) {
+            processed = await this.processAndResizeImage(file.buffer, imageType)
+            const meta = await sharp(processed).metadata()
+            if (meta) {
+                width = meta.width
+                height = meta.height
+            }
+        } else {
+            // process video here
+            processed = file.buffer
+        }
         return {
             key,
             mimeType: file.mimetype,
             type,
-            buffer: file.buffer,
-            url: Storage.getUrl(key)
+            buffer: processed,
+            url: Storage.getUrl(key),
+            size: {
+                width, height
+            }
         }
     }
 
@@ -76,12 +116,13 @@ export class Storage {
         if (!url) return
         const split = url.split('/')
         const key = split[split.length - 1]
-        await this.client
+        const r = await this.client
             .deleteObject({
                 Bucket: process.env.BB_BUCKET!,
                 Key: key,
             })
             .promise()
+        console.log(r);
     }
 
     async stream(key: string): Promise<StreamResponse> {

@@ -1,4 +1,4 @@
-/// <reference types="jest" />
+/// <reference types='jest' />
 export declare type MockProxy<T> = {
     [K in keyof T]: T[K] extends (...args: infer A) => infer B
     ? CalledWithMock<B, A>

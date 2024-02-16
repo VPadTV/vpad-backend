@@ -1,17 +1,17 @@
-import { makeRoute } from "@docs/helpers";
-import { dateExample } from "@docs/schemas/dateExample";
-import { simpleUser } from "@docs/schemas/simpleUser";
-import { exId } from "@docs/schemas/id";
+import { makeRoute } from '@docs/helpers';
+import { dateExample } from '@docs/schemas/dateExample';
+import { simpleUser } from '@docs/schemas/simpleUser';
+import { exId } from '@docs/schemas/id';
 
 export const commentNoId = {
     get: makeRoute({
-        tag: "Comment",
-        summary: "Returns many comments",
+        tag: 'Comment',
+        summary: 'Returns many comments',
         security: false,
         query: {
             postId: exId,
             parentId: exId,
-            sortBy: "latest | oldest",
+            sortBy: 'latest | oldest',
             page: 1,
             size: 30,
         },
@@ -23,7 +23,7 @@ export const commentNoId = {
             lastPage: 4,
             data: {
                 id: exId,
-                text: "some text",
+                text: 'some text',
                 childrenCount: 10,
                 meta: {
                     user: simpleUser,
@@ -32,14 +32,13 @@ export const commentNoId = {
                 }
             }
         },
-        404: "No comments found",
+        404: 'No comments found',
     }),
     post: makeRoute({
-        tag: "Comment",
-        summary: "Creates a new comment",
-        bodyRequired: ["postId", "text"],
+        tag: 'Comment',
+        summary: 'Creates a new comment',
+        bodyRequired: ['postid', 'text'],
         body: {
-            parentId: exId,
             postId: exId,
             text: "some text",
         },

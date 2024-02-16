@@ -1,4 +1,4 @@
-import { HttpError } from '@domain/helpers/errors'
+import { HttpError } from '@helpers/http'
 import { Response, Request, NextFunction } from 'express'
 
 export type MiddlewareData = {
@@ -13,8 +13,8 @@ export function middleware(fn: (request: MiddlewareData) => Promise<any>) {
                 authorization: req.headers.authorization as string,
                 params: req.params
             })
-            req.params = {
-                ...req.params,
+            req.middleware = {
+                ...req.middleware,
                 ...data
             }
             next()
@@ -22,8 +22,8 @@ export function middleware(fn: (request: MiddlewareData) => Promise<any>) {
             console.error(`** Middleware **`)
             console.error(error)
             if (error instanceof HttpError)
-                return res.status(error.code).json({ error: error.message })
-            return res.status(500).json({ error: error.code ?? error.message })
+                return res.status(error.status).send({ error: error.message })
+            return res.status(500).send({ error: 'Internal Server Error' })
         }
     }
 }

@@ -1,8 +1,8 @@
-import { PostStreamResponse } from '@domain/functions/post/stream'
-import { HttpError } from '@domain/helpers'
+import { PostStreamResponse } from '@functions/post/stream'
+import { HttpError } from '@helpers/http'
 import { Response, Request } from 'express'
 
-export function streamResponse<T, U extends PostStreamResponse>(fn: (request: T) => Promise<U>) {
+export function streamResponse<U extends PostStreamResponse>(fn: (request: any) => Promise<U>) {
     return async (req: Request, res: Response) => {
         try {
             const {
@@ -13,7 +13,7 @@ export function streamResponse<T, U extends PostStreamResponse>(fn: (request: T)
                 ...req.params,
                 ...req.query,
                 ...res.locals,
-            } as T)
+            })
             res.writeHead(200, {
                 'Content-Length': ContentLength,
                 'Content-Type': ContentType,
@@ -25,10 +25,9 @@ export function streamResponse<T, U extends PostStreamResponse>(fn: (request: T)
         } catch (error) {
             console.error(`** Streaming **`)
             console.error(error)
-            if (error instanceof HttpError) {
-                return res.status(error.code).json({ error: error.message })
-            }
-            return res.status(500).json({ error: error.code ?? error.message })
+            if (error instanceof HttpError)
+                return res.status(error.status).send({ error: error.message })
+            return res.status(500).send({ error: 'Internal Server Error' })
         }
     }
 }

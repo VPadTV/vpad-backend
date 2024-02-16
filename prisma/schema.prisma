@@ -18,6 +18,8 @@ model User {
     about           String?
     contact         String?
 
+    stripeAccountId String? @unique
+
     admin      Boolean   @default(false)
     banned     Boolean   @default(false)
     banTimeout DateTime?
@@ -61,13 +63,15 @@ enum MediaType {
 model Post {
     id        String    @id @default(cuid())
     title     String
-    text      String
+    text      String?
     mediaUrl  String
     mediaType MediaType
     thumbUrl  String?
 
-    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict)
-    userId String
+    thumbnailWidth  Int?
+    thumbnailHeight Int?
+
+    authors User[]
 
     comments Comment[]
     votes    Votes[]   @relation(name: "postVotes")

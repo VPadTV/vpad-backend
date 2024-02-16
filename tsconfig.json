@@ -3,8 +3,8 @@
         "paths": {
             "@docs/*": ["src/docs/*"],
             "@controllers/*": ["src/routes/*"],
-            "@domain/*": ["src/domain/*"],
-            "@functions/*": ["src/domain/functions/*"],
+            "@functions/*": ["src/functions/*"],
+            "@helpers/*": ["src/helpers/*"],
             "@infra/*": ["src/infra/*"],
             "@main/*": ["src/main/*"],
             "@routes/*": ["src/routes/*"],
@@ -27,7 +27,7 @@
         "emitDecoratorMetadata": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "strictNullChecks": true,
+        "strict": true
     },
     "include": ["./src/**/*"],
     "exclude": [
