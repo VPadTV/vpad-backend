@@ -3,7 +3,6 @@ import routes from './routes';
 import bodyParser from 'body-parser';
 import cors from 'cors'
 import { rateLimit } from 'express-rate-limit'
-import { boolify } from '@helpers/boolify';
 import { lockServer } from '@infra/middlewares/lock';
 
 const limiter = rateLimit({
@@ -22,7 +21,7 @@ export class App {
         this.server.use(limiter)
         this.server.use(bodyParser.urlencoded({ extended: true }));
         this.server.use(cors())
-        this.server.use(lockServer('SERVER_READ_ONLY'))
+        this.server.use(lockServer)
 
         for (let path in routes) {
             const router = express.Router()
