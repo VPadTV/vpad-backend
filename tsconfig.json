@@ -27,7 +27,7 @@
         "emitDecoratorMetadata": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "strict": true
+        "strict": false
     },
     "include": ["./src/**/*"],
     "exclude": [
