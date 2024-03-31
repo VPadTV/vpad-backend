@@ -1,4 +1,4 @@
-import { makeRoute } from '@docs/helpers';
+import { makeRoute } from 'src/old/docs/helpers';
 
 export const tierNoId = {
     post: makeRoute({

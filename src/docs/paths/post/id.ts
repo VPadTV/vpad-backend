@@ -1,7 +1,7 @@
-import { BodyFile, ContentType, makeRoute } from '@docs/helpers';
-import { exId } from '@docs/schemas/id';
-import { simpleUser } from '@docs/schemas/simpleUser';
-import { PostDeleteStatus } from '@functions/post/delete';
+import { BodyFile, ContentType, makeRoute } from 'src/old/docs/helpers';
+import { exId } from 'src/old/docs/schemas/id';
+import { simpleUser } from 'src/old/docs/schemas/simpleUser';
+import { PostDeleteStatus } from 'src/old/functions/post/delete';
 
 export const postId = {
     get: makeRoute({

@@ -1,6 +1,6 @@
-import { BodyFile, ContentType, makeRoute } from '@docs/helpers';
-import { exId } from '@docs/schemas/id';
-import { simpleUser } from '@docs/schemas/simpleUser';
+import { BodyFile, ContentType, makeRoute } from 'src/old/docs/helpers';
+import { exId } from 'src/old/docs/schemas/id';
+import { simpleUser } from 'src/old/docs/schemas/simpleUser';
 
 export const postNoId = {
     post: makeRoute({

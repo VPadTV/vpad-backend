@@ -2,11 +2,11 @@
     "compilerOptions": {
         "paths": {
             "@docs/*": ["src/docs/*"],
-            "@controllers/*": ["src/routes/*"],
-            "@functions/*": ["src/functions/*"],
-            "@helpers/*": ["src/helpers/*"],
-            "@infra/*": ["src/infra/*"],
+            "@domain/*": ["src/domain/*"],
+            "@infrastructure/*": ["src/infrastructure/*"],
             "@main/*": ["src/main/*"],
+            "@middlewares/*": ["src/middlewares/*"],
+            "@plugins/*": ["src/plugins/*"],
             "@routes/*": ["src/routes/*"],
             "@test/*": ["test/*"]
         },

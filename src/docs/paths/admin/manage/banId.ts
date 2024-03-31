@@ -1,6 +1,6 @@
-import { makeRoute } from '@docs/helpers';
-import { dateExample } from '@docs/schemas/dateExample'
-import { exId } from '@docs/schemas/id';
+import { makeRoute } from 'src/old/docs/helpers';
+import { dateExample } from 'src/old/docs/schemas/dateExample'
+import { exId } from 'src/old/docs/schemas/id';
 
 export const adminBanId = {
     put: makeRoute({

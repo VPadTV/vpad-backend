@@ -1,7 +1,7 @@
-import { makeRoute } from '@docs/helpers';
-import { dateExample } from '@docs/schemas/dateExample';
-import { simpleUser } from '@docs/schemas/simpleUser';
-import { exId } from '@docs/schemas/id';
+import { makeRoute } from 'src/old/docs/helpers';
+import { dateExample } from 'src/old/docs/schemas/dateExample';
+import { simpleUser } from 'src/old/docs/schemas/simpleUser';
+import { exId } from 'src/old/docs/schemas/id';
 
 export const commentNoId = {
     get: makeRoute({

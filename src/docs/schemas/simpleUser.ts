@@ -1,4 +1,4 @@
-import { Body } from '@docs/helpers';
+import { Body } from 'src/old/docs/helpers';
 import { exId } from './id';
 
 export const simpleUser: Body = {

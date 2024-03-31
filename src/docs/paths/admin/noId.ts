@@ -1,5 +1,5 @@
-import { makeRoute } from '@docs/helpers';
-import { simpleUser } from '@docs/schemas/simpleUser';
+import { makeRoute } from 'src/old/docs/helpers';
+import { simpleUser } from 'src/old/docs/schemas/simpleUser';
 
 export const adminNoId = {
     get: makeRoute({

@@ -1,5 +1,5 @@
-import { makeRoute } from '@docs/helpers';
-import { exId } from '@docs/schemas/id';
+import { makeRoute } from 'src/old/docs/helpers';
+import { exId } from 'src/old/docs/schemas/id';
 
 export const votePostId = {
     put: makeRoute({

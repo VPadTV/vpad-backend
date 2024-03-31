@@ -1,5 +1,5 @@
-import { BodyFile, ContentType, makeRoute } from '@docs/helpers';
-import { exId } from '@docs/schemas/id';
+import { BodyFile, ContentType, makeRoute } from 'src/old/docs/helpers';
+import { exId } from 'src/old/docs/schemas/id';
 
 export const userId = {
     get: makeRoute({

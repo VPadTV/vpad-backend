@@ -1,6 +1,6 @@
 import {
     makeRoute
-} from '@docs/helpers';
+} from 'src/old/docs/helpers';
 
 export const postStreamKey = {
     get: makeRoute({
