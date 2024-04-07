@@ -1,5 +1,5 @@
-import { IBaseRepository } from "../shared/IBaseRepository";
+import { IBaseRepository } from '../shared/IBaseRepository';
 
-export interface IPostRepository extends IBaseRepository<any> {
-    voteSet(request: any): Promise<any>
+export interface IPostRepository extends IBaseRepository<unknown> {
+	voteSet(request: any): Promise<unknown>;
 }

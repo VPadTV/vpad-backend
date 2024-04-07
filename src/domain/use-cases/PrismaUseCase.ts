@@ -1,8 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
 export class PrismaUseCase extends PrismaClient {
-
-    constructor(){
-        super()
-    }
+	constructor() {
+		super();
+	}
 }

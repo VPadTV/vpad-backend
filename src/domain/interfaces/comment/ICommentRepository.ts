@@ -1,3 +1,3 @@
-import { IBaseRepository } from "../shared/IBaseRepository";
+import { IBaseRepository } from '../shared/IBaseRepository';
 
-export interface ICommentRepository extends IBaseRepository<any> {}
+export interface ICommentRepository extends IBaseRepository<unknown> {}

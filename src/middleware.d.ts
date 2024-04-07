@@ -1,5 +1,5 @@
 declare namespace Express {
-    export interface Request {
-        middleware?: { [key: string]: unknown }
-    }
+	export interface Request {
+		middleware?: { [key: string]: unknown };
+	}
 }

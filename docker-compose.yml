@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   database:
@@ -34,7 +34,7 @@ services:
       dockerfile: Dockerfile
       target: base
     ports:
-      - "${PORT}:${PORT}"
+      - '${PORT}:${PORT}'
     tty: true
     networks:
       - db_network

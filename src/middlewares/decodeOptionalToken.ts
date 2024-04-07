@@ -4,30 +4,29 @@ import { PrismaUseCase } from '@domain/use-cases/PrismaUseCase';
 import { OptionalTokenMiddlewareResponse } from './decodeOptionalToken.types';
 import { MiddlewareData } from './middleware.types';
 
+export const optionalToken = async (
+	data: MiddlewareData,
+): Promise<OptionalTokenMiddlewareResponse> => {
+	const { authorization } = data;
+	if (!authorization) return {};
 
+	const bearerToken = authorization.replace('Bearer ', '');
 
-export const optionalToken = async (data: MiddlewareData): Promise<OptionalTokenMiddlewareResponse> => {
-    const { authorization } = data;
-    if (!authorization) return {}
+	const token = JWT.decode(bearerToken);
+	if (!token || !token.sub || !token.exp) throw Errors.INVALID_TOKEN();
 
-    const bearerToken = authorization.replace('Bearer ', '')
+	const now = Date.now();
+	if (now > token.exp) throw Errors.EXPIRED_TOKEN();
 
-    const token = JWT.decode(bearerToken)
-    if (!token || !token.sub || !token.exp)
-        throw Errors.INVALID_TOKEN()
+	const id = token.sub.split('#')[0];
 
-    const now = Date.now()
-    if (now > token.exp) throw Errors.EXPIRED_TOKEN()
+	const db = new PrismaUseCase();
+	const user = await db.user.findFirst({ where: { id } });
+	if (!user) throw Errors.UNAUTHORIZED();
 
-    const id = token.sub.split('#')[0]
+	// if it expires in less than a week
+	if (token.exp - now < 24 * 60 * 60 * 1000 * 7)
+		return { user, token: JWT.newToken(user) };
 
-    const db = new PrismaUseCase()
-    const user = await db.user.findFirst({ where: { id } })
-    if (!user) throw Errors.UNAUTHORIZED()
-
-    // if it expires in less than a week
-    if (token.exp - now < 24 * 60 * 60 * 1000 * 7)
-        return { user, token: JWT.newToken(user) }
-
-    return { user }
-}
+	return { user };
+};

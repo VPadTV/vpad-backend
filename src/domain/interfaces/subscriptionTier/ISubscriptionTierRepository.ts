@@ -1,4 +1,5 @@
-import { IBaseRepository } from "../shared/IBaseRepository";
-import { SubscriptionTier } from "@prisma/client";
+import { IBaseRepository } from '../shared/IBaseRepository';
 
-export interface ISubscriptionTierRepository extends IBaseRepository<SubscriptionTier>{}
+
+export interface ISubscriptionTierRepository
+	extends IBaseRepository<unknown> {}

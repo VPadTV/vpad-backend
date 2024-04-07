@@ -1,9 +1,9 @@
 export type FileRawUpload = {
-    fieldname: string;
-    originalname: string;
-    mimetype: string;
-    size: number;
-    buffer: Buffer;
-}
+	fieldname: string;
+	originalname: string;
+	mimetype: string;
+	size: number;
+	buffer: Buffer;
+};
 
-export type FileField = { name: string; maxCount: number; }
+export type FileField = { name: string; maxCount: number };
