@@ -1,40 +1,40 @@
 {
-    "compilerOptions": {
-        "paths": {
-            "@docs/*": ["src/docs/*"],
-            "@controllers/*": ["src/routes/*"],
-            "@functions/*": ["src/functions/*"],
-            "@helpers/*": ["src/helpers/*"],
-            "@infra/*": ["src/infra/*"],
-            "@main/*": ["src/main/*"],
-            "@routes/*": ["src/routes/*"],
-            "@test/*": ["test/*"]
-        },
-        "lib": ["ES5"],
-        "target": "ES5",
-        "moduleResolution": "Node",
-        "allowSyntheticDefaultImports": true,
-        "removeComments": false,
-        "sourceMap": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "rootDir": ".",
-        "baseUrl": ".",
-        "experimentalDecorators": true,
-        "outDir": "dist",
-        "resolveJsonModule": true,
-        "esModuleInterop": true,
-        "emitDecoratorMetadata": true,
-        "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true,
-        "strict": true
-    },
-    "include": ["./src/**/*"],
-    "exclude": [
-        "node_modules/**/*",
-        ".vscode/**/*",
-        "dist/**/*",
-        "test/**/*",
-        "prisma"
-    ]
+	"compilerOptions": {
+		"paths": {
+			"@docs/*": ["src/docs/*"],
+			"@domain/*": ["src/domain/*"],
+			"@infrastructure/*": ["src/infrastructure/*"],
+			"@main/*": ["src/main/*"],
+			"@middlewares/*": ["src/middlewares/*"],
+			"@plugins/*": ["src/plugins/*"],
+			"@routes/*": ["src/routes/*"],
+			"@test/*": ["test/*"]
+		},
+		"lib": ["ES5"],
+		"target": "ES5",
+		"moduleResolution": "Node",
+		"allowSyntheticDefaultImports": true,
+		"removeComments": false,
+		"sourceMap": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"rootDir": ".",
+		"baseUrl": ".",
+		"experimentalDecorators": true,
+		"outDir": "dist",
+		"resolveJsonModule": true,
+		"esModuleInterop": true,
+		"emitDecoratorMetadata": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"strict": false
+	},
+	"include": ["./src/**/*"],
+	"exclude": [
+		"node_modules/**/*",
+		".vscode/**/*",
+		"dist/**/*",
+		"test/**/*",
+		"prisma"
+	]
 }

@@ -19,51 +19,51 @@ import { votePostId } from './paths/vote/postId';
 import { payNoId } from './paths/pay/noId';
 
 export default {
-    openapi: '3.0.0',
-    info: {
-        title: 'VPAD API',
-        version: '0.0.1',
-    },
-    servers: [
-        {
-            url: 'http://localhost:3000',
-            description: 'Local server',
-        }
-    ],
-    components: {
-        securitySchemes: {
-            bearerAuth: {
-                type: 'http',
-                scheme: 'bearer',
-                bearerFormat: 'JWT'
-            },
-        },
-    },
-    paths: {
-        '/user/{id}': userId,
-        '/user/login': userLogin,
-        '/user/register': userRegister,
+	openapi: '3.0.0',
+	info: {
+		title: 'VPAD API',
+		version: '0.0.1',
+	},
+	servers: [
+		{
+			url: 'http://localhost:3000',
+			description: 'Local server',
+		},
+	],
+	components: {
+		securitySchemes: {
+			bearerAuth: {
+				type: 'http',
+				scheme: 'bearer',
+				bearerFormat: 'JWT',
+			},
+		},
+	},
+	paths: {
+		'/user/{id}': userId,
+		'/user/login': userLogin,
+		'/user/register': userRegister,
 
-        '/tier': tierNoId,
-        '/tier/{id}': tierId,
-        '/tier/creator/{creatorId}': tierCreatorId,
+		'/tier': tierNoId,
+		'/tier/{id}': tierId,
+		'/tier/creator/{creatorId}': tierCreatorId,
 
-        '/sub': subNoId,
-        '/sub/{id}': subId,
-        '/sub/{creatorId}': subCreatorId,
+		'/sub': subNoId,
+		'/sub/{id}': subId,
+		'/sub/{creatorId}': subCreatorId,
 
-        '/post/{id}': postId,
-        '/post/stream/{key}': postStreamKey,
-        '/post': postNoId,
-        '/vote/{postId}': votePostId,
+		'/post/{id}': postId,
+		'/post/stream/{key}': postStreamKey,
+		'/post': postNoId,
+		'/vote/{postId}': votePostId,
 
-        '/comment/{id}': commentId,
-        '/comment': commentNoId,
+		'/comment/{id}': commentId,
+		'/comment': commentNoId,
 
-        '/admin': adminNoId,
-        '/manage/admin/{id}': adminId,
-        '/manage/ban/{id}': adminBanId,
+		'/admin': adminNoId,
+		'/manage/admin/{id}': adminId,
+		'/manage/ban/{id}': adminBanId,
 
-        '/pay': payNoId,
-    }
-}
+		'/pay': payNoId,
+	},
+};
