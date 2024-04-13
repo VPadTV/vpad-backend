@@ -128,7 +128,7 @@ export class UserUseCase {
         if (req.password !== null && !usernameRegex().test(req.password))
             throw Errors.INVALID_PASSWORD();
         const profilePhotoData = await this.storage.getFileData(
-            req.profilePhotoUrl as unknown as FileRawUpload,
+            req.profilePhotoUrl as FileRawUpload,
             ImageType.THUMBNAIL,
         );
         if (profilePhotoData?.type === MediaType.VIDEO) throw Errors.INVALID_FILE();

@@ -161,7 +161,6 @@ export class PostUseCase {
             })),
         );
     }
-
     async updatePost(req) {
         if (!req.id) throw Errors.MISSING_ID();
         const tags = req.tags.length
@@ -199,7 +198,6 @@ export class PostUseCase {
         await this.storage.upload(mediaData);
         await this.storage.upload(thumbData);
     }
-
     async deletePost(req) {
         const found = await this.postRepo.getById(req);
         if (!found) throw Errors.NOT_FOUND();
@@ -231,7 +229,6 @@ export class PostUseCase {
         }
         throw Errors.NOT_FOUND();
     }
-
     async voteSet(req) {
         if (!req.vote && !validString(req.postId))
             throw Errors.MISSING_VOTE();

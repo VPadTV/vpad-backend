@@ -7,26 +7,23 @@ export class SubscriptionTierUseCase {
     constructor(
         private subscriptionTierRepository: SubscriptionTierRepository,
     ) { }
-    async createSubscriptionTier(request): Promise<unknown> {
+    async createSubscriptionTier(request) {
         if (typeof request.user.id !== 'string') throw Errors.MISSING_ID();
         if (!validString(request.name)) throw Errors.MISSING_NAME();
         const price = numify(request.price);
         if (price === undefined) throw Errors.MISSING_PRICE();
         return await this.subscriptionTierRepository.create(request);
     }
-    async getSubscriptionTierById(request): Promise<unknown> {
-        return await this.subscriptionTierRepository.getById(request);
-    }
-    async getAllSubscriptionTiers(request): Promise<unknown> {
+    async getAllSubscriptionTiers(request) {
         if (typeof request.creatorId !== 'string') throw Errors.MISSING_ID();
         return await this.subscriptionTierRepository.getAll(request);
     }
-    async updateSubscriptionTier(request): Promise<unknown> {
+    async updateSubscriptionTier(request) {
         if (typeof request.id !== 'string') throw Errors.MISSING_ID();
         if (!validString(request.name)) throw Errors.MISSING_NAME();
         return await this.subscriptionTierRepository.update(request);
     }
-    async deleteSubscriptionTier(request): Promise<unknown> {
+    async deleteSubscriptionTier(request) {
         if (typeof request.id !== 'string') throw Errors.MISSING_ID();
         return await this.subscriptionTierRepository.delete(request);
     }
