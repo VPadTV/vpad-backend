@@ -21,9 +21,6 @@ export class SubRepository {
 
         return [sub];
     }
-    getById(req) {
-        throw new Error('Method not implemented.');
-    }
 
     async create(req) {
         await this.db.subscription.create({
