@@ -3,18 +3,18 @@ import { SimpleUser } from '@plugins/user';
 
 export class CommentRepository {
     constructor(private readonly db: PrismaUseCase) { }
-    async create(request): Promise<unknown> {
+    async create(req) {
         return await this.db.comment.create({
-            data: request,
+            data: req,
             select: { id: true },
         });
     }
-    async getAll(request): Promise<unknown[]> {
+    async getAll(req) {
         const [comments, total] = await this.db.$transaction([
             this.db.comment.findMany({
                 where: {
-                    postId: request.postId ?? undefined,
-                    parentId: request.parentId ?? undefined,
+                    postId: req.postId ?? undefined,
+                    parentId: req.parentId ?? undefined,
                 },
                 select: {
                     id: true,
@@ -27,21 +27,21 @@ export class CommentRepository {
                     },
                 },
                 orderBy: {
-                    updatedAt: request.orderByUpdatedAt,
+                    updatedAt: req.orderByUpdatedAt,
                 },
             }),
             this.db.comment.count({
                 where: {
-                    postId: request.postId ?? undefined,
-                    parentId: request.parentId ?? undefined,
+                    postId: req.postId ?? undefined,
+                    parentId: req.parentId ?? undefined,
                 },
             }),
         ]);
-        return [comments, total];
+        return { comments, total };
     }
-    async getById(request): Promise<unknown> {
+    async getById(req) {
         return await this.db.comment.findUnique({
-            where: { id: request.id },
+            where: { id: req.id },
             select: {
                 text: true,
                 user: { select: SimpleUser.selector },
@@ -53,16 +53,16 @@ export class CommentRepository {
             },
         });
     }
-    async update(request): Promise<unknown> {
+    async update(req) {
         return await this.db.comment.update({
-            where: { id: request.id, userId: request.user.id },
-            data: request,
+            where: { id: req.id, userId: req.user.id },
+            data: req,
             select: { text: true, updatedAt: true },
         });
     }
-    async delete(request): Promise<unknown> {
+    async delete(req) {
         return await this.db.comment.delete({
-            where: { id: request.id, userId: request.userId },
+            where: { id: req.id, userId: req.userId },
         });
     }
 }

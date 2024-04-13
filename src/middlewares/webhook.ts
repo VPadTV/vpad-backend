@@ -9,7 +9,7 @@
 //     [key: string]: any,
 // }
 
-// export function webhook(fn: (request: PayWebhookRequest) => Promise<void>) {
+// export function webhook(fn: (req: PayWebhookRequest) => Promise<void>) {
 //     return async (req: Request, res: Response) => {
 //         try {
 //             await fn({

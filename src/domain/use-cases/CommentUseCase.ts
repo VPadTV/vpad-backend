@@ -3,23 +3,23 @@ import { Errors } from '@plugins/errors';
 import { CommentRepository } from '@infrastructure/repositories/comment/CommentRepository';
 
 export class CommentUseCase {
-    constructor(private commentRepository: CommentRepository) { }
-    async createComment(request): Promise<unknown> {
-        if (request.postId) throw Errors.MISSING_ID();
-        if (request.text) throw Errors.MISSING_TEXT();
-        return await this.commentRepository.create(request);
+    constructor(private commentRepo: CommentRepository) { }
+    async createComment(req) {
+        if (req.postId) throw Errors.MISSING_ID();
+        if (req.text) throw Errors.MISSING_TEXT();
+        return await this.commentRepo.create(req);
     }
-    async getComments(request): Promise<unknown> {
-        const offset = (request.page - 1) * request.size;
-        const orderByUpdatedAt = request.sortBy === 'oldest' ? 'asc' : 'desc';
-        request.orderByUpdatedAt = orderByUpdatedAt;
-        const [comments, total] = await this.commentRepository.getAll(request);
+    async getComments(req) {
+        const offset = (req.page - 1) * req.size;
+        const orderByUpdatedAt = req.sortBy === 'oldest' ? 'asc' : 'desc';
+        req.orderByUpdatedAt = orderByUpdatedAt;
+        const { comments, total } = await this.commentRepo.getAll(req);
 
         return paginate(
             total as number, // Cast 'total' to 'number'
-            request.page,
+            req.page,
             offset,
-            request.size,
+            req.size,
             comments.map((comment) => ({
                 id: comment.id,
                 text: comment.text,
@@ -32,8 +32,8 @@ export class CommentUseCase {
             })),
         );
     }
-    async getCommentById(request): Promise<unknown> {
-        const comment = await this.commentRepository.getById(request);
+    async getCommentById(req) {
+        const comment = await this.commentRepo.getById(req);
         if (!comment) throw Errors.NOT_FOUND();
         return {
             text: comment.text,
@@ -45,13 +45,13 @@ export class CommentUseCase {
             },
         };
     }
-    async updateComment(request): Promise<unknown> {
-        if (!request.id) throw Errors.MISSING_ID();
-        if (!request.text) throw Errors.MISSING_TEXT();
-        return await this.commentRepository.update(request);
+    async updateComment(req) {
+        if (!req.id) throw Errors.MISSING_ID();
+        if (!req.text) throw Errors.MISSING_TEXT();
+        return await this.commentRepo.update(req);
     }
     async deleteComment(id): Promise<void> {
-        const response = this.commentRepository.delete(id);
+        const response = this.commentRepo.delete(id);
         if (!response) throw Errors.NOT_FOUND();
     }
 }

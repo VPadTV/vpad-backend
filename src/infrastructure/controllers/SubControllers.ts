@@ -12,32 +12,32 @@ export class SubControllers implements IController {
         router.post(
             '/create',
             middleware(isLoggedIn),
-            jsonResponse(async (request) => {
-                return ok(await this.SubUseCase.createSub(request));
+            jsonResponse(async (req) => {
+                return ok(await this.SubUseCase.createSub(req));
             }),
         );
 
         router.get(
             '/:creatorId',
             middleware(isLoggedIn),
-            jsonResponse(async (request) => {
-                return ok(await this.SubUseCase.getAllSubs(request));
+            jsonResponse(async (req) => {
+                return ok(await this.SubUseCase.getAllSubs(req));
             }),
         );
 
         router.put(
             '/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request) => {
-                return ok(await this.SubUseCase.updateSub(request));
+            jsonResponse(async (req) => {
+                return ok(await this.SubUseCase.updateSub(req));
             }),
         );
 
         router.delete(
             '/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request) => {
-                return ok(await this.SubUseCase.deleteSub(request));
+            jsonResponse(async (req) => {
+                return ok(await this.SubUseCase.deleteSub(req));
             }),
         );
     }

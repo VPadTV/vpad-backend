@@ -2,11 +2,11 @@ import { PrismaUseCase } from '@domain/use-cases/PrismaUseCase';
 
 export class SubRepository {
     constructor(private readonly db: PrismaUseCase) { }
-    async getAll(request): Promise<unknown[]> {
+    async getAll(req) {
         const sub = await this.db.subscription.findFirst({
             where: {
-                userId: request.user.id,
-                creatorId: request.creatorId,
+                userId: req.user.id,
+                creatorId: req.creatorId,
             },
             select: {
                 id: true,
@@ -21,35 +21,36 @@ export class SubRepository {
 
         return [sub];
     }
-    getById(request): Promise<unknown> {
+    getById(req) {
         throw new Error('Method not implemented.');
     }
-    async create(request): Promise<unknown> {
+
+    async create(req) {
         await this.db.subscription.create({
             data: {
-                userId: request.user.id,
-                creatorId: request.creatorId,
-                tierId: request.tierId?.length === 0 ? null : request.tierId,
+                userId: req.user.id,
+                creatorId: req.creatorId,
+                tierId: req.tierId?.length === 0 ? null : req.tierId,
             },
         });
 
         return {};
     }
-    async update(request): Promise<unknown> {
+    async update(req) {
         await this.db.subscription.update({
             where: {
-                id: request.id,
-                userId: request.user.id,
-                creatorId: request.creatorId,
+                id: req.id,
+                userId: req.user.id,
+                creatorId: req.creatorId,
             },
-            data: { tierId: request.tierId },
+            data: { tierId: req.tierId },
         });
 
         return {};
     }
-    async delete(request): Promise<unknown> {
+    async delete(req) {
         await this.db.subscription.delete({
-            where: { id: request.id, userId: request.user.id },
+            where: { id: req.id, userId: req.user.id },
         });
 
         return {};

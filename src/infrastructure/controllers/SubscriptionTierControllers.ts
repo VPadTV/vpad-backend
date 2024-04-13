@@ -14,18 +14,18 @@ export class SubscriptionTierControllers implements IController {
         router.post(
             '/create',
             middleware(isLoggedIn),
-            jsonResponse(async (request) => {
+            jsonResponse(async (req) => {
                 return ok(
-                    await this.subscriptionTierUseCase.createSubscriptionTier(request),
+                    await this.subscriptionTierUseCase.createSubscriptionTier(req),
                 );
             }),
         );
 
         router.get(
             '/:id',
-            jsonResponse(async (request) => {
+            jsonResponse(async (req) => {
                 return ok(
-                    await this.subscriptionTierUseCase.getSubscriptionTierById(request),
+                    await this.subscriptionTierUseCase.getSubscriptionTierById(req),
                 );
             }),
         );
@@ -33,9 +33,9 @@ export class SubscriptionTierControllers implements IController {
         router.put(
             '/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request): Promise<HttpResponse> => {
+            jsonResponse(async (req): Promise<HttpResponse> => {
                 return ok(
-                    await this.subscriptionTierUseCase.updateSubscriptionTier(request),
+                    await this.subscriptionTierUseCase.updateSubscriptionTier(req),
                 );
             }),
         );
@@ -43,9 +43,9 @@ export class SubscriptionTierControllers implements IController {
         router.delete(
             '/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request): Promise<HttpResponse> => {
+            jsonResponse(async (req): Promise<HttpResponse> => {
                 return ok(
-                    await this.subscriptionTierUseCase.deleteSubscriptionTier(request),
+                    await this.subscriptionTierUseCase.deleteSubscriptionTier(req),
                 );
             }),
         );

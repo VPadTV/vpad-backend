@@ -10,14 +10,14 @@ export class PostRepository {
         private readonly storage: Storage,
     ) { }
 
-    async create(request): Promise<unknown> {
+    async create(req) {
         const mediaData = await this.storage.getFileData(
-            request.media,
+            req.media,
             ImageType.MEDIA,
         );
         if (!mediaData) throw Errors.INVALID_FILE();
         const thumbData = await this.storage.getFileData(
-            request.thumb ?? request.media,
+            req.thumb ?? req.media,
             ImageType.THUMBNAIL,
         );
         if (!thumbData || (thumbData && thumbData.type !== MediaType.IMAGE))
@@ -25,18 +25,18 @@ export class PostRepository {
         const post = await this.db.post.create({
             data: {
                 authors: {
-                    connect: [{ id: request.user.id }, ...(request.otherAuthorIds ?? [])],
+                    connect: [{ id: req.user.id }, ...(req.otherAuthorIds ?? [])],
                 },
-                title: request.title,
-                text: request.text,
+                title: req.title,
+                text: req.text,
                 mediaUrl: mediaData.url,
                 mediaType: mediaData.type,
                 thumbUrl: thumbData?.url,
-                nsfw: request.nsfw,
-                minTierId: request.minTierId,
+                nsfw: req.nsfw,
+                minTierId: req.minTierId,
                 thumbnailWidth: thumbData.size.width,
                 thumbnailHeight: thumbData.size.height,
-                tags: request.tags,
+                tags: req.tags,
             },
         });
         await this.storage.upload(mediaData);
@@ -44,10 +44,10 @@ export class PostRepository {
 
         return { id: post.id };
     }
-    async getById(request): Promise<unknown> {
+    async getById(req) {
         return await this.db.post.findFirst({
             where: {
-                id: request.id,
+                id: req.id,
             },
             select: {
                 id: true,
@@ -67,14 +67,14 @@ export class PostRepository {
             },
         });
     }
-    async getAll(request): Promise<unknown[]> {
+    async getAll(req) {
         const [posts, total] = await this.db.$transaction([
             this.db.post.findMany({
-                skip: request.offset,
-                take: +request.size,
+                skip: req.offset,
+                take: +req.size,
                 where: {
-                    ...request.where,
-                    nsfw: request.nsfw ?? false,
+                    ...req.where,
+                    nsfw: req.nsfw ?? false,
                 },
                 select: {
                     id: true,
@@ -95,47 +95,47 @@ export class PostRepository {
                         },
                     },
                 },
-                orderBy: request.orderBy,
+                orderBy: req.orderBy,
             }),
-            this.db.post.count({ where: { ...request.where } }),
+            this.db.post.count({ where: { ...req.where } }),
         ]);
-        return [posts, total];
+        return { posts, total };
     }
-    async update(request): Promise<void> {
+    async update(req) {
         await this.db.post.update({
-            where: { id: request.id },
+            where: { id: req.id },
             data: {
-                text: request.text,
-                mediaType: request.mediaType,
-                mediaUrl: request.mediaUrl,
-                thumbUrl: request.thumbUrl,
-                thumbnailWidth: request.thumbnailWidth,
-                thumbnailHeight: request.thumbnailHeight,
-                nsfw: request.nsfw,
-                tags: request.tags,
-                minTierId: request.minTierId,
+                text: req.text,
+                mediaType: req.mediaType,
+                mediaUrl: req.mediaUrl,
+                thumbUrl: req.thumbUrl,
+                thumbnailWidth: req.thumbnailWidth,
+                thumbnailHeight: req.thumbnailHeight,
+                nsfw: req.nsfw,
+                tags: req.tags,
+                minTierId: req.minTierId,
             },
         });
     }
-    async delete(request): Promise<void> {
-        await this.db.post.delete({ where: { id: request.id } });
+    async delete(req) {
+        await this.db.post.delete({ where: { id: req.id } });
     }
 
-    async voteSet(request): Promise<unknown> {
+    async voteSet(req) {
         await this.db.votes.upsert({
             where: {
                 userId_postId: {
-                    userId: request.user.id,
-                    postId: request.postId,
+                    userId: req.user.id,
+                    postId: req.postId,
                 },
             },
             create: {
-                userId: request.user.id,
-                postId: request.postId,
-                vote: request.vote,
+                userId: req.user.id,
+                postId: req.postId,
+                vote: req.vote,
             },
             update: {
-                vote: request.vote,
+                vote: req.vote,
             },
         });
 

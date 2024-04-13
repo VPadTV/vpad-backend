@@ -11,39 +11,39 @@ export class PostControllers implements IController {
     register(router: Router): void {
         router.post(
             '/create',
-            jsonResponse(async (request) => {
-                return ok(await this.postUseCase.createPost(request));
+            jsonResponse(async (req) => {
+                return ok(await this.postUseCase.createPost(req));
             }),
         );
 
         router.get(
             '/:id',
-            jsonResponse(async (request) => {
-                return ok(await this.postUseCase.getPostById(request));
+            jsonResponse(async (req) => {
+                return ok(await this.postUseCase.getPostById(req));
             }),
         );
 
         router.put(
             '/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request) => {
-                return ok(await this.postUseCase.updatePost(request));
+            jsonResponse(async (req) => {
+                return ok(await this.postUseCase.updatePost(req));
             }),
         );
 
         router.delete(
             '/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request) => {
-                return ok(await this.postUseCase.deletePost(request));
+            jsonResponse(async (req) => {
+                return ok(await this.postUseCase.deletePost(req));
             }),
         );
 
         router.put(
             'vote/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request) => {
-                return ok(await this.postUseCase.voteSet(request));
+            jsonResponse(async (req) => {
+                return ok(await this.postUseCase.voteSet(req));
             }),
         );
     }

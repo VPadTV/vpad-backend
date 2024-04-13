@@ -11,31 +11,31 @@ export class CommentControllers implements IController {
     register(router: Router): void {
         router.post(
             '/create',
-            jsonResponse(async (request) => {
-                return ok(await this.commentUseCase.createComment(request));
+            jsonResponse(async (req) => {
+                return ok(await this.commentUseCase.createComment(req));
             }),
         );
 
         router.get(
             '/:id',
-            jsonResponse(async (request) => {
-                return ok(await this.commentUseCase.getCommentById(request));
+            jsonResponse(async (req) => {
+                return ok(await this.commentUseCase.getCommentById(req));
             }),
         );
 
         router.put(
             '/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request) => {
-                return ok(await this.commentUseCase.updateComment(request));
+            jsonResponse(async (req) => {
+                return ok(await this.commentUseCase.updateComment(req));
             }),
         );
 
         router.delete(
             '/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request) => {
-                return ok(await this.commentUseCase.deleteComment(request));
+            jsonResponse(async (req) => {
+                return ok(await this.commentUseCase.deleteComment(req));
             }),
         );
     }

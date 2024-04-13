@@ -16,7 +16,7 @@ const transformFiles = (multerFiles: MulterFiles) => {
 export type ParsedHTTPRequest = { headers: IncomingHttpHeaders } & (RequestFiles | ParsedHTTPBody)
 
 export function jsonResponse<T extends HttpResponse>(
-    fn: (request: ParsedHTTPRequest) => Promise<T>,
+    fn: (req: ParsedHTTPRequest) => Promise<T>,
 ) {
     return async (req: Request, res: Response) => {
         const body = Array.isArray(req.body) ? { data: req.body } : req.body;

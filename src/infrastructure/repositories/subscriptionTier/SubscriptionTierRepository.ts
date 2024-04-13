@@ -4,28 +4,28 @@ import { PrismaUseCase } from '@domain/use-cases/PrismaUseCase';
 export class SubscriptionTierRepository {
     constructor(private readonly db: PrismaUseCase) { }
 
-    async create(request): Promise<unknown> {
+    async create(req) {
         const tier = await this.db.subscriptionTier.create({
             data: {
-                creatorId: request.user.id,
-                name: request.name,
-                price: new Decimal(request.price),
+                creatorId: req.user.id,
+                name: req.name,
+                price: new Decimal(req.price),
             },
             select: { id: true },
         });
 
         return { id: tier.id };
     }
-    async getById(request): Promise<unknown> {
+    async getByIdAndUserId(req) {
         const tier = await this.db.subscriptionTier.findFirst({
-            where: { id: request.id, creatorId: request.user.id },
-            select: { id: true },
+            where: { id: req.id, creatorId: req.userId },
+            select: { price: true },
         });
         return tier;
     }
-    async getAll(request): Promise<unknown[]> {
+    async getAll(req) {
         const tiers = await this.db.subscriptionTier.findMany({
-            where: { creatorId: request.creatorId },
+            where: { creatorId: req.creatorId },
             select: {
                 name: true,
                 price: true,
@@ -35,19 +35,19 @@ export class SubscriptionTierRepository {
         return tiers.map((tier) => ({
             name: tier.name,
             price: tier.price.toNumber(),
-        })) as unknown[];
+        }));
     }
-    async update(request): Promise<unknown> {
+    async update(req) {
         await this.db.subscriptionTier.update({
-            where: { id: request.id, creatorId: request.user.id },
-            data: { name: request.name },
+            where: { id: req.id, creatorId: req.user.id },
+            data: { name: req.name },
             select: { id: true },
         });
         return {};
     }
-    async delete(request): Promise<unknown> {
+    async delete(req) {
         await this.db.subscriptionTier.delete({
-            where: { id: request.id, creatorId: request.user.id },
+            where: { id: req.id, creatorId: req.user.id },
         });
 
         return {};

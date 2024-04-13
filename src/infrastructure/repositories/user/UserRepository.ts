@@ -1,8 +1,6 @@
 import { User } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import { SimpleUser } from '@plugins/user';
-
-import { Storage } from '@plugins/storage';
 import { PrismaUseCase } from '@domain/use-cases/PrismaUseCase';
 
 export class UserRepository {
@@ -10,7 +8,7 @@ export class UserRepository {
         private readonly db: PrismaUseCase,
     ) { }
 
-    async create(req: Partial<any>): Promise<unknown> {
+    async create(req: Partial<any>) {
         return await this.db.user.create({
             data: {
                 username: req.username,
@@ -22,7 +20,7 @@ export class UserRepository {
         });
     }
 
-    async getByEmail(email: string): Promise<User | null> {
+    async getByEmail(email: string) {
         return await this.db.user.findUnique({ where: { email } });
     }
 
@@ -38,7 +36,7 @@ export class UserRepository {
         return { banned: false };
     }
 
-    async getAll(req): Promise<unknown[]> {
+    async getAll(req) {
         const users = await this.db.user.findMany({
             where: {
                 username: req.usernameSearch
@@ -63,29 +61,28 @@ export class UserRepository {
 
         return [{ users }];
     }
-    async getById(request): Promise<User> {
-        const user = await this.db.user.findUnique({ where: { id: request.id } });
+    async getById(req) {
+        const user = await this.db.user.findUnique({ where: { id: req.id } });
         return user;
     }
 
-    async update(request): Promise<unknown> {
-        const result = this.db.user.update({
-            where: { id: request.id },
+    async update(req) {
+        const result = await this.db.user.update({
+            where: { id: req.id },
             data: {
-                username: request.username,
-                nickname: request.nickname,
-                email: request.email,
-                password: request.password,
-                about: request.about,
-                profilePhotoUrl: request.profilePhotoData?.url,
+                username: req.username,
+                nickname: req.nickname,
+                email: req.email,
+                password: req.password,
+                about: req.about,
+                profilePhotoUrl: req.profilePhotoData?.url,
             },
         });
 
-        await this.storage.upload(request.profilePhotoData);
 
-        return result;
+        return { id: result.id };
     }
-    async delete(request): Promise<unknown> {
-        return this.db.user.delete({ where: { id: request.id } });
+    async delete(req) {
+        return this.db.user.delete({ where: { id: req.id } });
     }
 }

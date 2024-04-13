@@ -4,39 +4,39 @@ import { Errors } from '@plugins/errors';
 
 export class SubUseCase {
     constructor(
-        private subRepository: SubRepository,
+        private subRepo: SubRepository,
         private SubscriptionTierUseCase: SubscriptionTierRepository,
     ) { }
-    async createSub(request): Promise<unknown> {
+    async createSub(req) {
         if (
-            typeof request.user.id !== 'string' ||
-            typeof request.creatorId !== 'string'
+            typeof req.user.id !== 'string' ||
+            typeof req.creatorId !== 'string'
         )
             throw Errors.MISSING_ID();
-        return await this.subRepository.create(request);
+        return await this.subRepo.create(req);
     }
     async getSubById(id) {
-        return this.subRepository.getById(id);
+        return this.subRepo.getById(id);
     }
-    async getAllSubs(request): Promise<unknown> {
+    async getAllSubs(req) {
         if (
-            typeof request.user.id !== 'string' ||
-            typeof request.creatorId !== 'string'
+            typeof req.user.id !== 'string' ||
+            typeof req.creatorId !== 'string'
         )
             throw Errors.MISSING_ID();
-        return this.subRepository.getAll();
+        return this.subRepo.getAll();
     }
-    async updateSub(request): Promise<unknown> {
-        if (typeof request.id !== 'string' || typeof request.tierId !== 'string')
+    async updateSub(req) {
+        if (typeof req.id !== 'string' || typeof req.tierId !== 'string')
             throw Errors.MISSING_ID();
 
-        const tier = await this.SubscriptionTierUseCase.getById(request.tierId);
+        const tier = await this.SubscriptionTierUseCase.getByIdAndUserId(req.tierId);
         if (!tier) throw Errors.BAD_REQUEST();
-        request.creatorId = tier.creatorId;
-        return this.subRepository.update(request);
+        req.creatorId = tier.creatorId;
+        return this.subRepo.update(req);
     }
-    async deleteSub(request) {
-        if (typeof request.id !== 'string') throw Errors.MISSING_ID();
-        return this.subRepository.delete(request);
+    async deleteSub(req) {
+        if (typeof req.id !== 'string') throw Errors.MISSING_ID();
+        return this.subRepo.delete(req);
     }
 }

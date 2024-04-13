@@ -20,33 +20,33 @@ import { SubRepository } from '@infrastructure/repositories/sub/SubRepository';
 
 const prismaUseCase = new PrismaUseCase();
 const storage = new Storage();
-const userRepository = new UserRepository(prismaUseCase, storage);
-const subscriptionTierRepository = new SubscriptionTierRepository(
-	prismaUseCase,
+const userRepo = new UserRepository(prismaUseCase);
+const subscriptionTierRepo = new SubscriptionTierRepository(
+    prismaUseCase,
 );
 
 export default {
-	'/user': new UserControllers(new UserUseCase(userRepository, storage)), // admin changed to user
-	'/docs': new DocumentationRoute(),
-	'/post': new PostControllers(
-		new PostUseCase(
-			new PostRepository(prismaUseCase, storage),
-			subscriptionTierRepository,
-			prismaUseCase,
-			storage,
-		),
-	), // vote changed to post
-	'/comment': new CommentControllers(
-		new CommentUseCase(new CommentRepository(prismaUseCase)),
-	),
-	'/tier': new SubscriptionTierControllers(
-		new SubscriptionTierUseCase(subscriptionTierRepository),
-	),
-	'/sub': new SubControllers(
-		new SubUseCase(
-			new SubRepository(prismaUseCase),
-			subscriptionTierRepository,
-		),
-	),
-	// '/pay': new PayRoute(),
+    '/user': new UserControllers(new UserUseCase(userRepo, storage)), // admin changed to user
+    '/docs': new DocumentationRoute(),
+    '/post': new PostControllers(
+        new PostUseCase(
+            new PostRepository(prismaUseCase, storage),
+            subscriptionTierRepo,
+            prismaUseCase,
+            storage,
+        ),
+    ), // vote changed to post
+    '/comment': new CommentControllers(
+        new CommentUseCase(new CommentRepository(prismaUseCase)),
+    ),
+    '/tier': new SubscriptionTierControllers(
+        new SubscriptionTierUseCase(subscriptionTierRepo),
+    ),
+    '/sub': new SubControllers(
+        new SubUseCase(
+            new SubRepository(prismaUseCase),
+            subscriptionTierRepo,
+        ),
+    ),
+    // '/pay': new PayRoute(),
 } as { [path: string]: IRoute };

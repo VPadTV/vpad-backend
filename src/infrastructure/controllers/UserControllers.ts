@@ -12,15 +12,15 @@ export class UserControllers implements IController {
     register(router: Router): void {
         router.post(
             '/register',
-            jsonResponse(async (request) => {
-                return ok(await this.userUseCase.registerUser(request));
+            jsonResponse(async (req) => {
+                return ok(await this.userUseCase.registerUser(req));
             }),
         );
 
         router.get(
             '/:id',
-            jsonResponse(async (request) => {
-                return ok(await this.userUseCase.getUserById(request));
+            jsonResponse(async (req) => {
+                return ok(await this.userUseCase.getUserById(req));
             }),
         );
 
@@ -28,36 +28,36 @@ export class UserControllers implements IController {
             '/:id',
             middleware(isLoggedIn),
             fields(['profilePhoto']),
-            jsonResponse(async (request) => {
-                return ok(await this.userUseCase.updateUser(request));
+            jsonResponse(async (req) => {
+                return ok(await this.userUseCase.updateUser(req));
             }),
         );
 
         router.post(
             '/login',
-            jsonResponse(async (request) => {
-                return ok(await this.userUseCase.loginUser(request));
+            jsonResponse(async (req) => {
+                return ok(await this.userUseCase.loginUser(req));
             }),
         );
 
         router.get(
             '/admin',
-            jsonResponse(async (request) => {
-                return ok(await this.userUseCase.getUsers(request));
+            jsonResponse(async (req) => {
+                return ok(await this.userUseCase.getUsers(req));
             }),
         );
 
         router.put(
             '/ban:id',
-            jsonResponse(async (request) => {
-                return ok(await this.userUseCase.manageBan(request));
+            jsonResponse(async (req) => {
+                return ok(await this.userUseCase.manageBan(req));
             }),
         );
 
         router.put(
             '/admin/:id',
-            jsonResponse(async (request) => {
-                return ok(await this.userUseCase.getUserById(request));
+            jsonResponse(async (req) => {
+                return ok(await this.userUseCase.getUserById(req));
             }),
         );
     }
