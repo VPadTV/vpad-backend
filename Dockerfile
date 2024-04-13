@@ -10,8 +10,6 @@ RUN rm -rf node_modules && yarn install --frozen-lockfile && yarn cache clean
 
 COPY . .
 
-RUN yarn add sharp --ignore-engines
+RUN yarn prisma generate && yarn build
 
-#RUN yarn prisma generate && yarn build
-#
-#CMD ["yarn", "start"]
+CMD ["yarn", "start"] 
