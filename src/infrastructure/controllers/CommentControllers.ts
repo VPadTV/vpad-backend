@@ -7,36 +7,36 @@ import { isLoggedIn } from '@middlewares/isLoggedIn';
 import { CommentUseCase } from '@domain/use-cases/CommentUseCase';
 
 export class CommentControllers implements IController {
-	constructor(private readonly commentUseCase: CommentUseCase) {}
-	register(router: Router): void {
-		router.post(
-			'/create',
-			jsonResponse(async (request: any) => {
-				return ok(await this.commentUseCase.createComment(request));
-			}),
-		);
+    constructor(private readonly commentUseCase: CommentUseCase) { }
+    register(router: Router): void {
+        router.post(
+            '/create',
+            jsonResponse(async (request) => {
+                return ok(await this.commentUseCase.createComment(request));
+            }),
+        );
 
-		router.get(
-			'/:id',
-			jsonResponse(async (request: any) => {
-				return ok(await this.commentUseCase.getCommentById(request));
-			}),
-		);
+        router.get(
+            '/:id',
+            jsonResponse(async (request) => {
+                return ok(await this.commentUseCase.getCommentById(request));
+            }),
+        );
 
-		router.put(
-			'/:id',
-			middleware(isLoggedIn),
-			jsonResponse(async (request: any) => {
-				return ok(await this.commentUseCase.updateComment(request));
-			}),
-		);
+        router.put(
+            '/:id',
+            middleware(isLoggedIn),
+            jsonResponse(async (request) => {
+                return ok(await this.commentUseCase.updateComment(request));
+            }),
+        );
 
-		router.delete(
-			'/:id',
-			middleware(isLoggedIn),
-			jsonResponse(async (request: any) => {
-				return ok(await this.commentUseCase.deleteComment(request));
-			}),
-		);
-	}
+        router.delete(
+            '/:id',
+            middleware(isLoggedIn),
+            jsonResponse(async (request) => {
+                return ok(await this.commentUseCase.deleteComment(request));
+            }),
+        );
+    }
 }

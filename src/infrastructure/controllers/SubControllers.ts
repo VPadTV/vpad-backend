@@ -7,38 +7,38 @@ import { ok } from '@plugins/responses';
 import { SubUseCase } from '@domain/use-cases/SubUseCase';
 
 export class SubControllers implements IController {
-	constructor(private readonly SubUseCase: SubUseCase) {}
-	register(router: Router): void {
-		router.post(
-			'/create',
-			middleware(isLoggedIn),
-			jsonResponse(async (request: any): Promise<unknown> => {
-				return ok(await this.SubUseCase.createSub(request));
-			}),
-		);
+    constructor(private readonly SubUseCase: SubUseCase) { }
+    register(router: Router): void {
+        router.post(
+            '/create',
+            middleware(isLoggedIn),
+            jsonResponse(async (request) => {
+                return ok(await this.SubUseCase.createSub(request));
+            }),
+        );
 
-		router.get(
-			'/:creatorId',
-			middleware(isLoggedIn),
-			jsonResponse(async (request: any): Promise<unknown> => {
-				return ok(await this.SubUseCase.getAllSubs(request));
-			}),
-		);
+        router.get(
+            '/:creatorId',
+            middleware(isLoggedIn),
+            jsonResponse(async (request) => {
+                return ok(await this.SubUseCase.getAllSubs(request));
+            }),
+        );
 
-		router.put(
-			'/:id',
-			middleware(isLoggedIn),
-			jsonResponse(async (request: any): Promise<unknown> => {
-				return ok(await this.SubUseCase.updateSub(request));
-			}),
-		);
+        router.put(
+            '/:id',
+            middleware(isLoggedIn),
+            jsonResponse(async (request) => {
+                return ok(await this.SubUseCase.updateSub(request));
+            }),
+        );
 
-		router.delete(
-			'/:id',
-			middleware(isLoggedIn),
-			jsonResponse(async (request: any): Promise<unknown> => {
-				return ok(await this.SubUseCase.deleteSub(request));
-			}),
-		);
-	}
+        router.delete(
+            '/:id',
+            middleware(isLoggedIn),
+            jsonResponse(async (request) => {
+                return ok(await this.SubUseCase.deleteSub(request));
+            }),
+        );
+    }
 }

@@ -7,44 +7,44 @@ import { isLoggedIn } from '@middlewares/isLoggedIn';
 import { PostUseCase } from '@domain/use-cases/PostUseCase';
 
 export class PostControllers implements IController {
-	constructor(private readonly postUseCase: PostUseCase) {}
-	register(router: Router): void {
-		router.post(
-			'/create',
-			jsonResponse(async (request: any): Promise<unknown> => {
-				return ok(await this.postUseCase.createPost(request));
-			}),
-		);
+    constructor(private readonly postUseCase: PostUseCase) { }
+    register(router: Router): void {
+        router.post(
+            '/create',
+            jsonResponse(async (request) => {
+                return ok(await this.postUseCase.createPost(request));
+            }),
+        );
 
-		router.get(
-			'/:id',
-			jsonResponse(async (request: any): Promise<unknown> => {
-				return ok(await this.postUseCase.getPostById(request));
-			}),
-		);
+        router.get(
+            '/:id',
+            jsonResponse(async (request) => {
+                return ok(await this.postUseCase.getPostById(request));
+            }),
+        );
 
-		router.put(
-			'/:id',
-			middleware(isLoggedIn),
-			jsonResponse(async (request: any): Promise<unknown> => {
-				return ok(await this.postUseCase.updatePost(request));
-			}),
-		);
+        router.put(
+            '/:id',
+            middleware(isLoggedIn),
+            jsonResponse(async (request) => {
+                return ok(await this.postUseCase.updatePost(request));
+            }),
+        );
 
-		router.delete(
-			'/:id',
-			middleware(isLoggedIn),
-			jsonResponse(async (request: any): Promise<unknown> => {
-				return ok(await this.postUseCase.deletePost(request));
-			}),
-		);
+        router.delete(
+            '/:id',
+            middleware(isLoggedIn),
+            jsonResponse(async (request) => {
+                return ok(await this.postUseCase.deletePost(request));
+            }),
+        );
 
-		router.put(
-			'vote/:id',
-			middleware(isLoggedIn),
-			jsonResponse(async (request: any): Promise<unknown> => {
-				return ok(await this.postUseCase.voteSet(request));
-			}),
-		);
-	}
+        router.put(
+            'vote/:id',
+            middleware(isLoggedIn),
+            jsonResponse(async (request) => {
+                return ok(await this.postUseCase.voteSet(request));
+            }),
+        );
+    }
 }
