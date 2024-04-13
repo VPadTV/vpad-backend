@@ -1,11 +1,11 @@
 import { validString } from '@plugins/validString';
-import { ISubscriptionTierRepository } from '../interfaces/subscriptionTier/ISubscriptionTierRepository';
 import { Errors } from '@plugins/errors';
 import { numify } from '@plugins/numify';
+import { SubscriptionTierRepository } from '@infrastructure/repositories/subscriptionTier/SubscriptionTierRepository';
 
 export class SubscriptionTierUseCase {
     constructor(
-        private subscriptionTierRepository: ISubscriptionTierRepository,
+        private subscriptionTierRepository: SubscriptionTierRepository,
     ) { }
     async createSubscriptionTier(request): Promise<unknown> {
         if (typeof request.user.id !== 'string') throw Errors.MISSING_ID();

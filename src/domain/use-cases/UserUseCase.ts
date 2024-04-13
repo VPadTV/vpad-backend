@@ -1,5 +1,4 @@
 import { Errors } from '@plugins/errors';
-import { IUserRepository } from '../interfaces/user/IUserRepository';
 import {
     emailRegex,
     nicknameRegex,
@@ -12,10 +11,11 @@ import { boolify } from '@plugins/boolify';
 import { ImageType, Storage } from '@plugins/storage';
 import { FileRawUpload } from '@middlewares/files.types';
 import { MediaType } from '@prisma/client';
+import { UserRepository } from '@infrastructure/repositories/user/UserRepository';
 
 export class UserUseCase {
     constructor(
-        private userRepository: IUserRepository,
+        private userRepository: UserRepository,
         private readonly storage: Storage,
     ) { }
 

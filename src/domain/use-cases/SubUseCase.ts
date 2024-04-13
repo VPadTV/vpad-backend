@@ -1,11 +1,11 @@
-import { ISubscriptionTierRepository } from '@domain/interfaces/subscriptionTier/ISubscriptionTierRepository';
-import { ISubRepository } from '../interfaces/sub/ISubRepository';
+import { SubRepository } from '@infrastructure/repositories/sub/SubRepository';
+import { SubscriptionTierRepository } from '@infrastructure/repositories/subscriptionTier/SubscriptionTierRepository';
 import { Errors } from '@plugins/errors';
 
 export class SubUseCase {
     constructor(
-        private subRepository: ISubRepository,
-        private SubscriptionTierUseCase: ISubscriptionTierRepository,
+        private subRepository: SubRepository,
+        private SubscriptionTierUseCase: SubscriptionTierRepository,
     ) { }
     async createSub(request): Promise<unknown> {
         if (

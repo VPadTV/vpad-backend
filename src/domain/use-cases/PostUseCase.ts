@@ -1,19 +1,19 @@
 import { validString } from '@plugins/validString';
-import { IPostRepository } from '../interfaces/post/IPostRepository';
 import { Errors } from '@plugins/errors';
 import { boolify } from '@plugins/boolify';
 import { parseTags } from '@plugins/parseTags';
-import { ISubscriptionTierRepository } from '@domain/interfaces/subscriptionTier/ISubscriptionTierRepository';
 import { PrismaUseCase } from './PrismaUseCase';
 import { paginate } from '@plugins/paginate';
 import { ImageType, Storage } from '@plugins/storage';
 import { MediaType } from '@prisma/client';
 import { numify } from '@plugins/numify';
+import { PostRepository } from '@infrastructure/repositories/post/PostRepository';
+import { SubscriptionTierRepository } from '@infrastructure/repositories/subscriptionTier/SubscriptionTierRepository';
 
 export class PostUseCase {
     constructor(
-        private postRepository: IPostRepository,
-        private SubscriptionTierRepository: ISubscriptionTierRepository,
+        private postRepository: PostRepository,
+        private subTierRepository: SubscriptionTierRepository,
         private readonly db: PrismaUseCase,
         private readonly storage: Storage,
     ) { }
@@ -38,7 +38,7 @@ export class PostUseCase {
         if (!post) throw Errors.NOT_FOUND();
         if (!request.user) throw Errors.UNAUTHORIZED();
         if (post.minTier && post.minTier.price.greaterThan(0)) {
-            const userTier = await this.SubscriptionTierRepository.getById({
+            const userTier = await this.subTierRepository.getById({
                 id: post.author[0].id,
                 userId: request.user.id,
             });
@@ -87,7 +87,7 @@ export class PostUseCase {
     }
     async getAllPosts(request): Promise<unknown> {
         if (request.user && request.userTierId) {
-            const userTier = await this.SubscriptionTierRepository.getById({
+            const userTier = await this.subTierRepository.getById({
                 id: request.userTierId,
                 userId: request.user.id,
             });
