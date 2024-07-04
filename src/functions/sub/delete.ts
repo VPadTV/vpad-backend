@@ -13,6 +13,8 @@ export async function subDelete(req: SubDeleteRequest, db: DatabaseClient): Prom
     if (typeof req.id !== 'string')
         throw Errors.MISSING_ID()
 
+    // TODO: check payment stuff
+
     await db.subscription.delete({
         where: { id: req.id, userId: req.user.id }
     })

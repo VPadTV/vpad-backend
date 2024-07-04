@@ -40,6 +40,7 @@ export const Errors = {
     INVALID_THUMB: () => badRequest("INVALID_THUMB"),
     INVALID_SORT: () => badRequest("INVALID_SORT"),
     INVALID_TIER: () => badRequest("INVALID_TIER"),
+    INVALID_TAKE: () => badRequest("INVALID_TAKE"),
     NO_ACCOUNT: () => badRequest("NO_ACCOUNT"),
 
     INCORRECT_PASSWORD: () => badRequest("INCORRECT_PASSWORD"),
@@ -57,6 +58,8 @@ export const Errors = {
     MISSING_EMAIL: () => badRequest("MISSING_EMAIL"),
     MISSING_PASSWORD: () => badRequest("MISSING_PASSWORD"),
     MISSING_VOTE: () => badRequest("MISSING_VOTE"),
+    MISSING_DETAILS: () => badRequest("MISSING_DETAILS"),
+    MISSING_CREATOR: () => badRequest("MISSING_CREATOR"),
 
     BANNED: () => forbidden("BANNED"),
 

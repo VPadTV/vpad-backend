@@ -32,9 +32,12 @@ model User {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    tiers       SubscriptionTier[]
-    subscribing Subscription[]     @relation(name: "user")
-    subscribed  Subscription[]     @relation(name: "creator")
+    tiers SubscriptionTier[]
+
+    subscriptions Subscription[] @relation(name: "user")
+
+    requestCommissions   Commission[] @relation(name: "user")
+    requestedCommissions Commission[] @relation(name: "creator")
 }
 
 model Comment {
@@ -128,14 +131,30 @@ model Subscription {
     tier   SubscriptionTier? @relation(fields: [tierId], references: [id], onDelete: Restrict, onUpdate: Restrict)
     tierId String?
 
+    user   User   @relation(name: "user", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict)
+    userId String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Commission {
+    id String @id @default(cuid())
+
+    title   String
+    details String
+
     creator   User   @relation(name: "creator", fields: [creatorId], references: [id], onDelete: Cascade, onUpdate: Restrict)
     creatorId String
 
     user   User   @relation(name: "user", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict)
     userId String
 
+    price Decimal
+
+    confirmed Boolean @default(false)
+    completed Boolean @default(false)
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
-    @@unique([creatorId, userId])
 }

@@ -44,7 +44,6 @@ export type PostSort = {
 }
 
 export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): Promise<PostGetManyResponse> {
-    let orderBy: PostSort
     let userTierValue = new Decimal(0)
     if (req.user && req.userTierId) {
         const userTier = await db.subscriptionTier.findFirst({
@@ -60,6 +59,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
             throw Errors.INVALID_TIER()
     }
 
+    let orderBy: PostSort
     switch (req.sortBy) {
         case 'low-views':
             orderBy = { votes: { _count: 'asc' } }
@@ -138,7 +138,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
             },
             orderBy
         }),
-        db.post.count({ where }),
+        db.post.count({ where, orderBy }),
     ])
 
     return paginate(total, +req.page, offset, +req.size, posts.map(post => ({

@@ -22,7 +22,9 @@ export async function subGet(req: SubGetRequest, db: DatabaseClient): Promise<Su
     const sub = await db.subscription.findFirst({
         where: {
             userId: req.user.id,
-            creatorId: req.creatorId,
+            tier: {
+                creatorId: req.creatorId
+            }
         },
         select: {
             id: true,

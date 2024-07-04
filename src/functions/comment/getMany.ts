@@ -52,6 +52,9 @@ export async function commentGetMany(req: CommentGetManyRequest, db: DatabaseCli
             where: {
                 postId: req.postId ?? undefined,
                 parentId: req.parentId ?? undefined
+            },
+            orderBy: {
+                updatedAt: orderByUpdatedAt
             }
         }),
     ])

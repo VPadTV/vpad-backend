@@ -26,7 +26,11 @@ export async function subUpdate(req: SubUpdateRequest, db: DatabaseClient): Prom
     const creatorId = tier.creatorId
 
     await db.subscription.update({
-        where: { id: req.id, userId: req.user.id, creatorId },
+        where: {
+            id: req.id,
+            userId: req.user.id,
+            tier: { creatorId }
+        },
         data: { tierId: req.tierId }
     })
 
