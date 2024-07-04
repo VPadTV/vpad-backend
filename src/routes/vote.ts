@@ -1,5 +1,5 @@
 import { VoteSetRequest, voteSet } from '@functions/vote/set';
-import { ok } from 'src/plugins/http';
+import { ok } from '@plugins/http';
 import { middleware, jsonResponse } from '@infra/adapters';
 import { Database } from '@infra/gateways';
 import { isLoggedIn } from '@infra/middlewares/isLoggedIn';

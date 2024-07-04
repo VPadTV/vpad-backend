@@ -1,5 +1,5 @@
-import { Errors } from 'src/plugins/http'
-import { validString } from 'src/plugins/validString'
+import { Errors } from '@plugins/http'
+import { validString } from '@plugins/validString'
 import { DatabaseClient } from '@infra/gateways/database'
 import { User } from '@prisma/client'
 

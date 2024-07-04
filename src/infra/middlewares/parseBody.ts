@@ -1,4 +1,4 @@
-import { numify } from "src/plugins/numify";
+import { numify } from "@plugins/numify";
 
 export const parseBody = (obj: unknown) => {
     let newObj: any;

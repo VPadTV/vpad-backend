@@ -1,4 +1,4 @@
-import { Errors } from 'src/plugins/http'
+import { Errors } from '@plugins/http'
 import { MiddlewareData } from '@infra/adapters'
 import { tokenWrapper } from './wrappers/tokenWrapper'
 

@@ -1,5 +1,5 @@
 import { SimpleUser } from '@infra/mappers/user'
-import { Paginate, paginate } from 'src/plugins/paginate'
+import { Paginate, paginate } from '@plugins/paginate'
 import { DatabaseClient } from '@infra/gateways/database'
 import { User } from '@prisma/client'
 

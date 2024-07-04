@@ -1,7 +1,7 @@
 import { middleware, jsonResponse } from '@infra/adapters';
 import { IRoute } from '@main/route';
 import { Router } from 'express';
-import { ok } from 'src/plugins/http';
+import { ok } from '@plugins/http';
 import { isLoggedIn } from '@infra/middlewares/isLoggedIn';
 import { UserGetRequest, userGet } from '@functions/user/get';
 import { UserLoginRequest, userLogin } from '@functions/user/login';

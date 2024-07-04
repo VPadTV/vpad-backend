@@ -1,8 +1,8 @@
-import { Errors } from 'src/plugins/http'
+import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
 import { User } from '@prisma/client'
-import { validString } from 'src/plugins/validString'
-import { numify } from 'src/plugins/numify'
+import { validString } from '@plugins/validString'
+import { numify } from '@plugins/numify'
 
 export type VoteSetRequest = {
     user: User

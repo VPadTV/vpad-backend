@@ -1,4 +1,4 @@
-import { Errors } from 'src/plugins/http'
+import { Errors } from '@plugins/http'
 import { Storage } from '@infra/gateways'
 import { DatabaseClient } from '@infra/gateways/database'
 import { SimpleUser } from '@infra/mappers/user'

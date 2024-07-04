@@ -4,7 +4,7 @@ import crypto from 'crypto';
 import { FileRawUpload } from '@infra/middlewares';
 import { MediaType } from '@prisma/client';
 import { Readable, ReadableOptions } from 'stream';
-import { Errors } from 'src/plugins/http';
+import { Errors } from '@plugins/http';
 import sharp from 'sharp';
 
 export type FileUpload = {

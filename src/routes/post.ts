@@ -4,7 +4,7 @@ import { PostEditRequest, postEdit } from '@functions/post/edit';
 import { PostGetRequest, postGet } from '@functions/post/get';
 import { PostGetManyRequest, postGetMany } from '@functions/post/getMany';
 import { PostStreamRequest, postStream } from '@functions/post/stream';
-import { ok } from 'src/plugins/http';
+import { ok } from '@plugins/http';
 import { middleware, jsonResponse } from '@infra/adapters';
 import { streamResponse } from '@infra/adapters/streamResponse';
 import { Database, Storage } from '@infra/gateways';

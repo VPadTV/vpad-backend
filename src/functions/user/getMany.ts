@@ -1,6 +1,6 @@
-import { Errors } from 'src/plugins/http'
+import { Errors } from '@plugins/http'
 import { SimpleUser } from '@infra/mappers/user'
-import { boolify } from 'src/plugins/boolify'
+import { boolify } from '@plugins/boolify'
 import { DatabaseClient } from '@infra/gateways/database'
 
 export type UserGetManyRequest = {

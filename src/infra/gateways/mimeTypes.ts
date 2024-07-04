@@ -1,4 +1,4 @@
-import { Errors } from 'src/plugins/http'
+import { Errors } from '@plugins/http'
 import { MediaType } from '@prisma/client'
 import mimeTypes from 'mime-types'
 export class MimeTypes {

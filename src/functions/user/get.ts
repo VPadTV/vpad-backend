@@ -1,4 +1,4 @@
-import { Errors } from 'src/plugins/http'
+import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
 
 export type UserGetRequest = {

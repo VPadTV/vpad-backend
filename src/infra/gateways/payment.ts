@@ -1,4 +1,4 @@
-import { Errors } from 'src/plugins/http';
+import { Errors } from '@plugins/http';
 import { Decimal } from '@prisma/client/runtime/library';
 import Stripe from 'stripe';
 
