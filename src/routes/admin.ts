@@ -1,7 +1,7 @@
 import { middleware, jsonResponse } from '@infra/adapters'
 import { IRoute } from '@main/route'
 import { Router } from 'express'
-import { ok } from '@helpers/http'
+import { ok } from 'src/plugins/http'
 import { Database } from '@infra/gateways'
 import { AdminManageBanRequest, adminManageBan } from '@functions/admin/manageBan'
 import { isAdmin } from '@infra/middlewares/isAdmin'

@@ -4,7 +4,7 @@
             "@docs/*": ["src/docs/*"],
             "@controllers/*": ["src/routes/*"],
             "@functions/*": ["src/functions/*"],
-            "@helpers/*": ["src/helpers/*"],
+            "@helpers/*": ["src/plugins/*"],
             "@infra/*": ["src/infra/*"],
             "@main/*": ["src/main/*"],
             "@routes/*": ["src/routes/*"],

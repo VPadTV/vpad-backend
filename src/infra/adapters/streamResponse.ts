@@ -1,5 +1,5 @@
 import { PostStreamResponse } from '@functions/post/stream'
-import { HttpError } from '@helpers/http'
+import { HttpError } from 'src/plugins/http'
 import { Response, Request } from 'express'
 
 export function streamResponse<U extends PostStreamResponse>(fn: (request: any) => Promise<U>) {

@@ -3,7 +3,7 @@ import routes from './routes';
 import bodyParser from 'body-parser';
 import cors from 'cors'
 import { rateLimit } from 'express-rate-limit'
-import { boolify } from '@helpers/boolify';
+import { boolify } from 'src/plugins/boolify';
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes

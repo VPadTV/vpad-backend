@@ -1,6 +1,6 @@
-import { Errors } from '@helpers/http'
+import { Errors } from 'src/plugins/http'
 import { SimpleUser } from '@infra/mappers/user'
-import { Paginate, paginate } from '@helpers/paginate'
+import { Paginate, paginate } from 'src/plugins/paginate'
 import { DatabaseClient } from '@infra/gateways/database'
 import { MediaType, User } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'

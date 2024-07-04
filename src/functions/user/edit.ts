@@ -1,5 +1,5 @@
-import { Errors } from '@helpers/http'
-import { emailRegex, usernameRegex, passwordRegex, nicknameRegex } from '@helpers/regex'
+import { Errors } from 'src/plugins/http'
+import { emailRegex, usernameRegex, passwordRegex, nicknameRegex } from 'src/plugins/regex'
 import { DatabaseClient } from '@infra/gateways/database'
 import { ImageType, Storage } from '@infra/gateways/storage'
 import { FileRawUpload } from '@infra/middlewares'

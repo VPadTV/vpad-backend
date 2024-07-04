@@ -1,4 +1,4 @@
-import { Errors, HttpError, HttpResponse } from '@helpers/http'
+import { Errors, HttpError, HttpResponse } from 'src/plugins/http'
 import { Response, Request } from 'express'
 import { parseBody } from "@infra/middlewares/parseBody";
 

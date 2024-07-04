@@ -1,7 +1,7 @@
 import { middleware, jsonResponse } from '@infra/adapters';
 import { IRoute } from '@main/route';
 import { Router } from 'express';
-import { ok } from '@helpers/http';
+import { ok } from 'src/plugins/http';
 import { Database } from '@infra/gateways';
 import { SubCreateRequest, subCreate } from '@functions/sub/create';
 import { SubUpdateRequest, subUpdate } from '@functions/sub/update';

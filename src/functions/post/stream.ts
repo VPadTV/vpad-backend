@@ -1,4 +1,4 @@
-import { Errors } from '@helpers/http'
+import { Errors } from 'src/plugins/http'
 import { SmartStream, Storage } from '@infra/gateways'
 
 export type PostStreamRequest = {

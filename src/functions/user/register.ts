@@ -1,5 +1,5 @@
-import { Errors } from '@helpers/http'
-import { emailRegex, usernameRegex, passwordRegex, nicknameRegex } from '@helpers/regex'
+import { Errors } from 'src/plugins/http'
+import { emailRegex, usernameRegex, passwordRegex, nicknameRegex } from 'src/plugins/regex'
 import { JWT } from '@infra/gateways'
 import { DatabaseClient } from '@infra/gateways/database'
 import bcrypt from 'bcrypt'

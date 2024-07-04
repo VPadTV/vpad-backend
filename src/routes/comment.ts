@@ -4,7 +4,7 @@ import { CommentEditRequest, commentEdit } from '@functions/comment/edit';
 import { CommentGetRequest, commentGet } from '@functions/comment/get';
 import { middleware, jsonResponse } from '@infra/adapters';
 import { isLoggedIn } from '@infra/middlewares/isLoggedIn';
-import { ok } from '@helpers/http';
+import { ok } from 'src/plugins/http';
 import { Database } from '@infra/gateways';
 import { IRoute } from '@main/route';
 import { Router } from 'express';

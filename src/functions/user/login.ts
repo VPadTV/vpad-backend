@@ -1,4 +1,4 @@
-import { Errors } from '@helpers/http'
+import { Errors } from 'src/plugins/http'
 import { JWT } from '@infra/gateways'
 import { DatabaseClient } from '@infra/gateways/database'
 import { User } from '@prisma/client'

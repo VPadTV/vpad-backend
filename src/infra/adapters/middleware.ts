@@ -1,4 +1,4 @@
-import { HttpError } from '@helpers/http'
+import { HttpError } from 'src/plugins/http'
 import { Response, Request, NextFunction } from 'express'
 
 export type MiddlewareData = {
