@@ -24,6 +24,7 @@ export const Errors = {
     IM_A_TEAPOT: () => imATeapot("IM_A_TEAPOT"),
     BAD_REQUEST: () => badRequest("BAD_REQUEST"),
     FAILED_TO_DOWNLOAD: () => badRequest("FAILED_TO_DOWNLOAD"),
+    FAILED_TO_UPDATE: () => badRequest("FAILED_TO_UPDATE"),
 
     LOW_TIER: () => badRequest("LOW_TIER"),
 
