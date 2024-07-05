@@ -9,12 +9,13 @@ import { UserRegisterRequest, userRegister } from '@functions/user/register';
 import { UserEditRequest, userEdit } from '@functions/user/edit';
 import { Database, Storage } from '@infra/gateways';
 import { fields } from '@infra/middlewares';
+import { Payment } from '@infra/gateways/payment';
 
 export class UserRoute implements IRoute {
     register(router: Router): void {
         router.post('/register',
             jsonResponse(async (request: UserRegisterRequest) => {
-                return ok(await userRegister(request, Database.get()))
+                return ok(await userRegister(request, Database.get(), Payment.get()))
             }))
 
         router.post('/login',

@@ -16,7 +16,7 @@ import { tierId } from './paths/tier/id';
 import { tierCreatorId } from './paths/tier/creatorId';
 import { subCreatorId } from './paths/sub/creatorId';
 import { votePostId } from './paths/vote/postId';
-import { payNoId } from './paths/pay/noId';
+import { donate } from './paths/pay/donate';
 
 export default {
     openapi: '3.0.0',
@@ -64,6 +64,6 @@ export default {
         '/manage/admin/{id}': adminId,
         '/manage/ban/{id}': adminBanId,
 
-        '/pay': payNoId,
+        // '/pay/donate': donate,
     }
 }
