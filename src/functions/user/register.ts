@@ -35,7 +35,7 @@ export async function userRegister(req: UserRegisterRequest, db: DatabaseClient,
     if (!passwordRegex().test(req.password))
         throw Errors.INVALID_PASSWORD()
 
-    const stripeAccountId = await pay.createAccount(req.email)
+    // const stripeAccountId = await pay.createAccount(req.email)
 
     const user = await db.user.create({
         data: {
@@ -44,7 +44,7 @@ export async function userRegister(req: UserRegisterRequest, db: DatabaseClient,
             email: req.email,
             about: req.about ? req.about : undefined,
             password: await bcrypt.hash(req.password, 10),
-            stripeAccountId
+            // stripeAccountId
         }
     })
 

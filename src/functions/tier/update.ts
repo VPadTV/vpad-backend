@@ -12,7 +12,9 @@ export type TierUpdateRequest = {
 export type TierUpdateResponse = {}
 
 export async function tierUpdate(req: TierUpdateRequest, db: DatabaseClient): Promise<TierUpdateResponse> {
-    if (typeof req.id !== 'string')
+    console.log(req);
+
+    if (!validString(req.id))
         throw Errors.MISSING_ID()
     if (!validString(req.name))
         throw Errors.MISSING_NAME()

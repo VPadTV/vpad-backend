@@ -12,6 +12,7 @@ export type SubGetResponse = {
     tier: {
         id: string;
         name: string;
+        price: number;
     } | null
 } | {}
 
@@ -32,10 +33,18 @@ export async function subGet(req: SubGetRequest, db: DatabaseClient): Promise<Su
                 select: {
                     id: true,
                     name: true,
+                    price: true,
                 }
             }
         }
     })
 
-    return sub ?? {}
+    return {
+        id: sub.id,
+        tier: {
+            id: sub.tier.id,
+            name: sub.tier.name,
+            price: sub.tier.price.toNumber()
+        }
+    } ?? {}
 }

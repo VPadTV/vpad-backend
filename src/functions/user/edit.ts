@@ -31,8 +31,10 @@ export async function userEdit(req: UserEditRequest, db: DatabaseClient, storage
     let profilePhotoData = await storage.getFileData(req.profilePhoto, ImageType.THUMBNAIL)
     if (profilePhotoData?.type === MediaType.VIDEO) throw Errors.INVALID_FILE()
 
-    const found = await db.user.findFirst({ where: { username: req.username } })
-    if (found && found.id !== req.id) throw Errors.USERNAME_ALREADY_EXISTS()
+    if (req.username) {
+        const found = await db.user.findFirst({ where: { username: req.username } })
+        if (found && found.id !== req.id) throw Errors.USERNAME_ALREADY_EXISTS()
+    }
 
     await db.user.update({
         where: { id: req.id },

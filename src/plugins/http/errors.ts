@@ -25,6 +25,7 @@ export const Errors = {
     BAD_REQUEST: () => badRequest("BAD_REQUEST"),
     FAILED_TO_DOWNLOAD: () => badRequest("FAILED_TO_DOWNLOAD"),
     FAILED_TO_UPDATE: () => badRequest("FAILED_TO_UPDATE"),
+    FOUND_SUBSCRIPTION: () => badRequest("FOUND_SUBSCRIPTION"),
 
     LOW_TIER: () => badRequest("LOW_TIER"),
 
