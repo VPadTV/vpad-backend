@@ -1,5 +1,5 @@
 import { makeRoute } from '@docs/helpers';
-import { dateExample } from '@docs/schemas/dateExample';
+import { exDate } from '@docs/schemas/dateExample';
 import { simpleUser } from '@docs/schemas/simpleUser';
 import { exId } from '@docs/schemas/id';
 
@@ -27,8 +27,8 @@ export const commentNoId = {
                 childrenCount: 10,
                 meta: {
                     user: simpleUser,
-                    createdAt: dateExample,
-                    updatedAt: dateExample,
+                    createdAt: exDate,
+                    updatedAt: exDate,
                 }
             }
         },

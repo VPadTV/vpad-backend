@@ -1,5 +1,5 @@
 import { makeRoute } from '@docs/helpers';
-import { dateExample } from '@docs/schemas/dateExample'
+import { exDate } from '@docs/schemas/dateExample'
 import { exId } from '@docs/schemas/id';
 
 export const adminBanId = {
@@ -11,12 +11,12 @@ export const adminBanId = {
         bodyRequired: ['banned'],
         body: {
             banned: true,
-            banTimeout: dateExample
+            banTimeout: exDate
         },
         success: {
             id: exId,
             banned: true,
-            banTimeout: dateExample
+            banTimeout: exDate
         },
         400: '`banned` must be `true` or `false`',
     }),

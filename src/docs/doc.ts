@@ -17,6 +17,8 @@ import { tierCreatorId } from './paths/tier/creatorId';
 import { subCreatorId } from './paths/sub/creatorId';
 import { votePostId } from './paths/vote/postId';
 import { donate } from './paths/pay/donate';
+import { commId } from './paths/commission/id';
+import { commNoId } from './paths/commission/noId';
 
 export default {
     openapi: '3.0.0',
@@ -59,6 +61,9 @@ export default {
 
         '/comment/{id}': commentId,
         '/comment': commentNoId,
+
+        '/commission/{id}': commId,
+        '/commission': commNoId,
 
         '/admin': adminNoId,
         '/manage/admin/{id}': adminId,
