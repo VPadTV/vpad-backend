@@ -6,7 +6,7 @@ import { User } from "@prisma/client"
 
 export type CommissionGetRequest = {
     user: User
-    take: 'i-commissioned' | 'got-commissioned'
+    take: 'i-commissioned' | 'they-commissioned'
 
     sortBy: 'latest' | 'oldest'
 
@@ -40,7 +40,7 @@ export async function commGet(req: CommissionGetRequest, db: DatabaseClient): Pr
 
     if (req.take === 'i-commissioned') {
         where = { userId: req.user.id }
-    } else if (req.take === 'got-commissioned') {
+    } else if (req.take === 'they-commissioned') {
         where = { creatorId: req.user.id }
     } else {
         throw Errors.INVALID_TAKE()

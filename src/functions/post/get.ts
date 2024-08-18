@@ -2,6 +2,7 @@ import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
 import { SimpleUser } from '@infra/mappers/user'
 import { User } from '@prisma/client'
+import { UserHttpReq } from '@plugins/requestBody'
 
 export type PostGetRequest = {
     user?: User
@@ -10,7 +11,7 @@ export type PostGetRequest = {
 
 export type PostGetResponse = {
     title: string
-    text: string
+    text: string | null
     mediaType: string
     mediaUrl: string
     thumbUrl?: string
@@ -32,7 +33,7 @@ export type PostGetResponse = {
     }
 }
 
-export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<PostGetResponse> {
+export async function postGet(req: UserHttpReq<PostGetRequest>, db: DatabaseClient): Promise<PostGetResponse> {
     const post = await db.post.findFirst({
         where: {
             id: req.id

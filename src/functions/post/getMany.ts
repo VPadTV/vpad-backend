@@ -4,6 +4,7 @@ import { Paginate, paginate } from '@plugins/paginate'
 import { DatabaseClient } from '@infra/gateways/database'
 import { MediaType, User } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
+import { UserHttpReq } from '@plugins/requestBody'
 
 export type PostGetManyRequest = {
     user?: User
@@ -20,7 +21,7 @@ export type PostGetManyRequest = {
 export type PostGetManyResponse = Paginate<{
     id: string
     title: string
-    text: string
+    text: string | null
     mediaUrl: string
     mediaType: MediaType,
     thumbUrl?: string
@@ -43,7 +44,9 @@ export type PostSort = {
     }
 }
 
-export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): Promise<PostGetManyResponse> {
+export async function postGetMany(req: UserHttpReq<PostGetManyRequest>, db: DatabaseClient): Promise<PostGetManyResponse> {
+    let page = +(req.page ?? 0)
+    let size = +(req.size ?? 100)
     let userTierValue = new Decimal(0)
     if (req.user && req.userTierId) {
         const userTier = await db.subscriptionTier.findFirst({
@@ -76,7 +79,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
         default:
             throw Errors.INVALID_SORT()
     }
-    const offset = (+req.page - 1) * +req.size
+    const offset = (page - 1) * size
     let authorsCheck
     if (req.creatorId && req.creatorId.trim().length > 0)
         authorsCheck = {
@@ -112,7 +115,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
     const [posts, total] = await db.$transaction([
         db.post.findMany({
             skip: offset,
-            take: +req.size,
+            take: size,
             where: {
                 ...where,
                 nsfw: req.nsfw ?? false,
@@ -141,7 +144,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
         db.post.count({ where, orderBy }),
     ])
 
-    return paginate(total, +req.page, offset, +req.size, posts.map(post => ({
+    return paginate(total, page, offset, size, posts.map(post => ({
         id: post.id,
         title: post.title,
         text: post.text,

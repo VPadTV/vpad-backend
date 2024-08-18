@@ -1,5 +1,6 @@
 import { DatabaseClient } from "@infra/gateways"
 import { Errors } from "@plugins/http"
+import { UserHttpReq } from "@plugins/requestBody"
 import { validString } from "@plugins/validString"
 import { User } from "@prisma/client"
 
@@ -10,12 +11,14 @@ export type CommissionDeleteRequest = {
 
 export type CommissionDeleteResponse = {}
 
-export async function commDelete(req: CommissionDeleteRequest, db: DatabaseClient): Promise<CommissionDeleteResponse> {
+export async function commDelete(req: UserHttpReq<CommissionDeleteRequest>, db: DatabaseClient): Promise<CommissionDeleteResponse> {
     if (!validString(req.commId)) throw Errors.MISSING_ID()
 
     const comm = await db.commission.findUnique({
         where: { id: req.commId }
     })
+    
+    if (!comm) throw Errors.NOT_FOUND() 
 
     if (req.user.id === comm.userId) {
         // requester is deleting

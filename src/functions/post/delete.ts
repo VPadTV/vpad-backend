@@ -3,6 +3,7 @@ import { Storage } from '@infra/gateways'
 import { DatabaseClient } from '@infra/gateways/database'
 import { SimpleUser } from '@infra/mappers/user'
 import { User } from '@prisma/client'
+import {UserHttpReq} from '@plugins/requestBody'
 
 export type PostDeleteRequest = {
     user: User
@@ -17,7 +18,7 @@ export type PostDeleteResponse = {
     status: PostDeleteStatus
 }
 
-export async function postDelete(req: PostDeleteRequest, db: DatabaseClient, storage: Storage): Promise<PostDeleteResponse> {
+export async function postDelete(req: UserHttpReq<PostDeleteRequest>, db: DatabaseClient, storage: Storage): Promise<PostDeleteResponse> {
     const found = await db.post.findFirst({
         select: { id: true },
         where: { id: req.id, authors: { some: { id: req.user.id } } }

@@ -5,6 +5,7 @@ import { ImageType, Storage } from '@infra/gateways'
 import { DatabaseClient } from '@infra/gateways/database'
 import { FileRawUpload } from '@infra/middlewares'
 import { MediaType, User } from '@prisma/client'
+import { UserHttpReq } from '@plugins/requestBody'
 
 export type PostEditRequest = {
     user: User
@@ -19,7 +20,7 @@ export type PostEditRequest = {
 
 export type PostEditResponse = {}
 
-export async function postEdit(req: PostEditRequest, db: DatabaseClient, storage: Storage): Promise<PostEditResponse> {
+export async function postEdit(req: UserHttpReq<PostEditRequest>, db: DatabaseClient, storage: Storage): Promise<PostEditResponse> {
     if (!req.id) throw Errors.MISSING_ID()
 
     req.nsfw = boolify(req.nsfw)

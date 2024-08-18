@@ -6,6 +6,7 @@ import { ImageType, Storage } from '@infra/gateways'
 import { DatabaseClient } from '@infra/gateways/database'
 import { FileRawUpload } from '@infra/middlewares'
 import { MediaType, User } from '@prisma/client'
+import { UserHttpReq } from '@plugins/requestBody'
 
 export type PostCreateRequest = {
     user: User
@@ -23,7 +24,7 @@ export type PostCreateResponse = {
     id: string
 }
 
-export async function postCreate(req: PostCreateRequest, db: DatabaseClient, storage: Storage): Promise<PostCreateResponse> {
+export async function postCreate(req: UserHttpReq<PostCreateRequest>, db: DatabaseClient, storage: Storage): Promise<PostCreateResponse> {
     if (!validString(req.title)) throw Errors.MISSING_TITLE()
     if (!validString(req.text)) throw Errors.MISSING_TEXT()
     if (!validString(req.tags)) throw Errors.MISSING_TAGS()
@@ -31,7 +32,7 @@ export async function postCreate(req: PostCreateRequest, db: DatabaseClient, sto
 
     req.nsfw = boolify(req.nsfw)
     let tags: string[] | false = []
-    tags = parseTags(req.tags.trim())
+    tags = parseTags(req.tags!.trim())
     if (tags === false) throw Errors.INVALID_TAGS()
     req.minTierId = validString(req.minTierId)
 
@@ -51,7 +52,7 @@ export async function postCreate(req: PostCreateRequest, db: DatabaseClient, sto
                     ...otherAuthorIds ?? []
                 ]
             },
-            title: req.title,
+            title: req.title!,
             text: req.text,
             mediaUrl: mediaData.url,
             mediaType: mediaData.type,
