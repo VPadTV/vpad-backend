@@ -1,5 +1,6 @@
 import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
+import { HttpReq } from '@plugins/requestBody'
 
 export type TierGetManyRequest = {
     creatorId: string
@@ -13,7 +14,7 @@ export type TierGetManyResponse = {
     }[]
 }
 
-export async function tierGetMany(req: TierGetManyRequest, db: DatabaseClient): Promise<TierGetManyResponse> {
+export async function tierGetMany(req: HttpReq<TierGetManyRequest>, db: DatabaseClient): Promise<TierGetManyResponse> {
     if (typeof req.creatorId !== 'string')
         throw Errors.MISSING_ID()
 
