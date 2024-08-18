@@ -1,15 +1,14 @@
 import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
-import { User } from '@prisma/client'
+import { UserHttpReq } from '@plugins/requestBody'
 
 export type SubDeleteRequest = {
-    user: User
     id: string
 }
 
 export type SubDeleteResponse = {}
 
-export async function subDelete(req: SubDeleteRequest, db: DatabaseClient): Promise<SubDeleteResponse> {
+export async function subDelete(req: UserHttpReq<SubDeleteRequest>, db: DatabaseClient): Promise<SubDeleteResponse> {
     if (typeof req.id !== 'string')
         throw Errors.MISSING_ID()
 

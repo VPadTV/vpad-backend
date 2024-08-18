@@ -1,15 +1,14 @@
 import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
-import { User } from '@prisma/client'
+import { UserHttpReq } from '@plugins/requestBody'
 
 export type SubCreateRequest = {
-    user: User
     tierId: string
 }
 
 export type SubCreateResponse = {}
 
-export async function subCreate(req: SubCreateRequest, db: DatabaseClient): Promise<SubCreateResponse> {
+export async function subCreate(req: UserHttpReq<SubCreateRequest>, db: DatabaseClient): Promise<SubCreateResponse> {
     if (typeof req.user.id !== 'string')
         throw Errors.MISSING_ID()
 

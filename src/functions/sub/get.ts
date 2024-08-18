@@ -1,9 +1,8 @@
 import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
-import { User } from '@prisma/client'
+import { UserHttpReq } from '@plugins/requestBody'
 
 export type SubGetRequest = {
-    user: User
     creatorId: string
 }
 
@@ -16,7 +15,7 @@ export type SubGetResponse = {
     } | null
 } | {}
 
-export async function subGet(req: SubGetRequest, db: DatabaseClient): Promise<SubGetResponse> {
+export async function subGet(req: UserHttpReq<SubGetRequest>, db: DatabaseClient): Promise<SubGetResponse> {
     if (typeof req.user.id !== 'string' || typeof req.creatorId !== 'string')
         throw Errors.MISSING_ID()
 
@@ -38,13 +37,15 @@ export async function subGet(req: SubGetRequest, db: DatabaseClient): Promise<Su
             }
         }
     })
+    
+    if (!sub) throw Errors.NOT_FOUND()
 
     return {
         id: sub.id,
-        tier: {
+        tier: sub.tier ? {
             id: sub.tier.id,
             name: sub.tier.name,
             price: sub.tier.price.toNumber()
-        }
+        } : null
     } ?? {}
 }
