@@ -1,5 +1,6 @@
 import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
+import { HttpReq } from '@plugins/requestBody'
 
 export type UserGetRequest = {
     id: string
@@ -15,7 +16,7 @@ export type UserGetResponse = {
     admin: boolean
 }
 
-export async function userGet(req: UserGetRequest, db: DatabaseClient): Promise<UserGetResponse> {
+export async function userGet(req: HttpReq<UserGetRequest>, db: DatabaseClient): Promise<UserGetResponse> {
     if (typeof req.id !== 'string') throw Errors.INVALID_ID()
     const user = await db.user.findFirst({ where: { id: req.id } })
     if (!user) {

@@ -5,6 +5,7 @@ import { ImageType, Storage } from '@infra/gateways/storage'
 import { FileRawUpload } from '@infra/middlewares'
 import { MediaType } from '@prisma/client'
 import bcrypt from 'bcrypt'
+import { UserHttpReq } from '@plugins/requestBody'
 
 export type UserEditRequest = {
     id: string
@@ -18,7 +19,7 @@ export type UserEditRequest = {
 
 export type UserEditResponse = {}
 
-export async function userEdit(req: UserEditRequest, db: DatabaseClient, storage: Storage): Promise<UserEditResponse> {
+export async function userEdit(req: UserHttpReq<UserEditRequest>, db: DatabaseClient, storage: Storage): Promise<UserEditResponse> {
     if (req.username != null && !usernameRegex().test(req.username))
         throw Errors.INVALID_USERNAME()
     if (req.nickname != null && !nicknameRegex().test(req.nickname))
