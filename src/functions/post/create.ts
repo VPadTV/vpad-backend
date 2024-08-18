@@ -5,11 +5,10 @@ import { validString } from '@plugins/validString'
 import { ImageType, Storage } from '@infra/gateways'
 import { DatabaseClient } from '@infra/gateways/database'
 import { FileRawUpload } from '@infra/middlewares'
-import { MediaType, User } from '@prisma/client'
+import { MediaType } from '@prisma/client'
 import { UserHttpReq } from '@plugins/requestBody'
 
 export type PostCreateRequest = {
-    user: User
     otherAuthorIds?: string[]
     title: string
     text: string

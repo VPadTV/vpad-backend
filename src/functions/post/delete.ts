@@ -2,11 +2,9 @@ import { Errors } from '@plugins/http'
 import { Storage } from '@infra/gateways'
 import { DatabaseClient } from '@infra/gateways/database'
 import { SimpleUser } from '@infra/mappers/user'
-import { User } from '@prisma/client'
-import {UserHttpReq} from '@plugins/requestBody'
+import { UserHttpReq } from '@plugins/requestBody'
 
 export type PostDeleteRequest = {
-    user: User
     id: string
 }
 
