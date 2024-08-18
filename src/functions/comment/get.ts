@@ -1,10 +1,9 @@
 import { Errors } from '@plugins/http'
 import { SimpleUser } from '@infra/mappers/user'
 import { DatabaseClient } from '@infra/gateways/database'
-import { User } from '@prisma/client'
+import { HttpReq } from '@plugins/requestBody'
 
 export type CommentGetRequest = {
-    user: User
     id: string
 }
 
@@ -18,7 +17,7 @@ export type CommentGetResponse = {
     }
 }
 
-export async function commentGet(req: CommentGetRequest, db: DatabaseClient): Promise<CommentGetResponse> {
+export async function commentGet(req: HttpReq<CommentGetRequest>, db: DatabaseClient): Promise<CommentGetResponse> {
     const comment = await db.comment.findFirst({
         where: { id: req.id },
         select: {
