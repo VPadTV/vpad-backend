@@ -1,10 +1,9 @@
 import { DatabaseClient } from "@infra/gateways";
 import { Errors } from "@plugins/http";
 import { validString } from "@plugins/validString";
-import { User } from "@prisma/client";
+import { UserHttpReq } from "@plugins/requestBody";
 
 export type CommissionEditRequest = {
-  user: User;
   commId: string;
   title: string;
   details: string;
@@ -19,7 +18,7 @@ type CommWhere = {} | { creatorId: string } | { userId: string };
 type CommData = {} | { confirmed: true } | { complete: true };
 
 export async function commCreate(
-  req: CommissionEditRequest,
+  req: UserHttpReq<CommissionEditRequest>,
   db: DatabaseClient
 ): Promise<CommissionEditResponse> {
   if (!validString(req.commId)) throw Errors.MISSING_ID();

@@ -2,10 +2,8 @@ import { DatabaseClient } from "@infra/gateways"
 import { Errors } from "@plugins/http"
 import { UserHttpReq } from "@plugins/requestBody"
 import { validString } from "@plugins/validString"
-import { User } from "@prisma/client"
 
 export type CommissionCreateRequest = {
-    user: User
     title: string
     details: string
     creatorId: string

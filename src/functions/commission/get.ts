@@ -2,10 +2,9 @@ import { DatabaseClient } from "@infra/gateways"
 import { SimpleUser } from "@infra/mappers/user"
 import { Errors } from "@plugins/http"
 import { paginate } from "@plugins/paginate"
-import { User } from "@prisma/client"
+import { UserHttpReq } from "@plugins/requestBody";
 
 export type CommissionGetRequest = {
-    user: User
     take: 'i-commissioned' | 'they-commissioned'
 
     sortBy: 'latest' | 'oldest'
@@ -22,7 +21,9 @@ export type CommSort = {
 
 type CommWhere = { userId: string } | { creatorId: string }
 
-export async function commGet(req: CommissionGetRequest, db: DatabaseClient): Promise<CommissionGetResponse> {
+export async function commGet(req: UserHttpReq<CommissionGetRequest>, db: DatabaseClient): Promise<CommissionGetResponse> {
+    const page = req.page ?? 1
+    const size = req.size ?? 1
     let orderBy: CommSort
     switch (req.sortBy) {
         case 'oldest':
@@ -34,7 +35,7 @@ export async function commGet(req: CommissionGetRequest, db: DatabaseClient): Pr
         default:
             throw Errors.INVALID_SORT()
     }
-    const offset = (+req.page - 1) * +req.size
+    const offset = (+page - 1) * + size
 
     let where: CommWhere
 
@@ -66,5 +67,5 @@ export async function commGet(req: CommissionGetRequest, db: DatabaseClient): Pr
         db.commission.count({ where: { userId: req.user.id }, orderBy }),
     ])
 
-    return paginate(total, req.page, offset, req.size, comms)
+    return paginate(total, page, offset, size, comms)
 }
