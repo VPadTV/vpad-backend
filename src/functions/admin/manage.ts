@@ -1,6 +1,7 @@
 import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
 import { User } from '@prisma/client'
+import { UserHttpReq } from '@plugins/requestBody'
 
 export type AdminManageRequest = {
     user: User
@@ -13,7 +14,7 @@ export type AdminManageResponse = {
     admin: boolean
 }
 
-export async function adminManage(req: AdminManageRequest, db: DatabaseClient): Promise<AdminManageResponse> {
+export async function adminManage(req: UserHttpReq<AdminManageRequest>, db: DatabaseClient): Promise<AdminManageResponse> {
     if (!req.id) throw Errors.MISSING_ID()
     if (!req.admin) throw Errors.MISSING_ADMIN()
     if (req.id === req.user.id)
