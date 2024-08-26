@@ -35,6 +35,10 @@ export type PostGetManyResponse = Paginate<{
             user: SimpleUser,
             description: string
         }[]
+        series: {
+            id: string
+            name: string
+        } | null
         views: number
         createdAt: string
     }
@@ -142,6 +146,12 @@ export async function postGetMany(req: UserHttpReq<PostGetManyRequest>, db: Data
                         description: true
                     },
                 },
+                series: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
                 thumbnailWidth: true,
                 thumbnailHeight: true,
                 createdAt: true,
@@ -170,6 +180,7 @@ export async function postGetMany(req: UserHttpReq<PostGetManyRequest>, db: Data
             tags: post.tags,
             author: post.author,
             credits: post.credits,
+            series: post.series,
             views: post._count.votes,
             createdAt: post.createdAt.toISOString(),
         }

@@ -15,6 +15,7 @@ export type PostEditRequest = {
     nsfw: boolean
     tags: string
     minTierId?: string
+    seriesId?: string
 }
 
 export type PostEditResponse = {}
@@ -56,7 +57,8 @@ export async function postEdit(req: UserHttpReq<PostEditRequest>, db: DatabaseCl
             thumbnailHeight: thumbData?.size.height ?? mediaData?.size.height,
             nsfw: req.nsfw,
             tags,
-            minTierId: req.minTierId
+            minTierId: req.minTierId,
+            seriesId: req.seriesId
         }
     })
 

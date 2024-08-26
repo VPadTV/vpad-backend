@@ -22,12 +22,16 @@ export type PostGetResponse = {
             id: string
             name: string
             price: number
-        } | undefined
+        } | null
         author: SimpleUser
         credits: {
             user: SimpleUser,
             description: string
         }[]
+        series: {
+            id: string,
+            name: string,
+        } | null,
         likes: number
         dislikes: number
         views: number
@@ -52,6 +56,12 @@ export async function postGet(req: HttpReq<PostGetRequest>, db: DatabaseClient):
             minTier: { select: { id: true, name: true, price: true } },
             nsfw: true,
             tags: true,
+            series: {
+                select: {
+                    id: true,
+                    name: true,
+                }
+            },
             author: {
                 select: SimpleUser.selector
             },
@@ -116,9 +126,10 @@ export async function postGet(req: HttpReq<PostGetRequest>, db: DatabaseClient):
                 id: post.minTier.id,
                 name: post.minTier.name,
                 price: post.minTier.price.toNumber(),
-            } : undefined,
+            } : null,
             author: post.author,
             credits: post.credits,
+            series: post.series,
             likes: likes ?? 0,
             dislikes: dislikes ?? 0,
             views: views ?? 0,

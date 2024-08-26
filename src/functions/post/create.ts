@@ -20,6 +20,7 @@ export type PostCreateRequest = {
     nsfw: boolean
     tags: string
     minTierId?: string
+    seriesId?: string
 }
 
 export type PostCreateResponse = {
@@ -60,6 +61,7 @@ export async function postCreate(req: UserHttpReq<PostCreateRequest>, db: Databa
             minTierId: req.minTierId,
             thumbnailWidth: thumbData.size.width,
             thumbnailHeight: thumbData.size.height,
+            seriesId: req.seriesId,
             tags,
         }
     })
