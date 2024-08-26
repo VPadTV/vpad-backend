@@ -8,16 +8,14 @@ export type SeriesEditRequest = {
     name: string
 }
 
-export type SeriesEditResponse = {
-    id: string
-}
+export type SeriesEditResponse = {}
 
 export async function seriesEdit(req: UserHttpReq<SeriesEditRequest>, db: DatabaseClient): Promise<SeriesEditResponse> {
     if (!validString(req.id) || !validString(req.name)) {
         throw Errors.INVALID_NAME()
     }
 
-    const series = await db.series.update({
+    await db.series.update({
         where: {
             id: req.id!,
             ownerId: req.user.id,
@@ -27,5 +25,5 @@ export async function seriesEdit(req: UserHttpReq<SeriesEditRequest>, db: Databa
         }
     })
 
-    return { id: series.id }
+    return {}
 }
