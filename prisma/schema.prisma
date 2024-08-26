@@ -27,14 +27,12 @@ model User {
     comments Comment[]
     votes    Votes[]   @relation(name: "userVotes")
 
-    posts       Post[]  @relation(name: "author")
-    highlight   Post?   @relation(name: "highlight", fields: [highlightId], references: [id])
+    series      Series[] @relation(name: "owner")
+    posts       Post[]   @relation(name: "author")
+    highlight   Post?    @relation(name: "highlight", fields: [highlightId], references: [id])
     highlightId String?
 
     credits PostCredits[]
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
 
     tiers SubscriptionTier[]
 
@@ -44,6 +42,9 @@ model User {
     requestedCommissions Commission[] @relation(name: "creator")
 
     customCss String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 enum MediaType {
@@ -52,8 +53,17 @@ enum MediaType {
 }
 
 model Series {
-    id    String @id @default(cuid())
+    id String @id @default(cuid())
+
+    owner   User   @relation(name: "owner", fields: [ownerId], references: [id])
+    ownerId String
+
     posts Post[]
+
+    name String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model Post {

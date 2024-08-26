@@ -1,0 +1,31 @@
+import { DatabaseClient } from '@infra/gateways/database'
+import { Errors } from '@plugins/http'
+import { UserHttpReq } from '@plugins/requestBody'
+import { validString } from '@plugins/validString'
+
+export type SeriesEditRequest = {
+    id: string
+    name: string
+}
+
+export type SeriesEditResponse = {
+    id: string
+}
+
+export async function seriesEdit(req: UserHttpReq<SeriesEditRequest>, db: DatabaseClient): Promise<SeriesEditResponse> {
+    if (!validString(req.id) || !validString(req.name)) {
+        throw Errors.INVALID_NAME()
+    }
+
+    const series = await db.series.update({
+        where: {
+            id: req.id!,
+            ownerId: req.user.id,
+        },
+        data: {
+            name: req.name!,
+        }
+    })
+
+    return { id: series.id }
+}
