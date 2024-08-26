@@ -14,6 +14,7 @@ export type UserEditRequest = {
     email?: string
     password?: string
     about?: string
+    customCss?: string
     profilePhoto?: FileRawUpload
 }
 
@@ -45,6 +46,7 @@ export async function userEdit(req: UserHttpReq<UserEditRequest>, db: DatabaseCl
             email: req.email,
             password: req.password && await bcrypt.hash(req.password, 10),
             about: req.about,
+            customCss: req.customCss,
             profilePhotoUrl: profilePhotoData?.url
         }
     })

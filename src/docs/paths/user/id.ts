@@ -29,6 +29,7 @@ export const userId = {
             password: 'somepass',
             about: 'some about me, or nothing',
             profilePhoto: BodyFile,
+            customCss: "custom css for the user's profile page"
         },
         400: 'Invalid username, nickname, email, password, or whatever',
         404: 'Provided ID didnt resolve to any user',
