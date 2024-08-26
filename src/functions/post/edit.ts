@@ -46,27 +46,29 @@ export async function postEdit(req: UserHttpReq<PostEditRequest>, db: DatabaseCl
     let thumbData = await storage.getFileData(req.thumb ?? req.media, ImageType.THUMBNAIL)
     if (thumbData && thumbData.type !== MediaType.IMAGE) throw Errors.INVALID_THUMB()
 
-    await db.post.update({
-        where: { id: req.id },
-        data: {
-            text: req.text ?? undefined,
-            mediaType: mediaData?.type,
-            mediaUrl: mediaData?.url,
-            thumbUrl: thumbData?.url,
-            thumbnailWidth: thumbData?.size.width ?? mediaData?.size.width,
-            thumbnailHeight: thumbData?.size.height ?? mediaData?.size.height,
-            nsfw: req.nsfw,
-            tags,
-            minTierId: req.minTierId,
-            seriesId: req.seriesId
-        }
+    await db.$transaction(async (tx) => {
+        await tx.post.update({
+            where: { id: req.id },
+            data: {
+                text: req.text ?? undefined,
+                mediaType: mediaData?.type,
+                mediaUrl: mediaData?.url,
+                thumbUrl: thumbData?.url,
+                thumbnailWidth: thumbData?.size.width ?? mediaData?.size.width,
+                thumbnailHeight: thumbData?.size.height ?? mediaData?.size.height,
+                nsfw: req.nsfw,
+                tags,
+                minTierId: req.minTierId,
+                seriesId: req.seriesId
+            }
+        })
+
+        await storage.delete(postFound.mediaUrl)
+        await storage.delete(postFound.thumbUrl)
+
+        await storage.upload(mediaData)
+        await storage.upload(thumbData)
     })
-
-    await storage.delete(postFound.mediaUrl)
-    await storage.delete(postFound.thumbUrl)
-
-    await storage.upload(mediaData)
-    await storage.upload(thumbData)
 
     return {}
 }

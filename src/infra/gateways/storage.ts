@@ -116,13 +116,12 @@ export class Storage {
         if (!url) return
         const split = url.split('/')
         const key = split[split.length - 1]
-        const r = await this.client
+        await this.client
             .deleteObject({
                 Bucket: process.env.BB_BUCKET!,
                 Key: key,
             })
             .promise()
-        console.log(r);
     }
 
     async stream(key: string): Promise<StreamResponse> {

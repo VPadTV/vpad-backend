@@ -79,6 +79,7 @@ export async function postGet(req: HttpReq<PostGetRequest>, db: DatabaseClient):
     })
     if (!post) throw Errors.NOT_FOUND()
 
+    // check if current user's sub tier price is >= the post's tier price
     if (post.minTier && post.minTier.price.greaterThan(0)) {
         if (!req.user) throw Errors.UNAUTHORIZED()
         const userTier = await db.subscriptionTier.findFirst({
@@ -94,7 +95,7 @@ export async function postGet(req: HttpReq<PostGetRequest>, db: DatabaseClient):
         })
         if (!userTier)
             throw Errors.BAD_REQUEST()
-        if (userTier?.price < post.minTier.price)
+        if (userTier?.price.lessThan(post.minTier.price))
             throw Errors.LOW_TIER()
     }
 

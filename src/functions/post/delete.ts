@@ -11,14 +11,16 @@ export async function postDelete(req: UserHttpReq<PostDeleteRequest>, db: Databa
 
     if (!req.id) throw Errors.MISSING_ID()
 
-    const post = await db.post.delete({
-        where: {
-            id: req.id,
-            authorId: req.user.id,
-        }
+    await db.$transaction(async (tx) => {
+        const post = await tx.post.delete({
+            where: {
+                id: req.id,
+                authorId: req.user.id,
+            }
+        })
+        await storage.delete(post.mediaUrl)
+        await storage.delete(post.thumbUrl)
     })
-    await storage.delete(post.mediaUrl)
-    await storage.delete(post.thumbUrl)
 
 
     return {}
