@@ -30,7 +30,11 @@ export type PostGetManyResponse = Paginate<{
         height?: number,
         nsfw: boolean
         tags: string[]
-        authors: SimpleUser[]
+        author: SimpleUser
+        credits: {
+            user: SimpleUser,
+            description: string
+        }[]
         views: number
         createdAt: string
     }
@@ -129,7 +133,15 @@ export async function postGetMany(req: UserHttpReq<PostGetManyRequest>, db: Data
                 thumbUrl: true,
                 nsfw: true,
                 tags: true,
-                authors: { select: SimpleUser.selector },
+                author: { select: SimpleUser.selector },
+                credits: {
+                    select: {
+                        user: {
+                            select: SimpleUser.selector
+                        },
+                        description: true
+                    },
+                },
                 thumbnailWidth: true,
                 thumbnailHeight: true,
                 createdAt: true,
@@ -156,7 +168,8 @@ export async function postGetMany(req: UserHttpReq<PostGetManyRequest>, db: Data
             height: post.thumbnailHeight ?? undefined,
             nsfw: post.nsfw,
             tags: post.tags,
-            authors: post.authors,
+            author: post.author,
+            credits: post.credits,
             views: post._count.votes,
             createdAt: post.createdAt.toISOString(),
         }

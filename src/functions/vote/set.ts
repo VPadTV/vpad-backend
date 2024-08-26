@@ -1,18 +1,17 @@
 import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
-import { User } from '@prisma/client'
 import { validString } from '@plugins/validString'
 import { numify } from '@plugins/numify'
+import { UserHttpReq } from '@plugins/requestBody'
 
 export type VoteSetRequest = {
-    user: User
     postId: string
     vote: number
 }
 
 export type VoteSetResponse = {}
 
-export async function voteSet(req: VoteSetRequest, db: DatabaseClient): Promise<VoteSetResponse> {
+export async function voteSet(req: UserHttpReq<VoteSetRequest>, db: DatabaseClient): Promise<VoteSetResponse> {
     if (!req.postId && !validString(req.postId)) throw Errors.MISSING_ID()
     let vote = numify(req.vote) || 0
     if (vote < 0) vote = -1
@@ -25,12 +24,12 @@ export async function voteSet(req: VoteSetRequest, db: DatabaseClient): Promise<
         where: {
             userId_postId: {
                 userId: req.user.id,
-                postId: req.postId,
+                postId: req.postId!,
             }
         },
         create: {
             userId: req.user.id,
-            postId: req.postId,
+            postId: req.postId!,
             vote
         },
         update: {

@@ -34,7 +34,8 @@ export async function postEdit(req: UserHttpReq<PostEditRequest>, db: DatabaseCl
 
     const postFound = await db.post.findFirst({
         where: {
-            id: req.id, authors: { some: { id: req.id } }
+            id: req.id,
+            authorId: req.user.id,
         }
     })
 

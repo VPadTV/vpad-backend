@@ -73,7 +73,7 @@ export class Storage {
     async getFileData(file: FileRawUpload | undefined, imageType: ImageType): Promise<FileUpload | undefined> {
         if (!file) return undefined
         let key: string = crypto.randomBytes(16).toString('hex')
-        const type = MimeTypes.getType(file.mimetype)
+        const type = MimeTypes.getMediaType(file.mimetype)
         let width
         let height
         let processed: Buffer | undefined

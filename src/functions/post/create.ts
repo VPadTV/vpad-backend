@@ -9,7 +9,10 @@ import { MediaType } from '@prisma/client'
 import { UserHttpReq } from '@plugins/requestBody'
 
 export type PostCreateRequest = {
-    otherAuthorIds?: string[]
+    credits?: {
+        userId: string,
+        description: string
+    }[]
     title: string
     text: string
     media: FileRawUpload
@@ -42,14 +45,11 @@ export async function postCreate(req: UserHttpReq<PostCreateRequest>, db: Databa
     let thumbData = await storage.getFileData(req.thumb ?? req.media, ImageType.THUMBNAIL)
     if (!thumbData || (thumbData && thumbData.type !== MediaType.IMAGE)) throw Errors.INVALID_THUMB()
 
-    const otherAuthorIds = req.otherAuthorIds?.map(id => ({ id }))
     const post = await db.post.create({
         data: {
-            authors: {
-                connect: [
-                    { id: req.user.id },
-                    ...otherAuthorIds ?? []
-                ]
+            authorId: req.user.id,
+            credits: {
+                create: req.credits
             },
             title: req.title!,
             text: req.text,

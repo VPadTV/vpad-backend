@@ -2,7 +2,7 @@ import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
 import { SimpleUser } from '@infra/mappers/user'
 import { User } from '@prisma/client'
-import { UserHttpReq } from '@plugins/requestBody'
+import { HttpReq } from '@plugins/requestBody'
 
 export type PostGetRequest = {
     user?: User
@@ -23,7 +23,11 @@ export type PostGetResponse = {
             name: string
             price: number
         } | undefined
-        authors: [SimpleUser]
+        author: SimpleUser
+        credits: {
+            user: SimpleUser,
+            description: string
+        }[]
         likes: number
         dislikes: number
         views: number
@@ -33,7 +37,7 @@ export type PostGetResponse = {
     }
 }
 
-export async function postGet(req: UserHttpReq<PostGetRequest>, db: DatabaseClient): Promise<PostGetResponse> {
+export async function postGet(req: HttpReq<PostGetRequest>, db: DatabaseClient): Promise<PostGetResponse> {
     const post = await db.post.findFirst({
         where: {
             id: req.id
@@ -48,8 +52,16 @@ export async function postGet(req: UserHttpReq<PostGetRequest>, db: DatabaseClie
             minTier: { select: { id: true, name: true, price: true } },
             nsfw: true,
             tags: true,
-            authors: {
+            author: {
                 select: SimpleUser.selector
+            },
+            credits: {
+                select: {
+                    user: {
+                        select: SimpleUser.selector
+                    },
+                    description: true,
+                }
             },
             createdAt: true,
             updatedAt: true,
@@ -57,14 +69,11 @@ export async function postGet(req: UserHttpReq<PostGetRequest>, db: DatabaseClie
     })
     if (!post) throw Errors.NOT_FOUND()
 
-    const author = post.authors[0]
-
     if (post.minTier && post.minTier.price.greaterThan(0)) {
-        // TODO: Fix `post.authors[0]` check.
         if (!req.user) throw Errors.UNAUTHORIZED()
         const userTier = await db.subscriptionTier.findFirst({
             where: {
-                creatorId: author.id,
+                creatorId: post.author.id,
                 subscribers: {
                     some: { userId: req.user.id }
                 },
@@ -108,7 +117,8 @@ export async function postGet(req: UserHttpReq<PostGetRequest>, db: DatabaseClie
                 name: post.minTier.name,
                 price: post.minTier.price.toNumber(),
             } : undefined,
-            authors: [author],
+            author: post.author,
+            credits: post.credits,
             likes: likes ?? 0,
             dislikes: dislikes ?? 0,
             views: views ?? 0,
