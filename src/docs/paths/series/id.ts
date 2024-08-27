@@ -1,7 +1,7 @@
 import { makeRoute } from '@docs/helpers';
 import { exId } from '@docs/schemas/id';
 
-export const postId = {
+export const seriesId = {
     put: makeRoute({
         tag: 'Series',
         summary: 'Updates series from id, must be logged in',

@@ -4,33 +4,33 @@ import { Router } from 'express';
 import { ok } from '@plugins/http';
 import { Database } from '@infra/gateways';
 import { isLoggedIn } from '@infra/middlewares';
-import { TierCreateRequest, tierCreate } from '@functions/tier/create';
-import { TierUpdateRequest, tierUpdate } from '@functions/tier/update';
-import { TierDeleteRequest, tierDelete } from '@functions/tier/delete';
-import { TierGetManyRequest, tierGetMany } from '@functions/tier/getMany';
+import { tierCreate } from '@functions/tier/create';
+import { tierUpdate } from '@functions/tier/update';
+import { tierDelete } from '@functions/tier/delete';
+import { tierGetMany } from '@functions/tier/getMany';
 
 export class TierRoute implements IRoute {
     register(router: Router): void {
         router.post('/',
             middleware(isLoggedIn),
-            jsonResponse(async (request: TierCreateRequest) => {
+            jsonResponse(async (request: any) => {
                 return ok(await tierCreate(request, Database.get()))
             }))
 
         router.get('/creator/:creatorId',
-            jsonResponse(async (request: TierGetManyRequest) => {
+            jsonResponse(async (request: any) => {
                 return ok(await tierGetMany(request, Database.get()))
             }))
 
         router.put('/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request: TierUpdateRequest) => {
+            jsonResponse(async (request: any) => {
                 return ok(await tierUpdate(request, Database.get()))
             }))
 
         router.delete('/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request: TierDeleteRequest) => {
+            jsonResponse(async (request: any) => {
                 return ok(await tierDelete(request, Database.get()))
             }))
     }

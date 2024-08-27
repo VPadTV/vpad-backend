@@ -8,11 +8,13 @@ import { FileRawUpload } from '@infra/middlewares'
 import { MediaType } from '@prisma/client'
 import { UserHttpReq } from '@plugins/requestBody'
 
+type Credit = {
+    userId: string,
+    description: string
+}
+
 export type PostCreateRequest = {
-    credits?: {
-        userId: string,
-        description: string
-    }[]
+    credits?: Credit | Credit[]
     title: string
     text: string
     media: FileRawUpload

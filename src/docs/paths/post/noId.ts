@@ -20,6 +20,7 @@ export const postNoId = {
             nsfw: false,
             tags: 'some,tags',
             minTierId: exId,
+            seriesId: exId,
         },
         success: {
             id: exId

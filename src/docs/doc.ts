@@ -19,6 +19,9 @@ import { votePostId } from './paths/vote/postId';
 import { donate } from './paths/pay/donate';
 import { commId } from './paths/commission/id';
 import { commNoId } from './paths/commission/noId';
+import { seriesId } from './paths/series/id';
+import { seriesNoId } from './paths/series/noId';
+import { seriesOwnerId } from './paths/series/ownerId';
 
 export default {
     openapi: '3.0.0',
@@ -54,9 +57,14 @@ export default {
         '/sub/{id}': subId,
         '/sub/{creatorId}': subCreatorId,
 
+        '/series/{id}': seriesId,
+        '/series/{ownerId}': seriesOwnerId,
+        '/series': seriesNoId,
+
         '/post/{id}': postId,
         '/post/stream/{key}': postStreamKey,
         '/post': postNoId,
+
         '/vote/{postId}': votePostId,
 
         '/comment/{id}': commentId,

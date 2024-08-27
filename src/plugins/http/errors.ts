@@ -64,7 +64,9 @@ export const Errors = {
     MISSING_DETAILS: () => badRequest("MISSING_DETAILS"),
     MISSING_CREATOR: () => badRequest("MISSING_CREATOR"),
 
+    DATABASE_ERROR: () => badRequest("DATABASE_ERROR"),
+
     BANNED: () => forbidden("BANNED"),
 
-    INTERNAL_SERVER_ERROR: () => serverError("INTERNAL_SERVER_ERROR")
+    INTERNAL_SERVER_ERROR: () => serverError("INTERNAL_SERVER_ERROR"),
 }

@@ -1,6 +1,7 @@
-import { Errors, HttpError, HttpResponse } from '@plugins/http'
+import { badRequest, Errors, HttpError, HttpResponse } from '@plugins/http'
 import { Response, Request } from 'express'
 import { parseBody } from "@infra/middlewares/parseBody";
+import { PrismaClientKnownRequestError, PrismaClientUnknownRequestError, PrismaClientValidationError } from '@prisma/client/runtime/library';
 
 type MulterFiles = { [fieldname: string]: Express.Multer.File[] }
 type RequestFiles = { [fieldname: string]: Express.Multer.File }
@@ -18,7 +19,7 @@ export function jsonResponse<T, R extends HttpResponse>(fn: (request: T) => Prom
         const files = transformFiles(req.files as MulterFiles)
 
         try {
-            const { statusCode, data } = await fn({
+            let { statusCode, data } = await fn({
                 headers: req.headers,
                 ...files,
                 ...parseBody({
@@ -28,14 +29,34 @@ export function jsonResponse<T, R extends HttpResponse>(fn: (request: T) => Prom
                 }),
                 ...req.middleware,
             })
+            if (Array.isArray(data)) data = { data }
             return res.status(statusCode).json({ ...data, token: data.token ?? req.params?.token })
         } catch (error) {
             console.error(`** JSON Route **`)
             console.error(error)
-            if (error instanceof HttpError)
-                return res.status(error.status).send({ error: error.message })
-            const serverError = Errors.INTERNAL_SERVER_ERROR()
-            return res.status(serverError.status).send({ error: serverError.message })
+            const httpErr = handleError(error)
+            return res.status(httpErr.status).send({ error: httpErr.message })
         }
     }
+}
+
+function handleError(error: unknown): HttpError {
+    if (error instanceof HttpError)
+        return error
+
+    else if (error instanceof PrismaClientKnownRequestError) {
+        return badRequest(error.meta?.cause as string ?? error.name)
+    }
+
+    else if (error instanceof PrismaClientValidationError) {
+        const match = /.*\n\n(.*)\.$/.exec(error.message)
+        if (!match) return badRequest(error.name)
+        return badRequest(match[1])
+    }
+
+    else if (error instanceof PrismaClientUnknownRequestError) {
+        return badRequest(error.name)
+    }
+
+    return Errors.INTERNAL_SERVER_ERROR()
 }

@@ -7,12 +7,14 @@ import { CommentRoute } from '@controllers/comment';
 import { TierRoute } from '@controllers/tier';
 import { SubRoute } from '@controllers/sub';
 import { VoteRoute } from '@controllers/vote';
+import { SeriesRoute } from '@controllers/series';
 // import { PayRoute } from '@controllers/pay';
 
 export default {
     '/user': new UserRoute(),
     '/admin': new AdminRoute(),
     '/docs': new DocumentationRoute(),
+    '/series': new SeriesRoute(),
     '/post': new PostRoute(),
     '/comment': new CommentRoute(),
     '/tier': new TierRoute(),

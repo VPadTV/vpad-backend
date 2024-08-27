@@ -11,7 +11,10 @@ export type SeriesEditRequest = {
 export type SeriesEditResponse = {}
 
 export async function seriesEdit(req: UserHttpReq<SeriesEditRequest>, db: DatabaseClient): Promise<SeriesEditResponse> {
-    if (!validString(req.id) || !validString(req.name)) {
+    if (!validString(req.id)) {
+        throw Errors.INVALID_ID()
+    }
+    if (!validString(req.name)) {
         throw Errors.INVALID_NAME()
     }
 

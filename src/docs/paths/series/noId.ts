@@ -1,7 +1,7 @@
 import { makeRoute } from '@docs/helpers';
 import { exId } from '@docs/schemas/id';
 
-export const postNoId = {
+export const seriesNoId = {
     post: makeRoute({
         tag: 'Series',
         summary: 'Creates a new series',
@@ -12,17 +12,5 @@ export const postNoId = {
         success: {
             id: exId
         }
-    }),
-    get: makeRoute({
-        tag: 'Series',
-        summary: 'Gets many series from owner id',
-        path: {
-            ownerId: exId
-        },
-        success: {
-            id: exId,
-            name: 'some name',
-        },
-        404: 'No series found',
     })
 }

@@ -2,7 +2,7 @@ import { middleware, jsonResponse } from '@infra/adapters';
 import { IRoute } from '@main/route';
 import express, { Router } from 'express';
 import { isLoggedIn } from '@infra/middlewares';
-import { DonateRequest, donateCreate } from '@functions/pay/donate';
+import { donateCreate } from '@functions/pay/donate';
 import { Payment } from '@infra/gateways/payment';
 import { Database } from '@infra/gateways';
 import { PayWebhookRequest, payWebhook } from '@functions/pay/webhook';
@@ -13,7 +13,7 @@ export class PayRoute implements IRoute {
     register(router: Router): void {
         router.post('/donate',
             middleware(isLoggedIn),
-            jsonResponse(async (request: DonateRequest) => {
+            jsonResponse(async (request: any) => {
                 return ok(await donateCreate(request, Database.get(), Payment.get()))
             }))
 

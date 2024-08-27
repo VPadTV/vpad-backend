@@ -1,8 +1,8 @@
-import { PostCreateRequest, postCreate } from '@functions/post/create';
-import { PostDeleteRequest, postDelete } from '@functions/post/delete';
-import { PostEditRequest, postEdit } from '@functions/post/edit';
-import { PostGetRequest, postGet } from '@functions/post/get';
-import { PostGetManyRequest, postGetMany } from '@functions/post/getMany';
+import { postCreate } from '@functions/post/create';
+import { postDelete } from '@functions/post/delete';
+import { postEdit } from '@functions/post/edit';
+import { postGet } from '@functions/post/get';
+import { postGetMany } from '@functions/post/getMany';
 import { PostStreamRequest, postStream } from '@functions/post/stream';
 import { ok } from '@plugins/http';
 import { middleware, jsonResponse } from '@infra/adapters';
@@ -19,17 +19,17 @@ export class PostRoute implements IRoute {
         router.post('/',
             middleware(isLoggedIn),
             fields(['media', 'thumb']),
-            jsonResponse(async (request: PostCreateRequest) => {
+            jsonResponse(async (request: any) => {
                 return ok(await postCreate(request, Database.get(), Storage.get()))
             }))
         router.get('/',
             middleware(optionalToken),
-            jsonResponse(async (request: PostGetManyRequest) => {
+            jsonResponse(async (request: any) => {
                 return ok(await postGetMany(request, Database.get()))
             }))
         router.get('/:id',
             middleware(optionalToken),
-            jsonResponse(async (request: PostGetRequest) => {
+            jsonResponse(async (request: any) => {
                 return ok(await postGet(request, Database.get()))
             }))
         router.get('/stream/:key',
@@ -38,12 +38,12 @@ export class PostRoute implements IRoute {
             }))
         router.put('/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request: PostEditRequest) => {
+            jsonResponse(async (request: any) => {
                 return ok(await postEdit(request, Database.get(), Storage.get()))
             }))
         router.delete('/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request: PostDeleteRequest) => {
+            jsonResponse(async (request: any) => {
                 return ok(await postDelete(request, Database.get(), Storage.get()))
             }))
     }
