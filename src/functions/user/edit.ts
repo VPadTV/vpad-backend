@@ -15,12 +15,16 @@ export type UserEditRequest = {
     password?: string
     about?: string
     customCss?: string
+    highlightPostId?: string
     profilePhoto?: FileRawUpload
 }
 
 export type UserEditResponse = {}
 
 export async function userEdit(req: UserHttpReq<UserEditRequest>, db: DatabaseClient, storage: Storage): Promise<UserEditResponse> {
+    if (req.user.id !== req.id && !req.user.admin)
+        throw Errors.UNAUTHORIZED()
+
     if (req.username != null && !usernameRegex().test(req.username))
         throw Errors.INVALID_USERNAME()
     if (req.nickname != null && !nicknameRegex().test(req.nickname))
@@ -47,7 +51,8 @@ export async function userEdit(req: UserHttpReq<UserEditRequest>, db: DatabaseCl
             password: req.password && await bcrypt.hash(req.password, 10),
             about: req.about,
             customCss: req.customCss,
-            profilePhotoUrl: profilePhotoData?.url
+            highlightId: req.highlightPostId,
+            profilePhotoUrl: profilePhotoData?.url,
         }
     })
 
