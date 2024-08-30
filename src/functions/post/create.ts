@@ -36,9 +36,9 @@ export async function postCreate(req: UserHttpReq<PostCreateRequest>, db: Databa
     if (!req.media) throw Errors.MISSING_MEDIA()
 
     req.nsfw = boolify(req.nsfw)
-    let tags: string[] | false = []
+    let tags: string[] | undefined = []
     tags = parseTags(req.tags!.trim())
-    if (tags === false) throw Errors.INVALID_TAGS()
+    if (tags === undefined) throw Errors.INVALID_TAGS()
     req.minTierId = validString(req.minTierId)
 
 

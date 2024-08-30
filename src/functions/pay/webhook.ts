@@ -7,7 +7,7 @@ export type PayWebhookRequest = {
     raw: Buffer
 }
 
-export async function payWebhook(req: PayWebhookRequest, db: DatabaseClient, pay: Payment): Promise<void> {
+export async function payWebhook(req: PayWebhookRequest, _db: DatabaseClient, pay: Payment): Promise<void> {
     const secret = process.env.STRIPE_SECRET
     const signature = req.signature
     if (!secret || !signature) throw Errors.UNAUTHORIZED()
@@ -24,7 +24,7 @@ export async function payWebhook(req: PayWebhookRequest, db: DatabaseClient, pay
             // handlePaymentIntentSucceeded(paymentIntent);
             break;
         case 'payment_method.attached':
-            const paymentMethod = event.data.object;
+            // const paymentMethod = event.data.object;
             // Then define and call a method to handle the successful attachment of a PaymentMethod.
             // handlePaymentMethodAttached(paymentMethod);
             break;

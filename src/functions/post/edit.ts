@@ -24,11 +24,11 @@ export async function postEdit(req: UserHttpReq<PostEditRequest>, db: DatabaseCl
     if (!req.id) throw Errors.MISSING_ID()
 
     req.nsfw = boolify(req.nsfw)
-    let tags: string[] | false = []
+    let tags: string[] | undefined = []
 
     if (req.tags && req.tags.length) {
         tags = parseTags(req.tags.trim())
-        if (tags === false) throw Errors.INVALID_TAGS()
+        if (tags === undefined) throw Errors.INVALID_TAGS()
     }
 
     if (!req.minTierId?.length) req.minTierId = undefined

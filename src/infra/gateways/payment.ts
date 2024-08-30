@@ -74,15 +74,15 @@ export class Payment {
         return link.url
     }
 
-    async donate(data: DonateInput): Promise<CheckoutData> {
+    async donate(_data: DonateInput): Promise<CheckoutData> {
         throw new Error('Unimplemented')
     }
 
-    async subscribe(data: DonateInput): Promise<CheckoutData> {
+    async subscribe(_data: DonateInput): Promise<CheckoutData> {
         throw new Error('Unimplemented')
     }
 
-    async payUser(data: DonateInput): Promise<CheckoutData> {
+    async payUser(_data: DonateInput): Promise<CheckoutData> {
         throw new Error('Unimplemented')
     }
 

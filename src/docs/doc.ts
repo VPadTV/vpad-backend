@@ -16,7 +16,6 @@ import { tierId } from './paths/tier/id';
 import { tierCreatorId } from './paths/tier/creatorId';
 import { subCreatorId } from './paths/sub/creatorId';
 import { votePostId } from './paths/vote/postId';
-import { donate } from './paths/pay/donate';
 import { commId } from './paths/commission/id';
 import { commNoId } from './paths/commission/noId';
 import { seriesId } from './paths/series/id';
