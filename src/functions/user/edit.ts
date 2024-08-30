@@ -5,7 +5,7 @@ import { ImageType, Storage } from '@infra/gateways/storage'
 import { FileRawUpload } from '@infra/middlewares'
 import { MediaType } from '@prisma/client'
 import bcrypt from 'bcrypt'
-import { UserHttpReq } from '@plugins/requestBody'
+import { UserReq } from '@plugins/requestBody'
 
 export type UserEditRequest = {
     id: string
@@ -21,7 +21,7 @@ export type UserEditRequest = {
 
 export type UserEditResponse = {}
 
-export async function userEdit(req: UserHttpReq<UserEditRequest>, db: DatabaseClient, storage: Storage): Promise<UserEditResponse> {
+export async function userEdit(req: UserReq<UserEditRequest>, db: DatabaseClient, storage: Storage): Promise<UserEditResponse> {
     if (req.user.id !== req.id && !req.user.admin)
         throw Errors.UNAUTHORIZED()
 

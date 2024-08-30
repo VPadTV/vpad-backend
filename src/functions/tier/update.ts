@@ -1,7 +1,7 @@
 import { Errors } from '@plugins/http'
 import { validString } from '@plugins/validString'
 import { DatabaseClient } from '@infra/gateways/database'
-import { UserHttpReq } from '@plugins/requestBody'
+import { UserReq } from '@plugins/requestBody'
 
 export type TierUpdateRequest = {
     id: string
@@ -10,7 +10,7 @@ export type TierUpdateRequest = {
 
 export type TierUpdateResponse = {}
 
-export async function tierUpdate(req: UserHttpReq<TierUpdateRequest>, db: DatabaseClient): Promise<TierUpdateResponse> {
+export async function tierUpdate(req: UserReq<TierUpdateRequest>, db: DatabaseClient): Promise<TierUpdateResponse> {
     if (!validString(req.id))
         throw Errors.MISSING_ID()
     if (!validString(req.name))

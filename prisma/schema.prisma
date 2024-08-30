@@ -45,11 +45,9 @@ model User {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-}
 
-enum MediaType {
-    VIDEO
-    IMAGE
+    sentMessages     ChatMessage[] @relation(name: "sender")
+    receivedMessages ChatMessage[] @relation(name: "receiver")
 }
 
 model Series {
@@ -64,6 +62,11 @@ model Series {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+}
+
+enum MediaType {
+    VIDEO
+    IMAGE
 }
 
 model Post {
@@ -198,6 +201,24 @@ model Commission {
 
     confirmed Boolean @default(false)
     completed Boolean @default(false)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model ChatMessage {
+    id String @id @default(cuid())
+
+    content String
+
+    seen   Boolean @default(false)
+    edited Boolean @default(false)
+
+    sender   User   @relation(name: "sender", fields: [senderId], references: [id])
+    senderId String
+
+    receiver   User   @relation(name: "receiver", fields: [receiverId], references: [id])
+    receiverId String
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

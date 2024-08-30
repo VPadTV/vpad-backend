@@ -1,6 +1,6 @@
 import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
-import { UserHttpReq } from '@plugins/requestBody'
+import { UserReq } from '@plugins/requestBody'
 
 export type CommentEditRequest = {
     id: string
@@ -12,7 +12,7 @@ export type CommentEditResponse = {
     updatedAt: Date
 }
 
-export async function commentEdit(req: UserHttpReq<CommentEditRequest>, db: DatabaseClient): Promise<CommentEditResponse> {
+export async function commentEdit(req: UserReq<CommentEditRequest>, db: DatabaseClient): Promise<CommentEditResponse> {
     if (!req.id) throw Errors.MISSING_ID()
     if (!req.text) throw Errors.MISSING_TEXT()
 

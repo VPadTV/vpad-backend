@@ -4,7 +4,7 @@ import { Paginate, paginate } from '@plugins/paginate'
 import { DatabaseClient } from '@infra/gateways/database'
 import { MediaType, User } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
-import { UserHttpReq } from '@plugins/requestBody'
+import { UserReq } from '@plugins/requestBody'
 
 export type PostGetManyRequest = {
     user?: User
@@ -52,7 +52,7 @@ export type PostSort = {
     }
 }
 
-export async function postGetMany(req: UserHttpReq<PostGetManyRequest>, db: DatabaseClient): Promise<PostGetManyResponse> {
+export async function postGetMany(req: UserReq<PostGetManyRequest>, db: DatabaseClient): Promise<PostGetManyResponse> {
     let page = +(req.page ?? 0)
     let size = +(req.size ?? 100)
     let userTierValue = new Decimal(0)

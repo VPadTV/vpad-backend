@@ -4,7 +4,7 @@ import { JWT } from '@infra/gateways'
 import { DatabaseClient } from '@infra/gateways/database'
 import bcrypt from 'bcrypt'
 import { Payment } from '@infra/gateways/payment'
-import { HttpReq } from '@plugins/requestBody'
+import { Req } from '@plugins/requestBody'
 
 export type UserRegisterRequest = {
     username: string
@@ -19,7 +19,7 @@ export type UserRegisterResponse = {
     token: string
 }
 
-export async function userRegister(req: HttpReq<UserRegisterRequest>, db: DatabaseClient, pay: Payment): Promise<UserRegisterResponse> {
+export async function userRegister(req: Req<UserRegisterRequest>, db: DatabaseClient, pay: Payment): Promise<UserRegisterResponse> {
     if (!req.username)
         throw Errors.MISSING_USERNAME()
     if (!req.email)

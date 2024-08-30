@@ -6,7 +6,7 @@ import { ImageType, Storage } from '@infra/gateways'
 import { DatabaseClient } from '@infra/gateways/database'
 import { FileRawUpload } from '@infra/middlewares'
 import { MediaType } from '@prisma/client'
-import { UserHttpReq } from '@plugins/requestBody'
+import { UserReq } from '@plugins/requestBody'
 
 type Credit = {
     userId: string,
@@ -29,7 +29,7 @@ export type PostCreateResponse = {
     id: string
 }
 
-export async function postCreate(req: UserHttpReq<PostCreateRequest>, db: DatabaseClient, storage: Storage): Promise<PostCreateResponse> {
+export async function postCreate(req: UserReq<PostCreateRequest>, db: DatabaseClient, storage: Storage): Promise<PostCreateResponse> {
     if (!validString(req.title)) throw Errors.MISSING_TITLE()
     if (!validString(req.text)) throw Errors.MISSING_TEXT()
     if (!validString(req.tags)) throw Errors.MISSING_TAGS()

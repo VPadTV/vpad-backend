@@ -1,6 +1,6 @@
 import { DatabaseClient } from '@infra/gateways/database'
 import { Errors } from '@plugins/http'
-import { HttpReq } from '@plugins/requestBody'
+import { Req } from '@plugins/requestBody'
 import { validString } from '@plugins/validString'
 
 export type SeriesGetRequest = {
@@ -12,7 +12,7 @@ export type SeriesGetResponse = {
     name: string
 }[]
 
-export async function seriesGet(req: HttpReq<SeriesGetRequest>, db: DatabaseClient): Promise<SeriesGetResponse> {
+export async function seriesGet(req: Req<SeriesGetRequest>, db: DatabaseClient): Promise<SeriesGetResponse> {
     if (!validString(req.ownerId)) {
         throw Errors.INVALID_ID()
     }

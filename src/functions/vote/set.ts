@@ -2,7 +2,7 @@ import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
 import { validString } from '@plugins/validString'
 import { numify } from '@plugins/numify'
-import { UserHttpReq } from '@plugins/requestBody'
+import { UserReq } from '@plugins/requestBody'
 
 export type VoteSetRequest = {
     postId: string
@@ -11,7 +11,7 @@ export type VoteSetRequest = {
 
 export type VoteSetResponse = {}
 
-export async function voteSet(req: UserHttpReq<VoteSetRequest>, db: DatabaseClient): Promise<VoteSetResponse> {
+export async function voteSet(req: UserReq<VoteSetRequest>, db: DatabaseClient): Promise<VoteSetResponse> {
     if (!req.postId && !validString(req.postId)) throw Errors.MISSING_ID()
     let vote = numify(req.vote) || 0
     if (vote < 0) vote = -1

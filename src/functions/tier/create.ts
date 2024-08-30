@@ -3,7 +3,7 @@ import { numify } from '@plugins/numify'
 import { validString } from '@plugins/validString'
 import { DatabaseClient } from '@infra/gateways/database'
 import { Decimal } from '@prisma/client/runtime/library'
-import { UserHttpReq } from '@plugins/requestBody'
+import { UserReq } from '@plugins/requestBody'
 
 export type TierCreateRequest = {
     name: string
@@ -14,7 +14,7 @@ export type TierCreateResponse = {
     id: string
 }
 
-export async function tierCreate(req: UserHttpReq<TierCreateRequest>, db: DatabaseClient): Promise<TierCreateResponse> {
+export async function tierCreate(req: UserReq<TierCreateRequest>, db: DatabaseClient): Promise<TierCreateResponse> {
     if (typeof req.user.id !== 'string')
         throw Errors.MISSING_ID()
     if (!validString(req.name))

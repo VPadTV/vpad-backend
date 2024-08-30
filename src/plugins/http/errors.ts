@@ -63,6 +63,7 @@ export const Errors = {
     MISSING_VOTE: () => badRequest("MISSING_VOTE"),
     MISSING_DETAILS: () => badRequest("MISSING_DETAILS"),
     MISSING_CREATOR: () => badRequest("MISSING_CREATOR"),
+    MISSING_MESSAGE: () => badRequest("MISSING_MESSAGE"),
 
     DATABASE_ERROR: () => badRequest("DATABASE_ERROR"),
 

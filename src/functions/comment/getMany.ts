@@ -1,7 +1,7 @@
 import { SimpleUser } from '@infra/mappers/user'
 import { Paginate, paginate } from '@plugins/paginate'
 import { DatabaseClient } from '@infra/gateways/database'
-import { HttpReq } from '@plugins/requestBody'
+import { Req } from '@plugins/requestBody'
 
 export type CommentGetManyRequest = {
     postId?: string
@@ -23,7 +23,7 @@ export type CommentGetManyResponse = Paginate<{
     }
 }>
 
-export async function commentGetMany(req: HttpReq<CommentGetManyRequest>, db: DatabaseClient): Promise<CommentGetManyResponse> {
+export async function commentGetMany(req: Req<CommentGetManyRequest>, db: DatabaseClient): Promise<CommentGetManyResponse> {
     const page = req.page ?? 1
     const size = req.size ?? 100
     const offset = (page - 1) * size

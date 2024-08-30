@@ -1,6 +1,6 @@
 import { DatabaseClient } from '@infra/gateways/database'
 import { Errors } from '@plugins/http'
-import { UserHttpReq } from '@plugins/requestBody'
+import { UserReq } from '@plugins/requestBody'
 import { validString } from '@plugins/validString'
 
 export type SeriesCreateRequest = {
@@ -11,7 +11,7 @@ export type SeriesCreateResponse = {
     id: string
 }
 
-export async function seriesCreate(req: UserHttpReq<SeriesCreateRequest>, db: DatabaseClient): Promise<SeriesCreateResponse> {
+export async function seriesCreate(req: UserReq<SeriesCreateRequest>, db: DatabaseClient): Promise<SeriesCreateResponse> {
     if (!validString(req.name)) {
         throw Errors.INVALID_NAME()
     }

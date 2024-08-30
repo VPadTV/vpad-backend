@@ -1,7 +1,7 @@
 import { Errors } from '@plugins/http'
 import { SimpleUser } from '@infra/mappers/user'
 import { DatabaseClient } from '@infra/gateways/database'
-import { HttpReq } from '@plugins/requestBody'
+import { Req } from '@plugins/requestBody'
 
 export type CommentGetRequest = {
     id: string
@@ -17,7 +17,7 @@ export type CommentGetResponse = {
     }
 }
 
-export async function commentGet(req: HttpReq<CommentGetRequest>, db: DatabaseClient): Promise<CommentGetResponse> {
+export async function commentGet(req: Req<CommentGetRequest>, db: DatabaseClient): Promise<CommentGetResponse> {
     const comment = await db.comment.findFirst({
         where: { id: req.id },
         select: {

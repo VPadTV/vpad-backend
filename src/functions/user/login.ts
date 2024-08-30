@@ -4,7 +4,7 @@ import { DatabaseClient } from '@infra/gateways/database'
 import { User } from '@prisma/client'
 import bcrypt from 'bcrypt'
 import { userIsBanned } from './isBanned'
-import { HttpReq } from '@plugins/requestBody'
+import { Req } from '@plugins/requestBody'
 
 export type UserLoginRequest = {
     emailOrUsername: string
@@ -16,7 +16,7 @@ export type UserLoginResponse = {
     token: string
 }
 
-export async function userLogin(req: HttpReq<UserLoginRequest>, db: DatabaseClient): Promise<UserLoginResponse> {
+export async function userLogin(req: Req<UserLoginRequest>, db: DatabaseClient): Promise<UserLoginResponse> {
     let user: User | null
     if (req.emailOrUsername)
         user = await db.user.findFirst({
@@ -29,7 +29,7 @@ export async function userLogin(req: HttpReq<UserLoginRequest>, db: DatabaseClie
         })
     else
         throw Errors.MISSING_EMAIL_OR_USERNAME()
-    
+
     if (!req.password)
         throw Errors.MISSING_PASSWORD()
 

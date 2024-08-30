@@ -1,6 +1,6 @@
 import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
-import { UserHttpReq } from '@plugins/requestBody'
+import { UserReq } from '@plugins/requestBody'
 
 export type SubGetRequest = {
     creatorId: string
@@ -15,7 +15,7 @@ export type SubGetResponse = {
     } | null
 } | {}
 
-export async function subGet(req: UserHttpReq<SubGetRequest>, db: DatabaseClient): Promise<SubGetResponse> {
+export async function subGet(req: UserReq<SubGetRequest>, db: DatabaseClient): Promise<SubGetResponse> {
     if (typeof req.user.id !== 'string' || typeof req.creatorId !== 'string')
         throw Errors.MISSING_ID()
 
@@ -37,7 +37,7 @@ export async function subGet(req: UserHttpReq<SubGetRequest>, db: DatabaseClient
             }
         }
     })
-    
+
     if (!sub) throw Errors.NOT_FOUND()
 
     return {

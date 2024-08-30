@@ -1,6 +1,6 @@
 import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
-import { UserHttpReq } from '@plugins/requestBody'
+import { UserReq } from '@plugins/requestBody'
 
 export type SubDeleteRequest = {
     id: string
@@ -8,7 +8,7 @@ export type SubDeleteRequest = {
 
 export type SubDeleteResponse = {}
 
-export async function subDelete(req: UserHttpReq<SubDeleteRequest>, db: DatabaseClient): Promise<SubDeleteResponse> {
+export async function subDelete(req: UserReq<SubDeleteRequest>, db: DatabaseClient): Promise<SubDeleteResponse> {
     if (typeof req.id !== 'string')
         throw Errors.MISSING_ID()
 

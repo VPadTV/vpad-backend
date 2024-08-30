@@ -1,6 +1,6 @@
 import { DatabaseClient } from '@infra/gateways/database'
 import { Errors } from '@plugins/http'
-import { UserHttpReq } from '@plugins/requestBody'
+import { UserReq } from '@plugins/requestBody'
 import { validString } from '@plugins/validString'
 
 export type SeriesEditRequest = {
@@ -10,7 +10,7 @@ export type SeriesEditRequest = {
 
 export type SeriesEditResponse = {}
 
-export async function seriesEdit(req: UserHttpReq<SeriesEditRequest>, db: DatabaseClient): Promise<SeriesEditResponse> {
+export async function seriesEdit(req: UserReq<SeriesEditRequest>, db: DatabaseClient): Promise<SeriesEditResponse> {
     if (!validString(req.id)) {
         throw Errors.INVALID_ID()
     }

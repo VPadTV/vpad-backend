@@ -1,4 +1,4 @@
 import { User } from "@prisma/client"
 
-export type HttpReq<T> = Partial<T>
-export type UserHttpReq<T> = Partial<T> & { user: User }
+export type Req<T> = Partial<T>
+export type UserReq<T> = Partial<T> & { user: User }

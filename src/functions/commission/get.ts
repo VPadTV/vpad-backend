@@ -2,7 +2,7 @@ import { DatabaseClient } from "@infra/gateways"
 import { SimpleUser } from "@infra/mappers/user"
 import { Errors } from "@plugins/http"
 import { paginate } from "@plugins/paginate"
-import { UserHttpReq } from "@plugins/requestBody";
+import { UserReq } from "@plugins/requestBody";
 
 export type CommissionGetRequest = {
     take: 'i-commissioned' | 'they-commissioned'
@@ -21,7 +21,7 @@ export type CommSort = {
 
 type CommWhere = { userId: string } | { creatorId: string }
 
-export async function commGet(req: UserHttpReq<CommissionGetRequest>, db: DatabaseClient): Promise<CommissionGetResponse> {
+export async function commGet(req: UserReq<CommissionGetRequest>, db: DatabaseClient): Promise<CommissionGetResponse> {
     const page = req.page ?? 1
     const size = req.size ?? 1
     let orderBy: CommSort

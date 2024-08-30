@@ -1,6 +1,6 @@
 import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
-import { UserHttpReq } from '@plugins/requestBody'
+import { UserReq } from '@plugins/requestBody'
 
 export type TierDeleteRequest = {
     id: string
@@ -8,7 +8,7 @@ export type TierDeleteRequest = {
 
 export type TierDeleteResponse = {}
 
-export async function tierDelete(req: UserHttpReq<TierDeleteRequest>, db: DatabaseClient): Promise<TierDeleteResponse> {
+export async function tierDelete(req: UserReq<TierDeleteRequest>, db: DatabaseClient): Promise<TierDeleteResponse> {
     if (typeof req.id !== 'string')
         throw Errors.MISSING_ID()
 

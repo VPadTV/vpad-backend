@@ -1,6 +1,6 @@
 import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
-import { UserHttpReq } from '@plugins/requestBody'
+import { UserReq } from '@plugins/requestBody'
 
 export type CommentCreateRequest = {
     postId: string
@@ -12,7 +12,7 @@ export type CommentCreateResponse = {
     id: string
 }
 
-export async function commentCreate(req: UserHttpReq<CommentCreateRequest>, db: DatabaseClient): Promise<CommentCreateResponse> {
+export async function commentCreate(req: UserReq<CommentCreateRequest>, db: DatabaseClient): Promise<CommentCreateResponse> {
     if (!req.postId) throw Errors.MISSING_ID()
     if (!req.text) throw Errors.MISSING_TEXT()
 
