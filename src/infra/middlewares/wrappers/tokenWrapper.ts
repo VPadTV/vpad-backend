@@ -28,9 +28,9 @@ export const tokenWrapper = async (data: MiddlewareData, func: (user: User) => P
 
     await func(user)
 
-    // if it expires in less than a day
-    if (token.exp - now < 24 * 60 * 60 * 1000)
-        return { user, token: JWT.newToken(user) }
+    // if it expires in less than a week
+    if (token.exp - now < 24 * 60 * 60 * 1000 * 7)
+        return { user, token: JWT.newToken(user, data.headers) }
 
     return { user }
 }

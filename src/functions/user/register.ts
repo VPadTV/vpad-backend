@@ -5,8 +5,10 @@ import { DatabaseClient } from '@infra/gateways/database'
 import bcrypt from 'bcrypt'
 import { Payment } from '@infra/gateways/payment'
 import { HttpReq } from '@plugins/requestBody'
+import { IncomingHttpHeaders } from 'http'
 
 export type UserRegisterRequest = {
+    headers: IncomingHttpHeaders
     username: string
     nickname?: string
     email: string
@@ -36,7 +38,7 @@ export async function userRegister(req: HttpReq<UserRegisterRequest>, db: Databa
     if (!passwordRegex().test(req.password))
         throw Errors.INVALID_PASSWORD()
 
-    // const stripeAccountId = await pay.createAccount(req.email)
+    const stripeAccountId = await pay.createAccount(req.email)
 
     const user = await db.user.create({
         data: {
@@ -45,11 +47,11 @@ export async function userRegister(req: HttpReq<UserRegisterRequest>, db: Databa
             email: req.email,
             about: req.about ? req.about : undefined,
             password: await bcrypt.hash(req.password, 10),
-            // stripeAccountId
+            stripeAccountId
         }
     })
 
-    const token = JWT.newToken(user)
+    const token = JWT.newToken(user, req.headers!)
 
     return { id: user.id, token }
 }

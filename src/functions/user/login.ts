@@ -5,8 +5,10 @@ import { User } from '@prisma/client'
 import bcrypt from 'bcrypt'
 import { userIsBanned } from './isBanned'
 import { HttpReq } from '@plugins/requestBody'
+import { IncomingHttpHeaders } from 'http'
 
 export type UserLoginRequest = {
+    headers: IncomingHttpHeaders
     emailOrUsername: string
     password: string
 }
@@ -29,7 +31,7 @@ export async function userLogin(req: HttpReq<UserLoginRequest>, db: DatabaseClie
         })
     else
         throw Errors.MISSING_EMAIL_OR_USERNAME()
-    
+
     if (!req.password)
         throw Errors.MISSING_PASSWORD()
 
@@ -42,7 +44,7 @@ export async function userLogin(req: HttpReq<UserLoginRequest>, db: DatabaseClie
     if (!await bcrypt.compare(req.password, user.password))
         throw Errors.INCORRECT_PASSWORD()
 
-    const token = JWT.newToken(user)
+    const token = JWT.newToken(user, req.headers!)
 
     return { id: user.id, token }
 }

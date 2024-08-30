@@ -29,7 +29,7 @@ export const optionalToken = async (data: MiddlewareData): Promise<OptionalToken
 
     // if it expires in less than a week
     if (token.exp - now < 24 * 60 * 60 * 1000 * 7)
-        return { user, token: JWT.newToken(user) }
+        return { user, token: JWT.newToken(user, data.headers) }
 
     return { user }
 }
