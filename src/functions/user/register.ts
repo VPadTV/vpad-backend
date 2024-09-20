@@ -3,7 +3,6 @@ import { emailRegex, usernameRegex, passwordRegex, nicknameRegex } from '@plugin
 import { JWT } from '@infra/gateways'
 import { DatabaseClient } from '@infra/gateways/database'
 import bcrypt from 'bcrypt'
-import { Payment } from '@infra/gateways/payment'
 import { HttpReq } from '@plugins/requestBody'
 import { IncomingHttpHeaders } from 'http'
 
@@ -21,7 +20,7 @@ export type UserRegisterResponse = {
     token: string
 }
 
-export async function userRegister(req: HttpReq<UserRegisterRequest>, db: DatabaseClient, pay: Payment): Promise<UserRegisterResponse> {
+export async function userRegister(req: HttpReq<UserRegisterRequest>, db: DatabaseClient): Promise<UserRegisterResponse> {
     if (!req.username)
         throw Errors.MISSING_USERNAME()
     if (!req.email)
@@ -38,7 +37,7 @@ export async function userRegister(req: HttpReq<UserRegisterRequest>, db: Databa
     if (!passwordRegex().test(req.password))
         throw Errors.INVALID_PASSWORD()
 
-    const stripeAccountId = await pay.createAccount(req.email)
+    // const stripeAccountId = await pay.createAccount(req.email)
 
     const user = await db.user.create({
         data: {
@@ -47,7 +46,7 @@ export async function userRegister(req: HttpReq<UserRegisterRequest>, db: Databa
             email: req.email,
             about: req.about ? req.about : undefined,
             password: await bcrypt.hash(req.password, 10),
-            stripeAccountId
+            // stripeAccountId
         }
     })
 
