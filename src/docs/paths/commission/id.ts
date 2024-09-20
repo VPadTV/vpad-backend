@@ -11,8 +11,8 @@ export const commId = {
         body: {
             title: 'funny commission',
             details: 'i want this and this and that',
-            creatorId: exId,
-            price: 1200
+            confirm: true,
+            complete: false,
         },
         bodyRequired: ['title', 'details', 'creatorId', 'price']
     }),
