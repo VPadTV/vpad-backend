@@ -1,7 +1,6 @@
-import { middleware, jsonResponse } from '@infra/adapters'
+import { middleware, route } from '@infra/adapters'
 import { IRoute } from '@main/route'
 import { Router } from 'express'
-import { ok } from '@plugins/http'
 import { Database } from '@infra/gateways'
 import { isAdmin } from '@infra/middlewares/isAdmin'
 import { adminManageBan } from '@functions/admin/manageBan'
@@ -13,18 +12,18 @@ export class AdminRoute implements IRoute {
         router.use(middleware(isAdmin))
 
         router.get('/',
-            jsonResponse(async (request: any) => {
-                return ok(await adminGetMany(request, Database.get()))
+            route(async (request: any) => {
+                return await adminGetMany(request, Database.get())
             }))
 
         router.put('/manage/admin/:id',
-            jsonResponse(async (request: any) => {
-                return ok(await adminManage(request, Database.get()))
+            route(async (request: any) => {
+                return await adminManage(request, Database.get())
             }))
 
         router.put('/manage/ban/:id',
-            jsonResponse(async (request: any) => {
-                return ok(await adminManageBan(request, Database.get()))
+            route(async (request: any) => {
+                return await adminManageBan(request, Database.get())
             }))
     }
 }

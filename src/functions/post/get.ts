@@ -1,6 +1,6 @@
 import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
-import { SimpleUser } from '@infra/mappers/user'
+import { SimpleUserMapper } from '@infra/mappers/user'
 import { User } from '@prisma/client'
 import { Req } from '@plugins/requestBody'
 
@@ -23,9 +23,9 @@ export type PostGetResponse = {
             name: string
             price: number
         } | null
-        author: SimpleUser
+        author: SimpleUserMapper
         credits: {
-            user: SimpleUser,
+            user: SimpleUserMapper,
             description: string
         }[]
         series: {
@@ -63,12 +63,12 @@ export async function postGet(req: Req<PostGetRequest>, db: DatabaseClient): Pro
                 }
             },
             author: {
-                select: SimpleUser.selector
+                select: SimpleUserMapper.selector
             },
             credits: {
                 select: {
                     user: {
-                        select: SimpleUser.selector
+                        select: SimpleUserMapper.selector
                     },
                     description: true,
                 }

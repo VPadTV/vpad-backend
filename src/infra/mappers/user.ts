@@ -1,4 +1,4 @@
-export class SimpleUser {
+export class SimpleUserMapper {
     constructor(
         readonly id: string,
         readonly nickname: string,
@@ -12,7 +12,7 @@ export class SimpleUser {
     }
 
     static fromAny(user: any) {
-        return new SimpleUser(
+        return new SimpleUserMapper(
             user.id,
             user.nickname,
             user.profilePhotoUrl

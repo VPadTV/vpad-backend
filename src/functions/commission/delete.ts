@@ -23,7 +23,7 @@ export async function commDelete(req: UserReq<CommissionDeleteRequest>, db: Data
     } else if (req.user.id === comm.creatorId) {
         // creator is deleting
     } else {
-        return {}
+        throw Errors.FORBIDDEN()
     }
 
     await db.commission.delete({

@@ -1,7 +1,6 @@
-import { middleware, jsonResponse } from '@infra/adapters';
+import { middleware, route } from '@infra/adapters';
 import { IRoute } from '@main/route';
 import { Router } from 'express';
-import { ok } from '@plugins/http';
 import { isLoggedIn } from '@infra/middlewares/isLoggedIn';
 import { userGet } from '@functions/user/get';
 import { userLogin } from '@functions/user/login';
@@ -14,25 +13,25 @@ import { Payment } from '@infra/gateways/payment';
 export class UserRoute implements IRoute {
     register(router: Router): void {
         router.post('/register',
-            jsonResponse(async (request: any) => {
-                return ok(await userRegister(request, Database.get(), Payment.get()))
+            route(async (request: any) => {
+                return await userRegister(request, Database.get(), Payment.get())
             }))
 
         router.post('/login',
-            jsonResponse(async (request: any) => {
-                return ok(await userLogin(request, Database.get()))
+            route(async (request: any) => {
+                return await userLogin(request, Database.get())
             }))
 
         router.get('/:id',
-            jsonResponse(async (request: any) => {
-                return ok(await userGet(request, Database.get()))
+            route(async (request: any) => {
+                return await userGet(request, Database.get())
             }))
 
         router.put('/:id',
             middleware(isLoggedIn),
             fields(['profilePhoto']),
-            jsonResponse(async (request: any) => {
-                return ok(await userEdit(request, Database.get(), Storage.get()))
+            route(async (request: any) => {
+                return await userEdit(request, Database.get(), Storage.get())
             }))
     }
 }

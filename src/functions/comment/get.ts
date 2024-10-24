@@ -1,7 +1,8 @@
 import { Errors } from '@plugins/http'
-import { SimpleUser } from '@infra/mappers/user'
+import { SimpleUserMapper } from '@infra/mappers/user'
 import { DatabaseClient } from '@infra/gateways/database'
 import { Req } from '@plugins/requestBody'
+import { CommentMapper } from '@infra/mappers/comment'
 
 export type CommentGetRequest = {
     id: string
@@ -11,7 +12,7 @@ export type CommentGetResponse = {
     text: string
     childrenCount: number
     meta: {
-        user: SimpleUser
+        user: SimpleUserMapper
         createdAt: string
         updatedAt: string
     }
@@ -20,15 +21,7 @@ export type CommentGetResponse = {
 export async function commentGet(req: Req<CommentGetRequest>, db: DatabaseClient): Promise<CommentGetResponse> {
     const comment = await db.comment.findFirst({
         where: { id: req.id },
-        select: {
-            text: true,
-            user: { select: SimpleUser.selector },
-            createdAt: true,
-            updatedAt: true,
-            _count: {
-                select: { children: true }
-            }
-        }
+        select: CommentMapper.selector,
     })
 
     if (!comment) throw Errors.NOT_FOUND()

@@ -1,7 +1,8 @@
-import { SimpleUser } from '@infra/mappers/user'
+import { SimpleUserMapper } from '@infra/mappers/user'
 import { Paginate, paginate } from '@plugins/paginate'
 import { DatabaseClient } from '@infra/gateways/database'
 import { Req } from '@plugins/requestBody'
+import { CommentMapper } from '@infra/mappers/comment'
 
 export type CommentGetManyRequest = {
     postId?: string
@@ -17,34 +18,26 @@ export type CommentGetManyResponse = Paginate<{
     text: string
     childrenCount: number
     meta: {
-        user: SimpleUser
+        user: SimpleUserMapper
         createdAt: string,
         updatedAt: string,
     }
 }>
 
 export async function commentGetMany(req: Req<CommentGetManyRequest>, db: DatabaseClient): Promise<CommentGetManyResponse> {
-    const page = req.page ?? 1
-    const size = req.size ?? 100
-    const offset = (page - 1) * size
+    const page = +(req.page ?? 0)
+    const size = +(req.size ?? 100)
 
     const orderByUpdatedAt = req.sortBy === 'oldest' ? 'asc' : 'desc'
     const [comments, total] = await db.$transaction([
         db.comment.findMany({
+            skip: page * size,
+            take: size,
             where: {
                 postId: req.postId ?? undefined,
                 parentId: req.parentId ?? undefined
             },
-            select: {
-                id: true,
-                text: true,
-                user: { select: SimpleUser.selector },
-                createdAt: true,
-                updatedAt: true,
-                _count: {
-                    select: { children: true }
-                }
-            },
+            select: CommentMapper.selector,
             orderBy: {
                 updatedAt: orderByUpdatedAt
             }
@@ -54,13 +47,10 @@ export async function commentGetMany(req: Req<CommentGetManyRequest>, db: Databa
                 postId: req.postId ?? undefined,
                 parentId: req.parentId ?? undefined
             },
-            orderBy: {
-                updatedAt: orderByUpdatedAt
-            }
         }),
     ])
 
-    return paginate(total, page, offset, size, comments.map(comment => ({
+    return paginate(total, page, size, comments.map(comment => ({
         id: comment.id,
         text: comment.text,
         childrenCount: comment._count.children,

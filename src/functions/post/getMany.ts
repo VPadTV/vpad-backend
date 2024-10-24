@@ -1,10 +1,11 @@
 import { Errors } from '@plugins/http'
-import { SimpleUser } from '@infra/mappers/user'
+import { SimpleUserMapper } from '@infra/mappers/user'
 import { Paginate, paginate } from '@plugins/paginate'
 import { DatabaseClient } from '@infra/gateways/database'
 import { MediaType, User } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
 import { UserReq } from '@plugins/requestBody'
+import { PostMapper } from '@infra/mappers/post'
 
 export type PostGetManyRequest = {
     user?: User
@@ -30,9 +31,9 @@ export type PostGetManyResponse = Paginate<{
         height?: number,
         nsfw: boolean
         tags: string[]
-        author: SimpleUser
+        author: SimpleUserMapper
         credits: {
-            user: SimpleUser,
+            user: SimpleUserMapper,
             description: string
         }[]
         series: {
@@ -55,6 +56,7 @@ export type PostSort = {
 export async function postGetMany(req: UserReq<PostGetManyRequest>, db: DatabaseClient): Promise<PostGetManyResponse> {
     let page = +(req.page ?? 0)
     let size = +(req.size ?? 100)
+
     let userTierValue = new Decimal(0)
     if (req.user && req.userTierId) {
         const userTier = await db.subscriptionTier.findFirst({
@@ -105,7 +107,8 @@ export async function postGetMany(req: UserReq<PostGetManyRequest>, db: Database
 
                 ]
             }
-        ]
+        ],
+        nsfw: req.nsfw ?? false,
     }
 
     if (req.titleSearch) {
@@ -124,49 +127,14 @@ export async function postGetMany(req: UserReq<PostGetManyRequest>, db: Database
         db.post.findMany({
             skip: offset,
             take: size,
-            where: {
-                ...where,
-                nsfw: req.nsfw ?? false,
-            },
-            select: {
-                id: true,
-                title: true,
-                text: true,
-                mediaType: true,
-                mediaUrl: true,
-                thumbUrl: true,
-                nsfw: true,
-                tags: true,
-                author: { select: SimpleUser.selector },
-                credits: {
-                    select: {
-                        user: {
-                            select: SimpleUser.selector
-                        },
-                        description: true
-                    },
-                },
-                series: {
-                    select: {
-                        id: true,
-                        name: true,
-                    },
-                },
-                thumbnailWidth: true,
-                thumbnailHeight: true,
-                createdAt: true,
-                _count: {
-                    select: {
-                        votes: true
-                    }
-                },
-            },
+            where,
+            select: PostMapper.selector,
             orderBy
         }),
         db.post.count({ where, orderBy }),
     ])
 
-    return paginate(total, page, offset, size, posts.map(post => ({
+    return paginate(total, page, size, posts.map(post => ({
         id: post.id,
         title: post.title,
         text: post.text,

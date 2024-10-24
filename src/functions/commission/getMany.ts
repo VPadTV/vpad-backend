@@ -1,5 +1,5 @@
 import { DatabaseClient } from "@infra/gateways"
-import { SimpleUser } from "@infra/mappers/user"
+import { SimpleUserMapper } from "@infra/mappers/user"
 import { Errors } from "@plugins/http"
 import { paginate } from "@plugins/paginate"
 import { UserReq } from "@plugins/requestBody";
@@ -21,9 +21,9 @@ export type CommSort = {
 
 type CommWhere = { userId: string } | { creatorId: string }
 
-export async function commGet(req: UserReq<CommissionGetRequest>, db: DatabaseClient): Promise<CommissionGetResponse> {
-    const page = req.page ?? 1
-    const size = req.size ?? 1
+export async function commGetMany(req: UserReq<CommissionGetRequest>, db: DatabaseClient): Promise<CommissionGetResponse> {
+    const page = +(req.page ?? 0)
+    const size = +(req.size ?? 100)
     let orderBy: CommSort
     switch (req.sortBy) {
         case 'oldest':
@@ -35,7 +35,6 @@ export async function commGet(req: UserReq<CommissionGetRequest>, db: DatabaseCl
         default:
             throw Errors.INVALID_SORT()
     }
-    const offset = (+page - 1) * + size
 
     let where: CommWhere
 
@@ -49,8 +48,8 @@ export async function commGet(req: UserReq<CommissionGetRequest>, db: DatabaseCl
 
     const [comms, total] = await db.$transaction([
         db.commission.findMany({
-            skip: offset,
-            take: req.size,
+            skip: page * size,
+            take: size,
             where,
             orderBy,
             select: {
@@ -58,14 +57,14 @@ export async function commGet(req: UserReq<CommissionGetRequest>, db: DatabaseCl
                 title: true,
                 details: true,
                 price: true,
-                user: { select: SimpleUser.selector },
-                creator: { select: SimpleUser.selector },
+                user: { select: SimpleUserMapper.selector },
+                creator: { select: SimpleUserMapper.selector },
                 createdAt: true,
                 updatedAt: true,
             }
         }),
-        db.commission.count({ where: { userId: req.user.id }, orderBy }),
+        db.commission.count({ where: { userId: req.user.id } }),
     ])
 
-    return paginate(total, page, offset, size, comms)
+    return paginate(total, page, size, comms)
 }

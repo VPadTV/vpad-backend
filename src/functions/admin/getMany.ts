@@ -1,11 +1,11 @@
 import { Errors } from '@plugins/http'
-import { SimpleUser } from '@infra/mappers/user'
+import { SimpleUserMapper } from '@infra/mappers/user'
 import { DatabaseClient } from '@infra/gateways/database'
 import { Req } from '@plugins/requestBody'
 
 export type AdminGetManyRequest = {}
 
-export type AdminGetManyResponse = { users: SimpleUser[] }
+export type AdminGetManyResponse = { users: SimpleUserMapper[] }
 
 export async function adminGetMany(_req: Req<AdminGetManyRequest>, db: DatabaseClient): Promise<AdminGetManyResponse> {
     const users = await db.user.findMany({
@@ -13,7 +13,7 @@ export async function adminGetMany(_req: Req<AdminGetManyRequest>, db: DatabaseC
             admin: true
         },
         select: {
-            ...SimpleUser.selector,
+            ...SimpleUserMapper.selector,
         },
         orderBy: {
             createdAt: 'desc'
