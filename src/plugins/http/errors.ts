@@ -44,6 +44,7 @@ export const Errors = {
     INVALID_TIER: () => badRequest("INVALID_TIER"),
     INVALID_TAKE: () => badRequest("INVALID_TAKE"),
     INVALID_NAME: () => badRequest("INVALID_NAME"),
+    INVALID_DESCRIPTION: () => badRequest("INVALID_DESCRIPTION"),
     NO_ACCOUNT: () => badRequest("NO_ACCOUNT"),
 
     INCORRECT_PASSWORD: () => badRequest("INCORRECT_PASSWORD"),
