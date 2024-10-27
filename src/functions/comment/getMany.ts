@@ -3,6 +3,7 @@ import { Paginate, paginate } from '@plugins/paginate'
 import { DatabaseClient } from '@infra/gateways/database'
 import { Req } from '@plugins/requestBody'
 import { CommentMapper } from '@infra/mappers/comment'
+import { Prisma } from '@prisma/client'
 
 export type CommentGetManyRequest = {
     postId?: string
@@ -19,8 +20,8 @@ export type CommentGetManyResponse = Paginate<{
     childrenCount: number
     meta: {
         user: SimpleUserMapper
-        createdAt: string,
-        updatedAt: string,
+        createdAt: Date,
+        updatedAt: Date,
     }
 }>
 
@@ -29,24 +30,24 @@ export async function commentGetMany(req: Req<CommentGetManyRequest>, db: Databa
     const size = +(req.size ?? 100)
 
     const orderByUpdatedAt = req.sortBy === 'oldest' ? 'asc' : 'desc'
+
+    const where: Prisma.CommentWhereInput = {
+        postId: req.postId ?? undefined,
+        parentId: req.parentId ?? undefined
+    }
+
     const [comments, total] = await db.$transaction([
         db.comment.findMany({
             skip: page * size,
             take: size,
-            where: {
-                postId: req.postId ?? undefined,
-                parentId: req.parentId ?? undefined
-            },
+            where,
             select: CommentMapper.selector,
             orderBy: {
                 updatedAt: orderByUpdatedAt
             }
         }),
         db.comment.count({
-            where: {
-                postId: req.postId ?? undefined,
-                parentId: req.parentId ?? undefined
-            },
+            where,
         }),
     ])
 
@@ -56,8 +57,8 @@ export async function commentGetMany(req: Req<CommentGetManyRequest>, db: Databa
         childrenCount: comment._count.children,
         meta: {
             user: comment.user,
-            createdAt: comment.createdAt.toISOString(),
-            updatedAt: comment.updatedAt.toISOString(),
+            createdAt: comment.createdAt,
+            updatedAt: comment.updatedAt,
         }
     })))
 }

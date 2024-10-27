@@ -13,8 +13,8 @@ export type CommentGetResponse = {
     childrenCount: number
     meta: {
         user: SimpleUserMapper
-        createdAt: string
-        updatedAt: string
+        createdAt: Date
+        updatedAt: Date
     }
 }
 
@@ -31,8 +31,8 @@ export async function commentGet(req: Req<CommentGetRequest>, db: DatabaseClient
         childrenCount: comment._count.children,
         meta: {
             user: comment.user,
-            createdAt: comment.createdAt.toISOString(),
-            updatedAt: comment.updatedAt.toISOString(),
+            createdAt: comment.createdAt,
+            updatedAt: comment.updatedAt,
         },
     }
 }

@@ -3,6 +3,7 @@ import { SimpleUserMapper } from "@infra/mappers/user"
 import { Errors } from "@plugins/http"
 import { paginate } from "@plugins/paginate"
 import { UserReq } from "@plugins/requestBody";
+import { Prisma } from "@prisma/client";
 
 export type CommissionGetRequest = {
     take: 'i-commissioned' | 'they-commissioned'
@@ -19,8 +20,6 @@ export type CommSort = {
     createdAt: 'asc' | 'desc'
 }
 
-type CommWhere = { userId: string } | { creatorId: string }
-
 export async function commGetMany(req: UserReq<CommissionGetRequest>, db: DatabaseClient): Promise<CommissionGetResponse> {
     const page = +(req.page ?? 0)
     const size = +(req.size ?? 100)
@@ -36,7 +35,7 @@ export async function commGetMany(req: UserReq<CommissionGetRequest>, db: Databa
             throw Errors.INVALID_SORT()
     }
 
-    let where: CommWhere
+    let where: Prisma.CommissionWhereInput
 
     if (req.take === 'i-commissioned') {
         where = { userId: req.user.id }

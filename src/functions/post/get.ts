@@ -36,8 +36,8 @@ export type PostGetResponse = {
         dislikes: number
         views: number
         myVote: number
-        createdAt: string
-        updatedAt: string
+        createdAt: Date
+        updatedAt: Date
     }
 }
 
@@ -135,8 +135,8 @@ export async function postGet(req: Req<PostGetRequest>, db: DatabaseClient): Pro
             dislikes: dislikes ?? 0,
             views: views ?? 0,
             myVote: myVote?.vote ?? 0,
-            createdAt: post.createdAt.toISOString(),
-            updatedAt: post.updatedAt.toISOString(),
+            createdAt: post.createdAt,
+            updatedAt: post.updatedAt,
         }
     }
 }

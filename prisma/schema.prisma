@@ -48,6 +48,9 @@ model User {
 
     sentMessages     ChatMessage[] @relation(name: "sender")
     receivedMessages ChatMessage[] @relation(name: "receiver")
+
+    jobs        Job[]
+    candidateAt JobCandidate[]
 }
 
 model Series {
@@ -222,4 +225,33 @@ model ChatMessage {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+}
+
+model Job {
+    id String @id @default(cuid())
+
+    description String
+
+    owner   User   @relation(fields: [ownerId], references: [id])
+    ownerId String
+
+    candidates JobCandidate[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model JobCandidate {
+    job   Job    @relation(fields: [jobId], references: [id])
+    jobId String
+
+    candidate   User   @relation(fields: [candidateId], references: [id])
+    candidateId String
+
+    description String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@id([jobId, candidateId])
 }

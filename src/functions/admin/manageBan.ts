@@ -11,7 +11,7 @@ export type AdminManageBanRequest = {
 export type AdminManageBanResponse = {
     id: string
     banned: boolean
-    banTimeout?: string
+    banTimeout: Date | null
 }
 
 export async function adminManageBan(req: UserReq<AdminManageBanRequest>, db: DatabaseClient): Promise<AdminManageBanResponse> {
@@ -26,5 +26,5 @@ export async function adminManageBan(req: UserReq<AdminManageBanRequest>, db: Da
             banTimeout: req.banned ? (req.banTimeout ?? null) : null
         }
     })
-    return { id: user.id, banned: user.banned, banTimeout: user.banTimeout?.toISOString() ?? undefined }
+    return { id: user.id, banned: user.banned, banTimeout: user.banTimeout }
 }
