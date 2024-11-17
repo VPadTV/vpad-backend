@@ -58,6 +58,10 @@ export const postNoId = {
                         user: simpleUser,
                         description: 'some description'
                     }],
+                    series: {
+                        id: exId,
+                        name: 'series name',
+                    },
                     views: 1000
                 }
             }
