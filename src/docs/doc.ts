@@ -21,6 +21,7 @@ import { commNoId } from './paths/commission/noId';
 import { seriesId } from './paths/series/id';
 import { seriesNoId } from './paths/series/noId';
 import { seriesOwnerId } from './paths/series/ownerId';
+import { userNoId } from './paths/user/noId';
 
 export default {
     openapi: '3.0.0',
@@ -44,6 +45,7 @@ export default {
         },
     },
     paths: {
+        '/user': userNoId,
         '/user/{id}': userId,
         '/user/login': userLogin,
         '/user/register': userRegister,
@@ -73,8 +75,8 @@ export default {
         '/commission': commNoId,
 
         '/admin': adminNoId,
-        '/manage/admin/{id}': adminId,
-        '/manage/ban/{id}': adminBanId,
+        '/admin/manage/admin/{id}': adminId,
+        '/admin/manage/ban/{id}': adminBanId,
 
         // '/pay/donate': donate,
     }

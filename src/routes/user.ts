@@ -9,6 +9,7 @@ import { userRegister } from '@functions/user/register';
 import { userEdit } from '@functions/user/edit';
 import { Database, Storage } from '@infra/gateways';
 import { fields } from '@infra/middlewares';
+import { userGetMany } from '@functions/user/getMany';
 
 export class UserRoute implements IRoute {
     register(router: Router): void {
@@ -20,6 +21,11 @@ export class UserRoute implements IRoute {
         router.post('/login',
             jsonResponse(async (request: any) => {
                 return ok(await userLogin(request, Database.get()))
+            }))
+
+        router.get('/',
+            jsonResponse(async (request: any) => {
+                return ok(await userGetMany(request, Database.get()))
             }))
 
         router.get('/:id',

@@ -37,7 +37,7 @@ export async function subGet(req: UserHttpReq<SubGetRequest>, db: DatabaseClient
             }
         }
     })
-    
+
     if (!sub) throw Errors.NOT_FOUND()
 
     return {
@@ -47,5 +47,5 @@ export async function subGet(req: UserHttpReq<SubGetRequest>, db: DatabaseClient
             name: sub.tier.name,
             price: sub.tier.price.toNumber()
         } : null
-    } ?? {}
+    }
 }

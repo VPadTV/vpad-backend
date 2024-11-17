@@ -1,38 +1,55 @@
 import { Errors } from '@plugins/http'
 import { SimpleUser } from '@infra/mappers/user'
-import { boolify } from '@plugins/boolify'
 import { DatabaseClient } from '@infra/gateways/database'
 import { HttpReq } from '@plugins/requestBody'
+import { Paginate, paginate } from '@plugins/paginate'
 
 export type UserGetManyRequest = {
-    usernameSearch?: string
-    nicknameSearch?: string
-    banned?: boolean
+    search: string
+    page: number,
+    size: number,
+    sortBy: 'nickname' | 'createdAt'
+    sortDirection: 'oldest' | 'latest'
 }
 
-export type UserGetManyResponse = { users: SimpleUser[] }
+export type UserGetManyResponse = SimpleUser
 
-export async function userGetMany(req: HttpReq<UserGetManyRequest>, db: DatabaseClient): Promise<UserGetManyResponse> {
-    req.banned = boolify(req.banned)
-    const users = await db.user.findMany({
-        where: {
-            username: req.usernameSearch ? {
-                search: req.usernameSearch,
-            } : undefined,
-            nickname: req.nicknameSearch ? {
-                search: req.nicknameSearch,
-            } : undefined,
-            banned: req.banned,
-        },
-        select: {
-            ...SimpleUser.selector,
-        },
-        orderBy: {
-            createdAt: 'desc'
-        }
-    })
+export async function userGetMany(req: HttpReq<UserGetManyRequest>, db: DatabaseClient): Promise<Paginate<UserGetManyResponse>> {
+    const page = req.page ?? 1
+    const size = req.size ?? 100
+    const offset = (page - 1) * size
 
-    if (!users || users.length === 0) throw Errors.NOT_FOUND()
+    if (req.sortBy !== 'nickname' && req.sortBy !== 'createdAt')
+        throw Errors.BAD_REQUEST()
 
-    return { users }
+    let sort = 'asc'
+    if (req.sortDirection === 'latest')
+        sort = 'desc'
+
+    const [users, total] = await db.$transaction([
+        db.user.findMany({
+            skip: offset,
+            take: size,
+            where: {
+                nickname: req.search ? {
+                    search: req.search,
+                } : undefined,
+            },
+            select: {
+                ...SimpleUser.selector,
+            },
+            orderBy: {
+                [req.sortBy]: sort
+            }
+        }),
+        db.user.count({
+            where: {
+                nickname: req.search ? {
+                    search: req.search,
+                } : undefined,
+            },
+        })
+    ])
+
+    return paginate(total, page, offset, size, users)
 }
