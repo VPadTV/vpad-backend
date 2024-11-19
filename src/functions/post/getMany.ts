@@ -2,7 +2,7 @@ import { Errors } from '@plugins/http'
 import { SimpleUser } from '@infra/mappers/user'
 import { Paginate, paginate } from '@plugins/paginate'
 import { DatabaseClient } from '@infra/gateways/database'
-import { MediaType, User } from '@prisma/client'
+import { MediaType, Prisma, User } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
 import { UserHttpReq } from '@plugins/requestBody'
 
@@ -13,6 +13,7 @@ export type PostGetManyRequest = {
     sortBy: 'latest' | 'oldest' | 'high-views' | 'low-views'
     titleSearch?: string
     nsfw?: boolean
+    seriesId?: string
 
     page: number
     size: number
@@ -23,7 +24,7 @@ export type PostGetManyResponse = Paginate<{
     title: string
     text: string | null
     mediaUrl: string
-    mediaType: MediaType,
+    mediaType: MediaType
     thumbUrl?: string
     meta: {
         width?: number,
@@ -53,8 +54,9 @@ export type PostSort = {
 }
 
 export async function postGetMany(req: UserHttpReq<PostGetManyRequest>, db: DatabaseClient): Promise<PostGetManyResponse> {
-    let page = +(req.page ?? 0)
+    let page = +(req.page ?? 1)
     let size = +(req.size ?? 100)
+
     let userTierValue = new Decimal(0)
     if (req.user && req.userTierId) {
         const userTier = await db.subscriptionTier.findFirst({
@@ -70,7 +72,7 @@ export async function postGetMany(req: UserHttpReq<PostGetManyRequest>, db: Data
             throw Errors.INVALID_TIER()
     }
 
-    let orderBy: PostSort
+    let orderBy: Prisma.PostOrderByWithRelationInput
     switch (req.sortBy) {
         case 'low-views':
             orderBy = { votes: { _count: 'asc' } }
@@ -88,36 +90,23 @@ export async function postGetMany(req: UserHttpReq<PostGetManyRequest>, db: Data
             throw Errors.INVALID_SORT()
     }
     const offset = (page - 1) * size
-    let authorsCheck
-    if (req.creatorId && req.creatorId.trim().length > 0)
-        authorsCheck = {
-            some: { id: req.creatorId },
-        }
-    const where: any = {
-        authors: authorsCheck,
+    let where: Prisma.PostWhereInput = {
+        authorId: req.creatorId,
         OR: [
             { minTier: { price: { lte: userTierValue } } },
             { minTier: null },
         ],
-        AND: [
-            {
-                OR: [
-
-                ]
-            }
-        ]
+        seriesId: req.seriesId,
+        nsfw: req.nsfw ?? false,
     }
 
     if (req.titleSearch) {
-        const words = req.titleSearch.split(' ').map((wd) => wd.trim());
-        words.forEach((word) => {
-            where.AND[0].OR.push({
-                title: {
-                    contains: word,
-                    mode: 'insensitive'
-                }
-            })
-        })
+        where = {
+            ...where,
+            title: {
+                search: req.titleSearch
+            }
+        }
     }
 
     const [posts, total] = await db.$transaction([
@@ -126,7 +115,6 @@ export async function postGetMany(req: UserHttpReq<PostGetManyRequest>, db: Data
             take: size,
             where: {
                 ...where,
-                nsfw: req.nsfw ?? false,
             },
             select: {
                 id: true,
@@ -163,7 +151,7 @@ export async function postGetMany(req: UserHttpReq<PostGetManyRequest>, db: Data
             },
             orderBy
         }),
-        db.post.count({ where, orderBy }),
+        db.post.count({ where }),
     ])
 
     return paginate(total, page, offset, size, posts.map(post => ({
