@@ -89,35 +89,41 @@ export async function postGetMany(req: UserHttpReq<PostGetManyRequest>, db: Data
         default:
             throw Errors.INVALID_SORT()
     }
-    const offset = (page - 1) * size
-    let where: Prisma.PostWhereInput = {
-        authorId: req.creatorId,
-        OR: [
-            { minTier: { price: { lte: userTierValue } } },
-            { minTier: null },
-        ],
-        seriesId: req.seriesId,
-        nsfw: req.nsfw ?? false,
-    }
+
+
+    let whereAnd: Prisma.PostWhereInput[] = [
+        {
+            OR: [
+                { minTier: { price: { lte: userTierValue } } },
+                { minTier: null },
+            ]
+        }
+    ]
 
     if (req.search) {
-        where = {
-            ...where,
+        whereAnd.push({
             OR: [
                 { title: { search: req.search } },
                 { text: { search: req.search } },
                 { author: { nickname: { search: req.search } } },
+                { series: { name: { search: req.search } } },
             ]
-        }
+        })
     }
 
+    let where: Prisma.PostWhereInput = {
+        authorId: req.creatorId,
+        seriesId: req.seriesId,
+        nsfw: req.nsfw ?? false,
+        AND: whereAnd,
+    }
+
+    const offset = (page - 1) * size
     const [posts, total] = await db.$transaction([
         db.post.findMany({
             skip: offset,
             take: size,
-            where: {
-                ...where,
-            },
+            where,
             select: {
                 id: true,
                 title: true,
