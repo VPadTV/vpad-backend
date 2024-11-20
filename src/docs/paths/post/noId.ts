@@ -34,6 +34,8 @@ export const postNoId = {
             creatorId: exId,
             sortBy: 'latest | oldest | high-views | low-views',
             search: 'search terms',
+            nsfw: 'true',
+            seriesId: exId,
             page: 1,
             size: 30,
         },

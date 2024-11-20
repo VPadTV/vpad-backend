@@ -11,7 +11,7 @@ export type PostGetManyRequest = {
     userTierId?: string
     creatorId?: string
     sortBy: 'latest' | 'oldest' | 'high-views' | 'low-views'
-    titleSearch?: string
+    search?: string
     nsfw?: boolean
     seriesId?: string
 
@@ -100,12 +100,14 @@ export async function postGetMany(req: UserHttpReq<PostGetManyRequest>, db: Data
         nsfw: req.nsfw ?? false,
     }
 
-    if (req.titleSearch) {
+    if (req.search) {
         where = {
             ...where,
-            title: {
-                search: req.titleSearch
-            }
+            OR: [
+                { title: { search: req.search } },
+                { text: { search: req.search } },
+                { author: { nickname: { search: req.search } } },
+            ]
         }
     }
 
