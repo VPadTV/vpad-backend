@@ -22,6 +22,7 @@ import { seriesId } from './paths/series/id';
 import { seriesNoId } from './paths/series/noId';
 import { seriesOwnerId } from './paths/series/ownerId';
 import { userNoId } from './paths/user/noId';
+import { userWhoAmI } from './paths/user/whoami';
 
 export default {
     openapi: '3.0.0',
@@ -49,6 +50,7 @@ export default {
         '/user/{id}': userId,
         '/user/login': userLogin,
         '/user/register': userRegister,
+        '/user/whoami': userWhoAmI,
 
         '/tier': tierNoId,
         '/tier/{id}': tierId,

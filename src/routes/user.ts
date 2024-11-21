@@ -10,6 +10,8 @@ import { userEdit } from '@functions/user/edit';
 import { Database, Storage } from '@infra/gateways';
 import { fields } from '@infra/middlewares';
 import { userGetMany } from '@functions/user/getMany';
+import { userWhoAmI } from '@functions/user/loggedIn';
+import { optionalToken } from '@infra/middlewares/decodeOptionalToken';
 
 export class UserRoute implements IRoute {
     register(router: Router): void {
@@ -26,6 +28,12 @@ export class UserRoute implements IRoute {
         router.get('/',
             jsonResponse(async (request: any) => {
                 return ok(await userGetMany(request, Database.get()))
+            }))
+
+        router.get('/whoami',
+            middleware(optionalToken),
+            jsonResponse(async (request: any) => {
+                return ok(await userWhoAmI(request))
             }))
 
         router.get('/:id',

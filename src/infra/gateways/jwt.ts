@@ -23,7 +23,7 @@ export abstract class JWT {
     public static newToken(user: User, headers: IncomingHttpHeaders) {
         const agent = headers['user-agent'] ?? ''
         return this.sign({
-            sub: user.id.toString() + '#' + user.username + agent,
+            sub: user.id.toString() + '#' + agent,
             secretKey: process.env.SECRET as string
         })
     }
