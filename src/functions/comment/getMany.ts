@@ -34,7 +34,7 @@ export async function commentGetMany(req: HttpReq<CommentGetManyRequest>, db: Da
         db.comment.findMany({
             where: {
                 postId: req.postId ?? undefined,
-                parentId: req.parentId ?? undefined
+                parentId: req.parentId ?? null
             },
             select: {
                 id: true,
@@ -49,12 +49,14 @@ export async function commentGetMany(req: HttpReq<CommentGetManyRequest>, db: Da
             },
             orderBy: {
                 updatedAt: orderByUpdatedAt
-            }
+            },
+            take: size,
+            skip: offset
         }),
         db.comment.count({
             where: {
                 postId: req.postId ?? undefined,
-                parentId: req.parentId ?? undefined
+                parentId: req.parentId ?? null
             },
             orderBy: {
                 updatedAt: orderByUpdatedAt
