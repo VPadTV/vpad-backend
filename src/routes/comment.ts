@@ -8,6 +8,7 @@ import { ok } from '@plugins/http';
 import { Database } from '@infra/gateways';
 import { IRoute } from '@main/route';
 import { Router } from 'express';
+import { commentGetMany } from '@functions/comment/getMany';
 
 export class CommentRoute implements IRoute {
     register(router: Router): void {
@@ -19,6 +20,10 @@ export class CommentRoute implements IRoute {
         router.get('/:id',
             jsonResponse(async (request: any) => {
                 return ok(await commentGet(request, Database.get()))
+            }))
+        router.get('',
+            jsonResponse(async (request: any) => {
+                return ok(await commentGetMany(request, Database.get()))
             }))
         router.put('/:id',
             middleware(isLoggedIn),
