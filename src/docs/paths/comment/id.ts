@@ -13,6 +13,7 @@ export const commentId = {
             text: 'some text',
             childrenCount: 10,
             meta: {
+                postId: exId,
                 user: simpleUser,
                 createdAt: exDate,
                 updatedAt: exDate,

@@ -11,6 +11,7 @@ export type CommentGetResponse = {
     text: string
     childrenCount: number
     meta: {
+        postId: string
         user: SimpleUser
         createdAt: string
         updatedAt: string
@@ -22,6 +23,7 @@ export async function commentGet(req: HttpReq<CommentGetRequest>, db: DatabaseCl
     const comment = await db.comment.findFirst({
         where: { id: req.id },
         select: {
+            postId: true,
             text: true,
             user: { select: SimpleUser.selector },
             createdAt: true,
@@ -39,6 +41,7 @@ export async function commentGet(req: HttpReq<CommentGetRequest>, db: DatabaseCl
         text: comment.text,
         childrenCount: comment._count.children,
         meta: {
+            postId: comment.postId,
             user: comment.user,
             createdAt: comment.createdAt.toISOString(),
             updatedAt: comment.updatedAt.toISOString(),
