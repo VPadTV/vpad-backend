@@ -17,6 +17,7 @@ export type CommentGetManyResponse = Paginate<{
     text: string
     childrenCount: number
     meta: {
+        postId: string
         user: SimpleUser
         createdAt: string,
         updatedAt: string,
@@ -36,6 +37,7 @@ export async function commentGetMany(req: HttpReq<CommentGetManyRequest>, db: Da
                 parentId: req.parentId ?? undefined
             },
             select: {
+                postId: true,
                 id: true,
                 text: true,
                 user: { select: SimpleUser.selector },
@@ -65,6 +67,7 @@ export async function commentGetMany(req: HttpReq<CommentGetManyRequest>, db: Da
         text: comment.text,
         childrenCount: comment._count.children,
         meta: {
+            postId: comment.postId,
             user: comment.user,
             createdAt: comment.createdAt.toISOString(),
             updatedAt: comment.updatedAt.toISOString(),
