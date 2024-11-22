@@ -114,7 +114,7 @@ export async function postGetMany(req: UserHttpReq<PostGetManyRequest>, db: Data
     let where: Prisma.PostWhereInput = {
         authorId: req.creatorId,
         seriesId: req.seriesId,
-        nsfw: req.nsfw ?? false,
+        nsfw: req.nsfw ? undefined : false,
         AND: whereAnd,
     }
 
