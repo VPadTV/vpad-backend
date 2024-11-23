@@ -8,7 +8,7 @@ export type TokenMiddlewareResponse = {
     token?: string
 }
 
-export const tokenWrapper = async (data: MiddlewareData, func: (user: User) => Promise<void>): Promise<TokenMiddlewareResponse> => {
+export const requiredToken = async (data: MiddlewareData, func: (user: User) => Promise<void>): Promise<TokenMiddlewareResponse> => {
     const { authorization } = data;
     if (!authorization) throw Errors.MISSING_TOKEN()
 
@@ -20,7 +20,10 @@ export const tokenWrapper = async (data: MiddlewareData, func: (user: User) => P
     const now = Date.now()
     if (now > token.exp) throw Errors.EXPIRED_TOKEN()
 
-    const id = token.sub.split('#')[0]
+    const [id, agent] = token.sub.split('#')
+
+    console.log(agent)
+    console.log(data.headers['user-agent'])
 
     const db = Database.get()
     const user = await db.user.findFirst({ where: { id } })

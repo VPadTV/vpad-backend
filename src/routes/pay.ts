@@ -6,16 +6,14 @@ import { donateCreate } from '@functions/pay/donate';
 import { Payment } from '@infra/gateways/payment';
 import { Database } from '@infra/gateways';
 import { PayWebhookRequest, payWebhook } from '@functions/pay/webhook';
-import { ok } from '@plugins/http';
 import { webhook } from '@infra/adapters/webhook';
 
 export class PayRoute implements IRoute {
     register(router: Router): void {
         router.post('/donate',
             middleware(isLoggedIn),
-            jsonResponse(async (request: any) => {
-                return ok(await donateCreate(request, Database.get(), Payment.get()))
-            }))
+            jsonResponse(
+                donateCreate, Database.get(), Payment.get()))
 
         router.post('/webhook',
             express.raw({ type: 'application/json' }),
