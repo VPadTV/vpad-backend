@@ -23,8 +23,9 @@ export const optionalToken = async (data: MiddlewareData): Promise<OptionalToken
 
     const [id, agent] = token.sub.split('#')
 
-    console.log(agent)
-    console.log(data.headers['user-agent'])
+    if (agent !== data.headers['user-agent']) {
+        throw Errors.INVALID_TOKEN()
+    }
 
     const db = Database.get()
     const user = await db.user.findFirst({ where: { id } })
