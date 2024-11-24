@@ -15,6 +15,7 @@ export type PostGetManyRequest = {
     search?: string
     nsfw?: boolean
     seriesId?: string
+    tags: string
 
     page: number
     size: number
@@ -125,6 +126,9 @@ export async function postGetMany(req: UserHttpReq<PostGetManyRequest>, db: Data
         authorId: req.creatorId,
         seriesId: req.seriesId,
         nsfw: req.nsfw ? undefined : false,
+        tags: req.tags ? {
+            hasEvery: req.tags.split(','),
+        } : undefined,
         AND: whereAnd,
     }
 
