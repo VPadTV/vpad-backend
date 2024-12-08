@@ -1,4 +1,4 @@
-import { middleware, jsonResponse } from '@infra/adapters';
+import { middleware, route } from '@infra/adapters';
 import { IRoute } from '@main/route';
 import { Router } from 'express';
 import { Database } from '@infra/gateways';
@@ -9,24 +9,26 @@ import { tierDelete } from '@functions/tier/delete';
 import { tierGetMany } from '@functions/tier/getMany';
 
 export class TierRoute implements IRoute {
+    prefix = '/tier'
+
     register(router: Router): void {
         router.post('/',
             middleware(isLoggedIn),
-            jsonResponse(
+            route(
                 tierCreate, Database.get()))
 
         router.get('/creator/:creatorId',
-            jsonResponse(
+            route(
                 tierGetMany, Database.get()))
 
         router.put('/:id',
             middleware(isLoggedIn),
-            jsonResponse(
+            route(
                 tierUpdate, Database.get()))
 
         router.delete('/:id',
             middleware(isLoggedIn),
-            jsonResponse(
+            route(
                 tierDelete, Database.get()))
     }
 }

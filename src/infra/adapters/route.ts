@@ -13,7 +13,7 @@ const transformFiles = (multerFiles: MulterFiles) => {
     return files
 }
 
-export function jsonResponse<T>(fn: (request: T, ...args: any[]) => Promise<Json>, ...args: any[]) {
+export function route<T>(fn: (request: T, ...args: any[]) => Promise<Json>, ...args: any[]) {
     return async (req: Request, res: Response) => {
         const body = Array.isArray(req.body) ? { data: req.body } : req.body
         const files = transformFiles(req.files as MulterFiles)

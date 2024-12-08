@@ -1,4 +1,4 @@
-import { middleware, jsonResponse } from '@infra/adapters';
+import { middleware, route } from '@infra/adapters';
 import { Database } from '@infra/gateways';
 import { isLoggedIn } from '@infra/middlewares/isLoggedIn';
 import { IRoute } from '@main/route';
@@ -9,24 +9,26 @@ import { seriesEdit } from '@functions/series/edit';
 import { seriesDelete } from '@functions/series/delete';
 
 export class SeriesRoute implements IRoute {
+    prefix = '/series'
+
     register(router: Router): void {
         router.post('/',
             middleware(isLoggedIn),
-            jsonResponse(
+            route(
                 seriesCreate, Database.get()))
 
         router.get('/:ownerId',
-            jsonResponse(
+            route(
                 seriesGet, Database.get()))
 
         router.put('/:id',
             middleware(isLoggedIn),
-            jsonResponse(
+            route(
                 seriesEdit, Database.get()))
 
         router.delete('/:id',
             middleware(isLoggedIn),
-            jsonResponse(
+            route(
                 seriesDelete, Database.get()))
     }
 }

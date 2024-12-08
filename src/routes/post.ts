@@ -4,7 +4,7 @@ import { postEdit } from '@functions/post/edit';
 import { postGet } from '@functions/post/get';
 import { postGetMany } from '@functions/post/getMany';
 import { postStream } from '@functions/post/stream';
-import { middleware, jsonResponse } from '@infra/adapters';
+import { middleware, route } from '@infra/adapters';
 import { streamResponse } from '@infra/adapters/streamResponse';
 import { Database, Storage } from '@infra/gateways';
 import { fields } from '@infra/middlewares';
@@ -14,21 +14,23 @@ import { IRoute } from '@main/route';
 import { Router } from 'express';
 
 export class PostRoute implements IRoute {
+    prefix = '/post'
+
     register(router: Router): void {
         router.post('/',
             middleware(isLoggedIn),
             fields(['media', 'thumb']),
-            jsonResponse(
+            route(
                 postCreate, Database.get(), Storage.get()))
 
         router.get('/',
             middleware(optionalToken),
-            jsonResponse(
+            route(
                 postGetMany, Database.get()))
 
         router.get('/:id',
             middleware(optionalToken),
-            jsonResponse(
+            route(
                 postGet, Database.get()))
 
         router.get('/stream/:key',
@@ -36,12 +38,12 @@ export class PostRoute implements IRoute {
 
         router.put('/:id',
             middleware(isLoggedIn),
-            jsonResponse(
+            route(
                 postEdit, Database.get(), Storage.get()))
 
         router.delete('/:id',
             middleware(isLoggedIn),
-            jsonResponse(
+            route(
                 postDelete, Database.get(), Storage.get()))
     }
 }

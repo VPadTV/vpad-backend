@@ -29,10 +29,10 @@ export class App {
             }
         })
 
-        for (let path in routes) {
+        for (let route of routes) {
             const router = express.Router()
-            routes[path].register(router)
-            this.server.use(path, router)
+            route.register(router)
+            this.server.use(route.prefix, router)
         }
     }
 }

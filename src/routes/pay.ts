@@ -1,4 +1,4 @@
-import { middleware, jsonResponse } from '@infra/adapters';
+import { middleware, route } from '@infra/adapters';
 import { IRoute } from '@main/route';
 import express, { Router } from 'express';
 import { isLoggedIn } from '@infra/middlewares';
@@ -9,10 +9,12 @@ import { PayWebhookRequest, payWebhook } from '@functions/pay/webhook';
 import { webhook } from '@infra/adapters/webhook';
 
 export class PayRoute implements IRoute {
+    prefix = '/pay'
+
     register(router: Router): void {
         router.post('/donate',
             middleware(isLoggedIn),
-            jsonResponse(
+            route(
                 donateCreate, Database.get(), Payment.get()))
 
         router.post('/webhook',

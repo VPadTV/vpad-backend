@@ -1,4 +1,4 @@
-import { middleware, jsonResponse } from '@infra/adapters';
+import { middleware, route } from '@infra/adapters';
 import { IRoute } from '@main/route';
 import { Router } from 'express';
 import { isLoggedIn } from '@infra/middlewares/isLoggedIn';
@@ -12,31 +12,33 @@ import { userGetMany } from '@functions/user/getMany';
 import { userWhoAmI } from '@functions/user/loggedIn';
 
 export class UserRoute implements IRoute {
+    prefix = '/user'
+
     register(router: Router): void {
         router.post('/register',
-            jsonResponse(userRegister, Database.get()))
+            route(userRegister, Database.get()))
 
         router.post('/login',
-            jsonResponse(
+            route(
                 userLogin, Database.get()))
 
         router.get('/',
-            jsonResponse(
+            route(
                 userGetMany, Database.get()))
 
         router.get('/whoami',
             middleware(isLoggedIn),
-            jsonResponse(
+            route(
                 userWhoAmI, Database.get()))
 
         router.get('/:id',
-            jsonResponse(
+            route(
                 userGet, Database.get()))
 
         router.put('/:id',
             middleware(isLoggedIn),
             fields(['profilePhoto']),
-            jsonResponse(
+            route(
                 userEdit, Database.get(), Storage.get()))
     }
 }
