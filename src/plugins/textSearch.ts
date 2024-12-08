@@ -1,7 +1,7 @@
 import { Json } from "./http";
 
 export function textSearch<T>(key: string | ((word: string) => Json | T), search: string | undefined): T[] {
-    if (!search) return {}
+    if (!search) return []
 
     let or: any[] = []
 
