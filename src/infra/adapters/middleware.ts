@@ -22,7 +22,6 @@ export function middleware(fn: (request: MiddlewareData) => Promise<any>) {
             }
             next()
         } catch (error) {
-            console.error(`** Middleware **`)
             console.error(error)
             const httpErr = handleError(error)
             return res.status(httpErr.status).send({ error: httpErr.message })

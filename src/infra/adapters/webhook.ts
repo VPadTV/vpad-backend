@@ -18,7 +18,6 @@ export function webhook(fn: (request: PayWebhookRequest) => Promise<void>) {
             })
             return res.status(200).send()
         } catch (error) {
-            console.error(`** Webhook Route **`)
             console.error(error)
             const httpErr = handleError(error)
             return res.status(httpErr.status).send({ error: httpErr.message })

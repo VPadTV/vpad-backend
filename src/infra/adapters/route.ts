@@ -32,7 +32,6 @@ export function route<T>(fn: (request: T, ...args: any[]) => Promise<Json>, ...a
             if (Array.isArray(data)) data = { data }
             return res.status(200).json({ ...data, token: data.token ?? req.params?.token })
         } catch (error) {
-            console.error(`** JSON Route **`)
             console.error(error)
             const httpErr = handleError(error)
             return res.status(httpErr.status).send({ error: httpErr.message })

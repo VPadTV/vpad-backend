@@ -23,7 +23,6 @@ export function streamResponse<U extends PostStreamResponse>(fn: (request: any, 
                 res.end()
             })
         } catch (error) {
-            console.error(`** Streaming **`)
             console.error(error)
             const httpErr = handleError(error)
             return res.status(httpErr.status).send({ error: httpErr.message })
