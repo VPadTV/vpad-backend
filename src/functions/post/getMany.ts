@@ -92,34 +92,25 @@ export async function postGetMany(req: UserHttpReq<PostGetManyRequest>, db: Data
             throw Errors.INVALID_SORT()
     }
 
-
-    let whereAnd: Prisma.PostWhereInput[] = [
-        {
-            OR: [
-                { minTier: { price: { lte: userTierValue } } },
-                { minTier: null },
-            ]
-        }
-    ]
-
+    let searchFilter: Prisma.PostWhereInput = {}
     if (req.search) {
-        const searchOrs: Prisma.PostWhereInput[] = []
+        searchFilter.OR = [
+            ...textSearch<Prisma.PostWhereInput>('title', req.search),
+            ...textSearch<Prisma.PostWhereInput>('text', req.search),
+            ...textSearch(word => ({
+                author: { nickname: { contains: word } },
+            }), req.search),
+            ...textSearch(word => ({
+                series: { name: { contains: word } }
+            }), req.search),
+        ]
+    }
 
-        searchOrs.push(textSearch('title', req.search))
-
-        searchOrs.push(textSearch('text', req.search))
-
-        searchOrs.push(textSearch(word => ({
-            author: { nickname: { contains: word } }
-        }), req.search))
-
-        searchOrs.push(textSearch(word => ({
-            series: { name: { contains: word } }
-        }), req.search))
-
-        whereAnd.push({
-            OR: searchOrs
-        })
+    const hasEnoughTier: Prisma.PostWhereInput = {
+        OR: [
+            { minTier: { price: { lte: userTierValue } } },
+            { minTier: null },
+        ]
     }
 
     let where: Prisma.PostWhereInput = {
@@ -129,7 +120,10 @@ export async function postGetMany(req: UserHttpReq<PostGetManyRequest>, db: Data
         tags: req.tags ? {
             hasEvery: req.tags.split(','),
         } : undefined,
-        AND: whereAnd,
+        AND: [
+            hasEnoughTier,
+            searchFilter,
+        ],
     }
 
     const offset = (page - 1) * size

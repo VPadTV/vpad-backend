@@ -1,24 +1,18 @@
 import { Json } from "./http";
 
-type PrismaWhere<T> = {
-    OR: T[]
-}
-
-export function textSearch<T>(key: string | ((word: string) => Json), search: string | undefined): {} | PrismaWhere<T> {
+export function textSearch<T>(key: string | ((word: string) => Json | T), search: string | undefined): T[] {
     if (!search) return {}
 
-    let where: PrismaWhere<any> = {
-        OR: []
-    }
+    let or: any[] = []
 
     for (const word of search.split(' ')) {
         if (typeof key === 'string')
-            where.OR.push({
+            or.push({
                 [key]: { contains: word }
             })
         else
-            where.OR.push(key(word))
+            or.push(key(word))
     }
 
-    return where
+    return or
 }
