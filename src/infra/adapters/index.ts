@@ -1,2 +1,2 @@
 export * from './middleware'
-export * from './json'
+export * from './route'

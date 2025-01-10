@@ -3,6 +3,8 @@ import { SimpleUser } from '@infra/mappers/user'
 import { DatabaseClient } from '@infra/gateways/database'
 import { HttpReq } from '@plugins/requestBody'
 import { Paginate, paginate } from '@plugins/paginate'
+import { textSearch } from '@plugins/textSearch'
+import { Prisma } from '@prisma/client'
 
 export type UserGetManyRequest = {
     search: string
@@ -26,15 +28,13 @@ export async function userGetMany(req: HttpReq<UserGetManyRequest>, db: Database
     if (req.sortDirection === 'latest')
         sort = 'desc'
 
+    const where: Prisma.UserWhereInput = textSearch('nickname', req.search)
+
     const [users, total] = await db.$transaction([
         db.user.findMany({
             skip: offset,
             take: size,
-            where: {
-                nickname: req.search ? {
-                    search: req.search,
-                } : undefined,
-            },
+            where,
             select: {
                 ...SimpleUser.selector,
             },
@@ -43,11 +43,7 @@ export async function userGetMany(req: HttpReq<UserGetManyRequest>, db: Database
             }
         }),
         db.user.count({
-            where: {
-                nickname: req.search ? {
-                    search: req.search,
-                } : undefined,
-            },
+            where,
         })
     ])
 

@@ -12,6 +12,7 @@ export async function userWhoAmI(req: UserHttpReq<UserWhoAmIRequest>): Promise<U
         profilePhotoUrl: user.profilePhotoUrl ?? null,
         about: user.about ?? null,
         contact: user.contact ?? null,
-        admin: user.admin
+        admin: user.admin,
+        id: user.id
     }
 }

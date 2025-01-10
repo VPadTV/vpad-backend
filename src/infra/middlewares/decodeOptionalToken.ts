@@ -21,7 +21,11 @@ export const optionalToken = async (data: MiddlewareData): Promise<OptionalToken
     const now = Date.now()
     if (now > token.exp) throw Errors.EXPIRED_TOKEN()
 
-    const id = token.sub.split('#')[0]
+    const [id, agent] = token.sub.split('#')
+
+    if (agent !== data.headers['user-agent']) {
+        throw Errors.INVALID_TOKEN()
+    }
 
     const db = Database.get()
     const user = await db.user.findFirst({ where: { id } })

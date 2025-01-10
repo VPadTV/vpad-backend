@@ -5,6 +5,7 @@ import { DatabaseClient } from '@infra/gateways/database'
 import { MediaType, Prisma, User } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
 import { UserHttpReq } from '@plugins/requestBody'
+import { textSearch } from '@plugins/textSearch'
 
 export type PostGetManyRequest = {
     user?: User
@@ -14,6 +15,7 @@ export type PostGetManyRequest = {
     search?: string
     nsfw?: boolean
     seriesId?: string
+    tags: string
 
     page: number
     size: number
@@ -90,32 +92,38 @@ export async function postGetMany(req: UserHttpReq<PostGetManyRequest>, db: Data
             throw Errors.INVALID_SORT()
     }
 
-
-    let whereAnd: Prisma.PostWhereInput[] = [
-        {
-            OR: [
-                { minTier: { price: { lte: userTierValue } } },
-                { minTier: null },
-            ]
-        }
-    ]
-
+    let searchFilter: Prisma.PostWhereInput = {}
     if (req.search) {
-        whereAnd.push({
-            OR: [
-                { title: { search: req.search } },
-                { text: { search: req.search } },
-                { author: { nickname: { search: req.search } } },
-                { series: { name: { search: req.search } } },
-            ]
-        })
+        searchFilter.OR = [
+            ...textSearch<Prisma.PostWhereInput>('title', req.search),
+            ...textSearch<Prisma.PostWhereInput>('text', req.search),
+            ...textSearch(word => ({
+                author: { nickname: { contains: word } },
+            }), req.search),
+            ...textSearch(word => ({
+                series: { name: { contains: word } }
+            }), req.search),
+        ]
+    }
+
+    const hasEnoughTier: Prisma.PostWhereInput = {
+        OR: [
+            { minTier: { price: { lte: userTierValue } } },
+            { minTier: null },
+        ]
     }
 
     let where: Prisma.PostWhereInput = {
         authorId: req.creatorId,
         seriesId: req.seriesId,
         nsfw: req.nsfw ? undefined : false,
-        AND: whereAnd,
+        tags: req.tags ? {
+            hasEvery: req.tags.split(','),
+        } : undefined,
+        AND: [
+            hasEnoughTier,
+            searchFilter,
+        ],
     }
 
     const offset = (page - 1) * size

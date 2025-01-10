@@ -14,6 +14,7 @@ export type UserGetResponse = {
     about: string | null
     contact: string | null
     admin: boolean
+    id: string
 }
 
 export async function userGet(req: HttpReq<UserGetRequest>, db: DatabaseClient): Promise<UserGetResponse> {

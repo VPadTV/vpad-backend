@@ -15,6 +15,7 @@ export type TierCreateResponse = {
 }
 
 export async function tierCreate(req: UserHttpReq<TierCreateRequest>, db: DatabaseClient): Promise<TierCreateResponse> {
+    console.log(req.user)
     if (typeof req.user.id !== 'string')
         throw Errors.MISSING_ID()
     if (!validString(req.name))

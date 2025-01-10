@@ -1,5 +1,4 @@
-import { ok } from '@plugins/http';
-import { middleware, jsonResponse } from '@infra/adapters';
+import { middleware, route } from '@infra/adapters';
 import { Database } from '@infra/gateways';
 import { isLoggedIn } from '@infra/middlewares/isLoggedIn';
 import { IRoute } from '@main/route';
@@ -10,25 +9,26 @@ import { seriesEdit } from '@functions/series/edit';
 import { seriesDelete } from '@functions/series/delete';
 
 export class SeriesRoute implements IRoute {
+    prefix = '/series'
+
     register(router: Router): void {
         router.post('/',
             middleware(isLoggedIn),
-            jsonResponse(async (request: any) => {
-                return ok(await seriesCreate(request, Database.get()))
-            }))
+            route(
+                seriesCreate, Database.get()))
+
         router.get('/:ownerId',
-            jsonResponse(async (request: any) => {
-                return ok(await seriesGet(request, Database.get()))
-            }))
+            route(
+                seriesGet, Database.get()))
+
         router.put('/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request: any) => {
-                return ok(await seriesEdit(request, Database.get()))
-            }))
+            route(
+                seriesEdit, Database.get()))
+
         router.delete('/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request: any) => {
-                return ok(await seriesDelete(request, Database.get()))
-            }))
+            route(
+                seriesDelete, Database.get()))
     }
 }
