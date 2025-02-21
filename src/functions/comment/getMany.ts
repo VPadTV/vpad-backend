@@ -21,7 +21,6 @@ export type CommentGetManyResponse = Paginate<{
         user: SimpleUser
         createdAt: string,
         updatedAt: string,
-        postId: string
     }
 }>
 
@@ -44,7 +43,6 @@ export async function commentGetMany(req: HttpReq<CommentGetManyRequest>, db: Da
                 user: { select: SimpleUser.selector },
                 createdAt: true,
                 updatedAt: true,
-                postId: true,
                 _count: {
                     select: { children: true }
                 }
@@ -75,7 +73,6 @@ export async function commentGetMany(req: HttpReq<CommentGetManyRequest>, db: Da
             user: comment.user,
             createdAt: comment.createdAt.toISOString(),
             updatedAt: comment.updatedAt.toISOString(),
-            postId: comment.postId
         }
     })))
 }
