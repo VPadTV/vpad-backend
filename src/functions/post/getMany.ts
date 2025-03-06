@@ -74,7 +74,7 @@ export async function postGetMany(req: UserHttpReq<PostGetManyRequest>, db: Data
             throw Errors.INVALID_TIER()
     }
 
-    let orderBy: Prisma.PostOrderByWithRelationInput
+    let orderBy: Prisma.PostOrderByWithRelationAndSearchRelevanceInput
     switch (req.sortBy) {
         case 'low-views':
             orderBy = { votes: { _count: 'asc' } }

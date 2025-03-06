@@ -20,7 +20,7 @@ export class CommentRoute implements IRoute {
         router.get('/:id',
             route(commentGet, Database.get()))
 
-        router.get('',
+        router.get('/',
             route(
                 commentGetMany, Database.get()))
 
