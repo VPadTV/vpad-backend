@@ -1,4 +1,4 @@
-import { boolify } from "@helpers/boolify"
+import { boolify } from "@plugins/boolify"
 import type { Request, Response, NextFunction } from 'express'
 
 export const lockServer = (error: string = 'Server is read-only right now') => {

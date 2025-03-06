@@ -1,10 +1,9 @@
 import { SimpleUser } from '@infra/mappers/user'
-import { Paginate, paginate } from '@helpers/paginate'
+import { Paginate, paginate } from '@plugins/paginate'
 import { DatabaseClient } from '@infra/gateways/database'
-import { User } from '@prisma/client'
+import { HttpReq } from '@plugins/requestBody'
 
 export type CommentGetManyRequest = {
-    user: User
     postId?: string
     parentId?: string
     sortBy: 'latest' | 'oldest'
@@ -18,23 +17,27 @@ export type CommentGetManyResponse = Paginate<{
     text: string
     childrenCount: number
     meta: {
+        postId: string
         user: SimpleUser
         createdAt: string,
         updatedAt: string,
     }
 }>
 
-export async function commentGetMany(req: CommentGetManyRequest, db: DatabaseClient): Promise<CommentGetManyResponse> {
-    const offset = (req.page - 1) * req.size
+export async function commentGetMany(req: HttpReq<CommentGetManyRequest>, db: DatabaseClient): Promise<CommentGetManyResponse> {
+    const page = req.page ?? 1
+    const size = req.size ?? 100
+    const offset = (page - 1) * size
 
     const orderByUpdatedAt = req.sortBy === 'oldest' ? 'asc' : 'desc'
     const [comments, total] = await db.$transaction([
         db.comment.findMany({
             where: {
                 postId: req.postId ?? undefined,
-                parentId: req.parentId ?? undefined
+                parentId: req.parentId ?? null
             },
             select: {
+                postId: true,
                 id: true,
                 text: true,
                 user: { select: SimpleUser.selector },
@@ -46,21 +49,27 @@ export async function commentGetMany(req: CommentGetManyRequest, db: DatabaseCli
             },
             orderBy: {
                 updatedAt: orderByUpdatedAt
-            }
+            },
+            take: size,
+            skip: offset
         }),
         db.comment.count({
             where: {
                 postId: req.postId ?? undefined,
-                parentId: req.parentId ?? undefined
+                parentId: req.parentId ?? null
+            },
+            orderBy: {
+                updatedAt: orderByUpdatedAt
             }
         }),
     ])
 
-    return paginate(total, req.page, offset, req.size, comments.map(comment => ({
+    return paginate(total, page, offset, size, comments.map(comment => ({
         id: comment.id,
         text: comment.text,
         childrenCount: comment._count.children,
         meta: {
+            postId: comment.postId,
             user: comment.user,
             createdAt: comment.createdAt.toISOString(),
             updatedAt: comment.updatedAt.toISOString(),

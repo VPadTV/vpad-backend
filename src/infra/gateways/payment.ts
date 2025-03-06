@@ -1,4 +1,4 @@
-import { Errors } from '@helpers/http';
+import { Errors } from '@plugins/http';
 import { Decimal } from '@prisma/client/runtime/library';
 import Stripe from 'stripe';
 
@@ -13,9 +13,28 @@ export type CreateCheckout = {
         price: Decimal // Decimal(100) = $1.00
         name: string
     }
-    quantity: [number, number]
     email: string
     destinationAccountId: string
+}
+
+export type DonateInput = {
+    destinationAccountId: string
+    email: string
+    amount: Decimal
+}
+
+export type SubscribeInput = {
+    destinationAccountId: string
+    email: string
+    amount: Decimal
+
+    lengthInMonths?: number
+}
+
+export type PayInput = {
+    destinationAccountId: string
+    email: string
+    amount: Decimal
 }
 
 export class Payment {
@@ -55,6 +74,18 @@ export class Payment {
         return link.url
     }
 
+    async donate(_data: DonateInput): Promise<CheckoutData> {
+        throw new Error('Unimplemented')
+    }
+
+    async subscribe(_data: DonateInput): Promise<CheckoutData> {
+        throw new Error('Unimplemented')
+    }
+
+    async payUser(_data: DonateInput): Promise<CheckoutData> {
+        throw new Error('Unimplemented')
+    }
+
     async createSession(data: CreateCheckout): Promise<CheckoutData> {
         let mode: 'payment' | 'subscription'
         if (data.type === 'donation') mode = 'payment'
@@ -82,9 +113,7 @@ export class Payment {
                     },
                     quantity: 1,
                     adjustable_quantity: {
-                        enabled: true,
-                        minimum: data.quantity[0] ?? 1,
-                        maximum: data.quantity[1] ?? 1,
+                        enabled: false,
                     }
                 }
             ],

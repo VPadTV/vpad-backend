@@ -1,4 +1,4 @@
-import { Errors } from '@helpers/http'
+import { Errors } from '@plugins/http'
 import { MiddlewareData } from '@infra/adapters'
 import { JWT, Database } from '@infra/gateways'
 import { User } from '@prisma/client'
@@ -21,7 +21,11 @@ export const optionalToken = async (data: MiddlewareData): Promise<OptionalToken
     const now = Date.now()
     if (now > token.exp) throw Errors.EXPIRED_TOKEN()
 
-    const id = token.sub.split('#')[0]
+    const [id, agent] = token.sub.split('#')
+
+    if (agent !== data.headers['user-agent']) {
+        throw Errors.INVALID_TOKEN()
+    }
 
     const db = Database.get()
     const user = await db.user.findFirst({ where: { id } })
@@ -29,7 +33,7 @@ export const optionalToken = async (data: MiddlewareData): Promise<OptionalToken
 
     // if it expires in less than a week
     if (token.exp - now < 24 * 60 * 60 * 1000 * 7)
-        return { user, token: JWT.newToken(user) }
+        return { user, token: JWT.newToken(user, data.headers) }
 
     return { user }
 }

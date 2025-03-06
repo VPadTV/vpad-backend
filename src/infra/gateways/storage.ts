@@ -4,7 +4,7 @@ import crypto from 'crypto';
 import { FileRawUpload } from '@infra/middlewares';
 import { MediaType } from '@prisma/client';
 import { Readable, ReadableOptions } from 'stream';
-import { Errors } from '@helpers/http';
+import { Errors } from '@plugins/http';
 import sharp from 'sharp';
 
 export type FileUpload = {
@@ -73,7 +73,7 @@ export class Storage {
     async getFileData(file: FileRawUpload | undefined, imageType: ImageType): Promise<FileUpload | undefined> {
         if (!file) return undefined
         let key: string = crypto.randomBytes(16).toString('hex')
-        const type = MimeTypes.getType(file.mimetype)
+        const type = MimeTypes.getMediaType(file.mimetype)
         let width
         let height
         let processed: Buffer | undefined
@@ -116,13 +116,12 @@ export class Storage {
         if (!url) return
         const split = url.split('/')
         const key = split[split.length - 1]
-        const r = await this.client
+        await this.client
             .deleteObject({
                 Bucket: process.env.BB_BUCKET!,
                 Key: key,
             })
             .promise()
-        console.log(r);
     }
 
     async stream(key: string): Promise<StreamResponse> {

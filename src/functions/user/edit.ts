@@ -1,10 +1,11 @@
-import { Errors } from '@helpers/http'
-import { emailRegex, usernameRegex, passwordRegex, nicknameRegex } from '@helpers/regex'
+import { Errors } from '@plugins/http'
+import { emailRegex, usernameRegex, passwordRegex, nicknameRegex } from '@plugins/regex'
 import { DatabaseClient } from '@infra/gateways/database'
 import { ImageType, Storage } from '@infra/gateways/storage'
 import { FileRawUpload } from '@infra/middlewares'
 import { MediaType } from '@prisma/client'
 import bcrypt from 'bcrypt'
+import { UserHttpReq } from '@plugins/requestBody'
 
 export type UserEditRequest = {
     id: string
@@ -13,12 +14,17 @@ export type UserEditRequest = {
     email?: string
     password?: string
     about?: string
+    customCss?: string
+    highlightPostId?: string
     profilePhoto?: FileRawUpload
 }
 
 export type UserEditResponse = {}
 
-export async function userEdit(req: UserEditRequest, db: DatabaseClient, storage: Storage): Promise<UserEditResponse> {
+export async function userEdit(req: UserHttpReq<UserEditRequest>, db: DatabaseClient, storage: Storage): Promise<UserEditResponse> {
+    if (req.user.id !== req.id && !req.user.admin)
+        throw Errors.UNAUTHORIZED()
+
     if (req.username != null && !usernameRegex().test(req.username))
         throw Errors.INVALID_USERNAME()
     if (req.nickname != null && !nicknameRegex().test(req.nickname))
@@ -31,8 +37,10 @@ export async function userEdit(req: UserEditRequest, db: DatabaseClient, storage
     let profilePhotoData = await storage.getFileData(req.profilePhoto, ImageType.THUMBNAIL)
     if (profilePhotoData?.type === MediaType.VIDEO) throw Errors.INVALID_FILE()
 
-    const found = await db.user.findFirst({ where: { username: req.username } })
-    if (found && found.id !== req.id) throw Errors.USERNAME_ALREADY_EXISTS()
+    if (req.username) {
+        const found = await db.user.findFirst({ where: { username: req.username } })
+        if (found && found.id !== req.id) throw Errors.USERNAME_ALREADY_EXISTS()
+    }
 
     await db.user.update({
         where: { id: req.id },
@@ -42,7 +50,9 @@ export async function userEdit(req: UserEditRequest, db: DatabaseClient, storage
             email: req.email,
             password: req.password && await bcrypt.hash(req.password, 10),
             about: req.about,
-            profilePhotoUrl: profilePhotoData?.url
+            customCss: req.customCss,
+            highlightId: req.highlightPostId,
+            profilePhotoUrl: profilePhotoData?.url,
         }
     })
 

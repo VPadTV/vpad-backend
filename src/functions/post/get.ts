@@ -1,7 +1,8 @@
-import { Errors } from '@helpers/http'
+import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
 import { SimpleUser } from '@infra/mappers/user'
 import { User } from '@prisma/client'
+import { HttpReq } from '@plugins/requestBody'
 
 export type PostGetRequest = {
     user?: User
@@ -10,7 +11,7 @@ export type PostGetRequest = {
 
 export type PostGetResponse = {
     title: string
-    text: string
+    text: string | null
     mediaType: string
     mediaUrl: string
     thumbUrl?: string
@@ -21,8 +22,16 @@ export type PostGetResponse = {
             id: string
             name: string
             price: number
-        } | undefined
-        authors: [SimpleUser]
+        } | null
+        author: SimpleUser
+        credits: {
+            user: SimpleUser,
+            description: string
+        }[]
+        series: {
+            id: string,
+            name: string,
+        } | null,
         likes: number
         dislikes: number
         views: number
@@ -32,7 +41,7 @@ export type PostGetResponse = {
     }
 }
 
-export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<PostGetResponse> {
+export async function postGet(req: HttpReq<PostGetRequest>, db: DatabaseClient): Promise<PostGetResponse> {
     const post = await db.post.findFirst({
         where: {
             id: req.id
@@ -47,8 +56,22 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
             minTier: { select: { id: true, name: true, price: true } },
             nsfw: true,
             tags: true,
-            authors: {
+            series: {
+                select: {
+                    id: true,
+                    name: true,
+                }
+            },
+            author: {
                 select: SimpleUser.selector
+            },
+            credits: {
+                select: {
+                    user: {
+                        select: SimpleUser.selector
+                    },
+                    description: true,
+                }
             },
             createdAt: true,
             updatedAt: true,
@@ -56,14 +79,12 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
     })
     if (!post) throw Errors.NOT_FOUND()
 
-    const author = post.authors[0]
-
+    // check if current user's sub tier price is >= the post's tier price
     if (post.minTier && post.minTier.price.greaterThan(0)) {
-        // TODO: Fix `post.authors[0]` check.
         if (!req.user) throw Errors.UNAUTHORIZED()
         const userTier = await db.subscriptionTier.findFirst({
             where: {
-                creatorId: author.id,
+                creatorId: post.author.id,
                 subscribers: {
                     some: { userId: req.user.id }
                 },
@@ -74,7 +95,7 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
         })
         if (!userTier)
             throw Errors.BAD_REQUEST()
-        if (userTier?.price < post.minTier.price)
+        if (userTier?.price.lessThan(post.minTier.price))
             throw Errors.LOW_TIER()
     }
 
@@ -106,8 +127,10 @@ export async function postGet(req: PostGetRequest, db: DatabaseClient): Promise<
                 id: post.minTier.id,
                 name: post.minTier.name,
                 price: post.minTier.price.toNumber(),
-            } : undefined,
-            authors: [author],
+            } : null,
+            author: post.author,
+            credits: post.credits,
+            series: post.series,
             likes: likes ?? 0,
             dislikes: dislikes ?? 0,
             views: views ?? 0,

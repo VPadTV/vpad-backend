@@ -1,56 +1,27 @@
-import { Errors } from '@helpers/http'
 import { Storage } from '@infra/gateways'
 import { DatabaseClient } from '@infra/gateways/database'
-import { SimpleUser } from '@infra/mappers/user'
-import { User } from '@prisma/client'
+import { Errors } from '@plugins/http'
+import { UserHttpReq } from '@plugins/requestBody'
 
 export type PostDeleteRequest = {
-    user: User
     id: string
 }
 
-export enum PostDeleteStatus {
-    POST_DELETED = 'Post Deleted',
-    AUTHOR_REMOVED = 'Author Removed'
-}
-export type PostDeleteResponse = {
-    status: PostDeleteStatus
-}
+export async function postDelete(req: UserHttpReq<PostDeleteRequest>, db: DatabaseClient, storage: Storage): Promise<{}> {
 
-export async function postDelete(req: PostDeleteRequest, db: DatabaseClient, storage: Storage): Promise<PostDeleteResponse> {
-    const found = await db.post.findFirst({
-        select: { id: true },
-        where: { id: req.id, authors: { some: { id: req.user.id } } }
-    })
+    if (!req.id) throw Errors.MISSING_ID()
 
-    if (!found)
-        throw Errors.NOT_FOUND()
-
-    const post = await db.post.update({
-        select: {
-            id: true, mediaUrl: true, thumbUrl: true,
-            authors: { select: SimpleUser.selector }
-        },
-        where: { id: req.id, authors: { some: { id: req.user.id } } },
-        data: {
-            authors: {
-                disconnect: { id: req.user.id }
+    await db.$transaction(async (tx) => {
+        const post = await tx.post.delete({
+            where: {
+                id: req.id,
+                authorId: req.user.id,
             }
-        }
+        })
+        await storage.delete(post.mediaUrl)
+        await storage.delete(post.thumbUrl)
     })
 
-    let status = PostDeleteStatus.AUTHOR_REMOVED
-    if (post.authors.length < 1) {
-        await db.post.delete({ where: { id: post.id } })
-        if (post.mediaUrl)
-            await storage.delete(post.mediaUrl)
-        if (post.thumbUrl)
-            await storage.delete(post.thumbUrl)
-        status = PostDeleteStatus.POST_DELETED
-    }
 
-
-    return {
-        status
-    }
+    return {}
 }

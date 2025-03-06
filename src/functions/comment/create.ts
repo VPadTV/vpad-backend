@@ -1,9 +1,8 @@
-import { Errors } from '@helpers/http'
+import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
-import { User } from '@prisma/client'
+import { UserHttpReq } from '@plugins/requestBody'
 
 export type CommentCreateRequest = {
-    user: User
     postId: string
     parentId?: string
     text: string
@@ -13,7 +12,7 @@ export type CommentCreateResponse = {
     id: string
 }
 
-export async function commentCreate(req: CommentCreateRequest, db: DatabaseClient): Promise<CommentCreateResponse> {
+export async function commentCreate(req: UserHttpReq<CommentCreateRequest>, db: DatabaseClient): Promise<CommentCreateResponse> {
     if (!req.postId) throw Errors.MISSING_ID()
     if (!req.text) throw Errors.MISSING_TEXT()
 

@@ -1,30 +1,25 @@
-import { middleware, jsonResponse } from '@infra/adapters'
+import { middleware, route } from '@infra/adapters'
 import { IRoute } from '@main/route'
 import { Router } from 'express'
-import { ok } from '@helpers/http'
 import { Database } from '@infra/gateways'
-import { AdminManageBanRequest, adminManageBan } from '@functions/admin/manageBan'
 import { isAdmin } from '@infra/middlewares/isAdmin'
-import { AdminGetManyRequest, adminGetMany } from '@functions/admin/getMany'
-import { AdminManageRequest, adminManage } from '@functions/admin/manage'
+import { adminManageBan } from '@functions/admin/manageBan'
+import { adminGetMany } from '@functions/admin/getMany'
+import { adminManage } from '@functions/admin/manage'
 
 export class AdminRoute implements IRoute {
+    prefix = '/admin'
+
     register(router: Router): void {
         router.use(middleware(isAdmin))
 
         router.get('/',
-            jsonResponse(async (request: AdminGetManyRequest) => {
-                return ok(await adminGetMany(request, Database.get()))
-            }))
+            route(adminGetMany, Database.get()))
 
         router.put('/manage/admin/:id',
-            jsonResponse(async (request: AdminManageRequest) => {
-                return ok(await adminManage(request, Database.get()))
-            }))
+            route(adminManage, Database.get()))
 
         router.put('/manage/ban/:id',
-            jsonResponse(async (request: AdminManageBanRequest) => {
-                return ok(await adminManageBan(request, Database.get()))
-            }))
+            route(adminManageBan, Database.get()))
     }
 }

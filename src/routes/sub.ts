@@ -1,38 +1,29 @@
-import { middleware, jsonResponse } from '@infra/adapters';
+import { middleware, route } from '@infra/adapters';
 import { IRoute } from '@main/route';
 import { Router } from 'express';
-import { ok } from '@helpers/http';
 import { Database } from '@infra/gateways';
-import { SubCreateRequest, subCreate } from '@functions/sub/create';
-import { SubUpdateRequest, subUpdate } from '@functions/sub/update';
-import { SubDeleteRequest, subDelete } from '@functions/sub/delete';
+import { subCreate } from '@functions/sub/create';
+import { subDelete } from '@functions/sub/delete';
 import { isLoggedIn } from '@infra/middlewares';
-import { SubGetRequest, subGet } from '@functions/sub/get';
+import { subGet } from '@functions/sub/get';
 
 export class SubRoute implements IRoute {
+    prefix = '/sub'
+
     register(router: Router): void {
         router.post('/',
             middleware(isLoggedIn),
-            jsonResponse(async (request: SubCreateRequest) => {
-                return ok(await subCreate(request, Database.get()))
-            }))
+            route(
+                subCreate, Database.get()))
 
         router.get('/:creatorId',
             middleware(isLoggedIn),
-            jsonResponse(async (request: SubGetRequest) => {
-                return ok(await subGet(request, Database.get()))
-            }))
-
-        router.put('/:id',
-            middleware(isLoggedIn),
-            jsonResponse(async (request: SubUpdateRequest) => {
-                return ok(await subUpdate(request, Database.get()))
-            }))
+            route(
+                subGet, Database.get()))
 
         router.delete('/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request: SubDeleteRequest) => {
-                return ok(await subDelete(request, Database.get()))
-            }))
+            route(
+                subDelete, Database.get()))
     }
 }

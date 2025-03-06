@@ -1,5 +1,6 @@
-import { Errors } from '@helpers/http'
+import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
+import { UserHttpReq } from '@plugins/requestBody'
 
 export type AdminManageBanRequest = {
     id: string,
@@ -13,7 +14,7 @@ export type AdminManageBanResponse = {
     banTimeout?: string
 }
 
-export async function adminManageBan(req: AdminManageBanRequest, db: DatabaseClient): Promise<AdminManageBanResponse> {
+export async function adminManageBan(req: UserHttpReq<AdminManageBanRequest>, db: DatabaseClient): Promise<AdminManageBanResponse> {
     if (!req.id) throw Errors.MISSING_ID()
     if (req.banned !== true && req.banned !== false) throw Errors.BAD_REQUEST()
     if (req.banned === false && req.banTimeout) throw Errors.BAD_REQUEST()

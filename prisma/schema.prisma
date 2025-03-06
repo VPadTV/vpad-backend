@@ -27,29 +27,21 @@ model User {
     comments Comment[]
     votes    Votes[]   @relation(name: "userVotes")
 
-    posts Post[]
+    series      Series[] @relation(name: "owner")
+    posts       Post[]   @relation(name: "author")
+    highlight   Post?    @relation(name: "highlight", fields: [highlightId], references: [id])
+    highlightId String?
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    credits PostCredits[]
 
-    tiers       SubscriptionTier[]
-    subscribing Subscription[]     @relation(name: "user")
-    subscribed  Subscription[]     @relation(name: "creator")
-}
+    tiers SubscriptionTier[]
 
-model Comment {
-    id   String @id @default(cuid())
-    text String
+    subscriptions Subscription[] @relation(name: "user")
 
-    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict)
-    userId String
+    requestCommissions   Commission[] @relation(name: "user")
+    requestedCommissions Commission[] @relation(name: "creator")
 
-    post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Restrict)
-    postId String @unique
-
-    parent   Comment?  @relation(name: "chain", fields: [parentId], references: [id], onDelete: Cascade, onUpdate: Restrict)
-    parentId String?
-    children Comment[] @relation(name: "chain")
+    customCss String?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -58,6 +50,20 @@ model Comment {
 enum MediaType {
     VIDEO
     IMAGE
+}
+
+model Series {
+    id String @id @default(cuid())
+
+    owner   User   @relation(name: "owner", fields: [ownerId], references: [id])
+    ownerId String
+
+    posts Post[]
+
+    name String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model Post {
@@ -71,7 +77,15 @@ model Post {
     thumbnailWidth  Int?
     thumbnailHeight Int?
 
-    authors User[]
+    series   Series? @relation(fields: [seriesId], references: [id])
+    seriesId String?
+
+    author   User   @relation(name: "author", fields: [authorId], references: [id])
+    authorId String
+
+    highlighted User[] @relation(name: "highlight")
+
+    credits PostCredits[]
 
     comments Comment[]
     votes    Votes[]   @relation(name: "postVotes")
@@ -85,6 +99,39 @@ model Post {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+}
+
+model Comment {
+    id   String @id @default(cuid())
+    text String
+
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict)
+    userId String
+
+    post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Restrict)
+    postId String
+
+    parent   Comment?  @relation(name: "chain", fields: [parentId], references: [id], onDelete: Cascade, onUpdate: Restrict)
+    parentId String?
+    children Comment[] @relation(name: "chain")
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model PostCredits {
+    post   Post   @relation(fields: [postId], references: [id])
+    postId String
+
+    user   User   @relation(fields: [userId], references: [id])
+    userId String
+
+    description String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@id([postId, userId])
 }
 
 model Votes {
@@ -128,14 +175,30 @@ model Subscription {
     tier   SubscriptionTier? @relation(fields: [tierId], references: [id], onDelete: Restrict, onUpdate: Restrict)
     tierId String?
 
+    user   User   @relation(name: "user", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict)
+    userId String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Commission {
+    id String @id @default(cuid())
+
+    title   String
+    details String
+
     creator   User   @relation(name: "creator", fields: [creatorId], references: [id], onDelete: Cascade, onUpdate: Restrict)
     creatorId String
 
     user   User   @relation(name: "user", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Restrict)
     userId String
 
+    price Decimal
+
+    confirmed Boolean @default(false)
+    completed Boolean @default(false)
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
-    @@unique([creatorId, userId])
 }

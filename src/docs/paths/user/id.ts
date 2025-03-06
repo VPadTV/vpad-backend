@@ -28,6 +28,8 @@ export const userId = {
             email: 'email@domain.com',
             password: 'somepass',
             about: 'some about me, or nothing',
+            customCss: "custom css for the user's profile page",
+            highlightPostId: exId,
             profilePhoto: BodyFile,
         },
         400: 'Invalid username, nickname, email, password, or whatever',

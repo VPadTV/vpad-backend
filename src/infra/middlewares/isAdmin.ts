@@ -1,8 +1,8 @@
-import { Errors } from '@helpers/http'
+import { Errors } from '@plugins/http'
 import { MiddlewareData } from '@infra/adapters'
-import { tokenWrapper } from './wrappers/tokenWrapper'
+import { requiredToken } from './wrappers/requiredToken'
 
 export const isAdmin = async (data: MiddlewareData) =>
-    tokenWrapper(data, async (user) => {
+    requiredToken(data, async (user) => {
         if (!user.admin) throw Errors.FORBIDDEN()
     })

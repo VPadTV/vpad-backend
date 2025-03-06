@@ -22,18 +22,16 @@ This is the backend. We are using:
 
 ```txt
 src/ - Where the source code is
-        docs/ - Where the Swagger documentation is
+        docs/ - Swagger docs
             paths/ - Each subfolder represents a path, with the file being the route itself
             schemas/ - Reusable bits of code
-            doc.ts - Main file where routes are registered
         functions/ - Core functionality
-        helpers/ - Helper functions
-            http/errors.ts - Error definitions
-            regex.ts - Regex constructors
         infra/ - Infrastructure
             adapters/ - Adapters (such as express middleware, routes)
             gateways/ - Gateway classes (Database, JWT, File Storage, etc)
             middlewares/ - Middlewares
+        plugins/ - Helper functions
+            http/- Errors and responses
         main/ - The code that actually runs the project
             routes.ts - Where routes are registered
             server.dev.ts - Development server entry point

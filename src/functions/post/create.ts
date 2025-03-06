@@ -1,15 +1,20 @@
-import { Errors } from '@helpers/http'
-import { parseTags } from '@helpers/parseTags'
-import { boolify } from '@helpers/boolify'
-import { validString } from '@helpers/validString'
+import { Errors } from '@plugins/http'
+import { parseTags } from '@plugins/parseTags'
+import { boolify } from '@plugins/boolify'
+import { validString } from '@plugins/validString'
 import { ImageType, Storage } from '@infra/gateways'
 import { DatabaseClient } from '@infra/gateways/database'
 import { FileRawUpload } from '@infra/middlewares'
-import { MediaType, User } from '@prisma/client'
+import { MediaType } from '@prisma/client'
+import { UserHttpReq } from '@plugins/requestBody'
+
+type Credit = {
+    userId: string,
+    description: string
+}
 
 export type PostCreateRequest = {
-    user: User
-    otherAuthorIds?: string[]
+    credits?: Credit | Credit[]
     title: string
     text: string
     media: FileRawUpload
@@ -17,22 +22,23 @@ export type PostCreateRequest = {
     nsfw: boolean
     tags: string
     minTierId?: string
+    seriesId?: string
 }
 
 export type PostCreateResponse = {
     id: string
 }
 
-export async function postCreate(req: PostCreateRequest, db: DatabaseClient, storage: Storage): Promise<PostCreateResponse> {
+export async function postCreate(req: UserHttpReq<PostCreateRequest>, db: DatabaseClient, storage: Storage): Promise<PostCreateResponse> {
     if (!validString(req.title)) throw Errors.MISSING_TITLE()
     if (!validString(req.text)) throw Errors.MISSING_TEXT()
     if (!validString(req.tags)) throw Errors.MISSING_TAGS()
     if (!req.media) throw Errors.MISSING_MEDIA()
 
     req.nsfw = boolify(req.nsfw)
-    let tags: string[] | false = []
-    tags = parseTags(req.tags.trim())
-    if (tags === false) throw Errors.INVALID_TAGS()
+    let tags: string[] | undefined = []
+    tags = parseTags(req.tags!.trim())
+    if (tags === undefined) throw Errors.INVALID_TAGS()
     req.minTierId = validString(req.minTierId)
 
 
@@ -42,16 +48,13 @@ export async function postCreate(req: PostCreateRequest, db: DatabaseClient, sto
     let thumbData = await storage.getFileData(req.thumb ?? req.media, ImageType.THUMBNAIL)
     if (!thumbData || (thumbData && thumbData.type !== MediaType.IMAGE)) throw Errors.INVALID_THUMB()
 
-    const otherAuthorIds = req.otherAuthorIds?.map(id => ({ id }))
     const post = await db.post.create({
         data: {
-            authors: {
-                connect: [
-                    { id: req.user.id },
-                    ...otherAuthorIds ?? []
-                ]
+            authorId: req.user.id,
+            credits: {
+                create: req.credits
             },
-            title: req.title,
+            title: req.title!,
             text: req.text,
             mediaUrl: mediaData.url,
             mediaType: mediaData.type,
@@ -60,6 +63,7 @@ export async function postCreate(req: PostCreateRequest, db: DatabaseClient, sto
             minTierId: req.minTierId,
             thumbnailWidth: thumbData.size.width,
             thumbnailHeight: thumbData.size.height,
+            seriesId: req.seriesId,
             tags,
         }
     })

@@ -1,9 +1,8 @@
-import { Errors } from '@helpers/http'
+import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
-import { User } from '@prisma/client'
+import { UserHttpReq } from '@plugins/requestBody'
 
 export type CommentEditRequest = {
-    user: User
     id: string
     text: string
 }
@@ -13,7 +12,7 @@ export type CommentEditResponse = {
     updatedAt: Date
 }
 
-export async function commentEdit(req: CommentEditRequest, db: DatabaseClient): Promise<CommentEditResponse> {
+export async function commentEdit(req: UserHttpReq<CommentEditRequest>, db: DatabaseClient): Promise<CommentEditResponse> {
     if (!req.id) throw Errors.MISSING_ID()
     if (!req.text) throw Errors.MISSING_TEXT()
 

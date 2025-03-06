@@ -1,4 +1,4 @@
-import { Errors } from '@helpers/http'
+import { Errors } from '@plugins/http'
 import { MiddlewareData } from '@infra/adapters'
 import { JWT, Database } from '@infra/gateways'
 import { User } from '@prisma/client'
@@ -8,7 +8,7 @@ export type TokenMiddlewareResponse = {
     token?: string
 }
 
-export const tokenWrapper = async (data: MiddlewareData, func: (user: User) => Promise<void>): Promise<TokenMiddlewareResponse> => {
+export const requiredToken = async (data: MiddlewareData, func: (user: User) => Promise<void>): Promise<TokenMiddlewareResponse> => {
     const { authorization } = data;
     if (!authorization) throw Errors.MISSING_TOKEN()
 
@@ -20,7 +20,11 @@ export const tokenWrapper = async (data: MiddlewareData, func: (user: User) => P
     const now = Date.now()
     if (now > token.exp) throw Errors.EXPIRED_TOKEN()
 
-    const id = token.sub.split('#')[0]
+    const [id, agent] = token.sub.split('#')
+
+    if (agent !== data.headers['user-agent']) {
+        throw Errors.INVALID_TOKEN()
+    }
 
     const db = Database.get()
     const user = await db.user.findFirst({ where: { id } })
@@ -28,9 +32,9 @@ export const tokenWrapper = async (data: MiddlewareData, func: (user: User) => P
 
     await func(user)
 
-    // if it expires in less than a day
-    if (token.exp - now < 24 * 60 * 60 * 1000)
-        return { user, token: JWT.newToken(user) }
+    // if it expires in less than a week
+    if (token.exp - now < 24 * 60 * 60 * 1000 * 7)
+        return { user, token: JWT.newToken(user, data.headers) }
 
     return { user }
 }

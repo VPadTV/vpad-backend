@@ -1,8 +1,8 @@
-import { Errors } from '@helpers/http'
+import { Errors } from '@plugins/http'
 import { MediaType } from '@prisma/client'
 import mimeTypes from 'mime-types'
 export class MimeTypes {
-    static getType(mimeType: string): MediaType {
+    static getMediaType(mimeType: string): MediaType {
         if (mimeType.startsWith('image'))
             return MediaType.IMAGE
         if (mimeType.startsWith('video'))

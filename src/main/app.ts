@@ -3,7 +3,7 @@ import routes from './routes';
 import bodyParser from 'body-parser';
 import cors from 'cors'
 import { rateLimit } from 'express-rate-limit'
-import { boolify } from '@helpers/boolify';
+import { boolify } from '@plugins/boolify';
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -29,10 +29,10 @@ export class App {
             }
         })
 
-        for (let path in routes) {
+        for (let route of routes) {
             const router = express.Router()
-            routes[path].register(router)
-            this.server.use(path, router)
+            route.register(router)
+            this.server.use(route.prefix, router)
         }
     }
 }

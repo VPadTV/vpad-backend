@@ -1,17 +1,21 @@
-import { Errors } from '@helpers/http'
+import { Errors } from '@plugins/http'
 import { SimpleUser } from '@infra/mappers/user'
-import { Paginate, paginate } from '@helpers/paginate'
+import { Paginate, paginate } from '@plugins/paginate'
 import { DatabaseClient } from '@infra/gateways/database'
-import { MediaType, User } from '@prisma/client'
+import { MediaType, Prisma, User } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
+import { UserHttpReq } from '@plugins/requestBody'
+import { textSearch } from '@plugins/textSearch'
 
 export type PostGetManyRequest = {
     user?: User
     userTierId?: string
     creatorId?: string
     sortBy: 'latest' | 'oldest' | 'high-views' | 'low-views'
-    titleSearch?: string
+    search?: string
     nsfw?: boolean
+    seriesId?: string
+    tags: string
 
     page: number
     size: number
@@ -20,16 +24,24 @@ export type PostGetManyRequest = {
 export type PostGetManyResponse = Paginate<{
     id: string
     title: string
-    text: string
+    text: string | null
     mediaUrl: string
-    mediaType: MediaType,
+    mediaType: MediaType
     thumbUrl?: string
     meta: {
         width?: number,
         height?: number,
         nsfw: boolean
         tags: string[]
-        authors: SimpleUser[]
+        author: SimpleUser
+        credits: {
+            user: SimpleUser,
+            description: string
+        }[]
+        series: {
+            id: string
+            name: string
+        } | null
         views: number
         createdAt: string
     }
@@ -43,8 +55,10 @@ export type PostSort = {
     }
 }
 
-export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): Promise<PostGetManyResponse> {
-    let orderBy: PostSort
+export async function postGetMany(req: UserHttpReq<PostGetManyRequest>, db: DatabaseClient): Promise<PostGetManyResponse> {
+    let page = +(req.page ?? 1)
+    let size = +(req.size ?? 100)
+
     let userTierValue = new Decimal(0)
     if (req.user && req.userTierId) {
         const userTier = await db.subscriptionTier.findFirst({
@@ -60,6 +74,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
             throw Errors.INVALID_TIER()
     }
 
+    let orderBy: Prisma.PostOrderByWithRelationAndSearchRelevanceInput
     switch (req.sortBy) {
         case 'low-views':
             orderBy = { votes: { _count: 'asc' } }
@@ -76,47 +91,47 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
         default:
             throw Errors.INVALID_SORT()
     }
-    const offset = (+req.page - 1) * +req.size
-    let authorsCheck
-    if (req.creatorId && req.creatorId.trim().length > 0)
-        authorsCheck = {
-            some: { id: req.creatorId },
-        }
-    const where: any = {
-        authors: authorsCheck,
-        OR: [
-            { minTier: { price: { lte: userTierValue } } },
-            { minTier: null },
-        ],
-        AND: [
-            {
-                OR: [
 
-                ]
-            }
+    let searchFilter: Prisma.PostWhereInput = {}
+    if (req.search) {
+        searchFilter.OR = [
+            ...textSearch<Prisma.PostWhereInput>('title', req.search),
+            ...textSearch<Prisma.PostWhereInput>('text', req.search),
+            ...textSearch(word => ({
+                author: { nickname: { contains: word } },
+            }), req.search),
+            ...textSearch(word => ({
+                series: { name: { contains: word } }
+            }), req.search),
         ]
     }
 
-    if (req.titleSearch) {
-        const words = req.titleSearch.split(' ').map((wd) => wd.trim());
-        words.forEach((word) => {
-            where.AND[0].OR.push({
-                title: {
-                    contains: word,
-                    mode: 'insensitive'
-                }
-            })
-        })
+    const hasEnoughTier: Prisma.PostWhereInput = {
+        OR: [
+            { minTier: { price: { lte: userTierValue } } },
+            { minTier: null },
+        ]
     }
 
+    let where: Prisma.PostWhereInput = {
+        authorId: req.creatorId,
+        seriesId: req.seriesId,
+        nsfw: req.nsfw ? undefined : false,
+        tags: req.tags ? {
+            hasEvery: req.tags.split(','),
+        } : undefined,
+        AND: [
+            hasEnoughTier,
+            searchFilter,
+        ],
+    }
+
+    const offset = (page - 1) * size
     const [posts, total] = await db.$transaction([
         db.post.findMany({
             skip: offset,
-            take: +req.size,
-            where: {
-                ...where,
-                nsfw: req.nsfw ?? false,
-            },
+            take: size,
+            where,
             select: {
                 id: true,
                 title: true,
@@ -126,7 +141,21 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
                 thumbUrl: true,
                 nsfw: true,
                 tags: true,
-                authors: { select: SimpleUser.selector },
+                author: { select: SimpleUser.selector },
+                credits: {
+                    select: {
+                        user: {
+                            select: SimpleUser.selector
+                        },
+                        description: true
+                    },
+                },
+                series: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
                 thumbnailWidth: true,
                 thumbnailHeight: true,
                 createdAt: true,
@@ -141,7 +170,7 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
         db.post.count({ where }),
     ])
 
-    return paginate(total, +req.page, offset, +req.size, posts.map(post => ({
+    return paginate(total, page, offset, size, posts.map(post => ({
         id: post.id,
         title: post.title,
         text: post.text,
@@ -153,7 +182,9 @@ export async function postGetMany(req: PostGetManyRequest, db: DatabaseClient): 
             height: post.thumbnailHeight ?? undefined,
             nsfw: post.nsfw,
             tags: post.tags,
-            authors: post.authors,
+            author: post.author,
+            credits: post.credits,
+            series: post.series,
             views: post._count.votes,
             createdAt: post.createdAt.toISOString(),
         }

@@ -1,5 +1,5 @@
 import { MiddlewareData } from '@infra/adapters/middleware'
-import { tokenWrapper } from './wrappers/tokenWrapper'
+import { requiredToken } from './wrappers/requiredToken'
 
 export const isLoggedIn = async (data: MiddlewareData) =>
-    tokenWrapper(data, async (_) => { })
+    requiredToken(data, async (_) => { })

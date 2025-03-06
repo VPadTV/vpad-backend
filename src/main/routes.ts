@@ -7,16 +7,17 @@ import { CommentRoute } from '@controllers/comment';
 import { TierRoute } from '@controllers/tier';
 import { SubRoute } from '@controllers/sub';
 import { VoteRoute } from '@controllers/vote';
-// import { PayRoute } from '@controllers/pay';
+import { SeriesRoute } from '@controllers/series';
 
-export default {
-    '/user': new UserRoute(),
-    '/admin': new AdminRoute(),
-    '/docs': new DocumentationRoute(),
-    '/post': new PostRoute(),
-    '/comment': new CommentRoute(),
-    '/tier': new TierRoute(),
-    '/sub': new SubRoute(),
-    '/vote': new VoteRoute(),
-    // '/pay': new PayRoute(),
-} as { [path: string]: IRoute }
+export default [
+    new UserRoute(),
+    new AdminRoute(),
+    new DocumentationRoute(),
+    new SeriesRoute(),
+    new PostRoute(),
+    new CommentRoute(),
+    new TierRoute(),
+    new SubRoute(),
+    new VoteRoute(),
+    // new PayRoute(),
+] as IRoute[]

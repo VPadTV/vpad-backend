@@ -1,15 +1,14 @@
-import { Errors } from '@helpers/http'
+import { Errors } from '@plugins/http'
 import { DatabaseClient } from '@infra/gateways/database'
-import { User } from '@prisma/client'
+import { UserHttpReq } from '@plugins/requestBody'
 
 export type TierDeleteRequest = {
-    user: User
     id: string
 }
 
 export type TierDeleteResponse = {}
 
-export async function tierDelete(req: TierDeleteRequest, db: DatabaseClient): Promise<TierDeleteResponse> {
+export async function tierDelete(req: UserHttpReq<TierDeleteRequest>, db: DatabaseClient): Promise<TierDeleteResponse> {
     if (typeof req.id !== 'string')
         throw Errors.MISSING_ID()
 

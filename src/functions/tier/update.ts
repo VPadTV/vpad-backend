@@ -1,18 +1,17 @@
-import { Errors } from '@helpers/http'
-import { validString } from '@helpers/validString'
+import { Errors } from '@plugins/http'
+import { validString } from '@plugins/validString'
 import { DatabaseClient } from '@infra/gateways/database'
-import { User } from '@prisma/client'
+import { UserHttpReq } from '@plugins/requestBody'
 
 export type TierUpdateRequest = {
-    user: User
     id: string
     name: string
 }
 
 export type TierUpdateResponse = {}
 
-export async function tierUpdate(req: TierUpdateRequest, db: DatabaseClient): Promise<TierUpdateResponse> {
-    if (typeof req.id !== 'string')
+export async function tierUpdate(req: UserHttpReq<TierUpdateRequest>, db: DatabaseClient): Promise<TierUpdateResponse> {
+    if (!validString(req.id))
         throw Errors.MISSING_ID()
     if (!validString(req.name))
         throw Errors.MISSING_NAME()

@@ -16,7 +16,13 @@ import { tierId } from './paths/tier/id';
 import { tierCreatorId } from './paths/tier/creatorId';
 import { subCreatorId } from './paths/sub/creatorId';
 import { votePostId } from './paths/vote/postId';
-import { payNoId } from './paths/pay/noId';
+import { commId } from './paths/commission/id';
+import { commNoId } from './paths/commission/noId';
+import { seriesId } from './paths/series/id';
+import { seriesNoId } from './paths/series/noId';
+import { seriesOwnerId } from './paths/series/ownerId';
+import { userNoId } from './paths/user/noId';
+import { userWhoAmI } from './paths/user/whoami';
 
 export default {
     openapi: '3.0.0',
@@ -40,9 +46,11 @@ export default {
         },
     },
     paths: {
+        '/user': userNoId,
         '/user/{id}': userId,
         '/user/login': userLogin,
         '/user/register': userRegister,
+        '/user/whoami': userWhoAmI,
 
         '/tier': tierNoId,
         '/tier/{id}': tierId,
@@ -52,18 +60,26 @@ export default {
         '/sub/{id}': subId,
         '/sub/{creatorId}': subCreatorId,
 
+        '/series/{id}': seriesId,
+        '/series/{ownerId}': seriesOwnerId,
+        '/series': seriesNoId,
+
         '/post/{id}': postId,
         '/post/stream/{key}': postStreamKey,
         '/post': postNoId,
+
         '/vote/{postId}': votePostId,
 
         '/comment/{id}': commentId,
         '/comment': commentNoId,
 
-        '/admin': adminNoId,
-        '/manage/admin/{id}': adminId,
-        '/manage/ban/{id}': adminBanId,
+        '/commission/{id}': commId,
+        '/commission': commNoId,
 
-        '/pay': payNoId,
+        '/admin': adminNoId,
+        '/admin/manage/admin/{id}': adminId,
+        '/admin/manage/ban/{id}': adminBanId,
+
+        // '/pay/donate': donate,
     }
 }

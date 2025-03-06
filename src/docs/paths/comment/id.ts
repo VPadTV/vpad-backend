@@ -1,5 +1,5 @@
 import { makeRoute } from '@docs/helpers';
-import { dateExample } from '@docs/schemas/dateExample';
+import { exDate } from '@docs/schemas/dateExample';
 import { simpleUser } from '@docs/schemas/simpleUser';
 import { exId } from '@docs/schemas/id';
 
@@ -13,9 +13,10 @@ export const commentId = {
             text: 'some text',
             childrenCount: 10,
             meta: {
+                postId: exId,
                 user: simpleUser,
-                createdAt: dateExample,
-                updatedAt: dateExample,
+                createdAt: exDate,
+                updatedAt: exDate,
             },
         },
         404: 'Provided ID didnt resolve to any comment',

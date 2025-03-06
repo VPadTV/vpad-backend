@@ -1,5 +1,3 @@
-import { userRegister } from '@functions/user/register'
-import { Errors } from '@helpers/http'
 import { User } from '@prisma/client'
 import { prismaMock } from '@test/prismaMock'
 

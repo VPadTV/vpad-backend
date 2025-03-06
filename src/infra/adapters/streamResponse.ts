@@ -1,8 +1,8 @@
 import { PostStreamResponse } from '@functions/post/stream'
-import { HttpError } from '@helpers/http'
 import { Response, Request } from 'express'
+import { handleError } from './handleError'
 
-export function streamResponse<U extends PostStreamResponse>(fn: (request: any) => Promise<U>) {
+export function streamResponse<U extends PostStreamResponse>(fn: (request: any, ...args: any[]) => Promise<U>, ...args: any[]) {
     return async (req: Request, res: Response) => {
         try {
             const {
@@ -13,7 +13,7 @@ export function streamResponse<U extends PostStreamResponse>(fn: (request: any) 
                 ...req.params,
                 ...req.query,
                 ...res.locals,
-            })
+            }, ...args)
             res.writeHead(200, {
                 'Content-Length': ContentLength,
                 'Content-Type': ContentType,
@@ -23,11 +23,9 @@ export function streamResponse<U extends PostStreamResponse>(fn: (request: any) 
                 res.end()
             })
         } catch (error) {
-            console.error(`** Streaming **`)
             console.error(error)
-            if (error instanceof HttpError)
-                return res.status(error.status).send({ error: error.message })
-            return res.status(500).send({ error: 'Internal Server Error' })
+            const httpErr = handleError(error)
+            return res.status(httpErr.status).send({ error: httpErr.message })
         }
     }
 }

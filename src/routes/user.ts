@@ -1,37 +1,44 @@
-import { middleware, jsonResponse } from '@infra/adapters';
+import { middleware, route } from '@infra/adapters';
 import { IRoute } from '@main/route';
 import { Router } from 'express';
-import { ok } from '@helpers/http';
 import { isLoggedIn } from '@infra/middlewares/isLoggedIn';
-import { UserGetRequest, userGet } from '@functions/user/get';
-import { UserLoginRequest, userLogin } from '@functions/user/login';
-import { UserRegisterRequest, userRegister } from '@functions/user/register';
-import { UserEditRequest, userEdit } from '@functions/user/edit';
+import { userGet } from '@functions/user/get';
+import { userLogin } from '@functions/user/login';
+import { userRegister } from '@functions/user/register';
+import { userEdit } from '@functions/user/edit';
 import { Database, Storage } from '@infra/gateways';
 import { fields } from '@infra/middlewares';
+import { userGetMany } from '@functions/user/getMany';
+import { userWhoAmI } from '@functions/user/loggedIn';
 
 export class UserRoute implements IRoute {
+    prefix = '/user'
+
     register(router: Router): void {
         router.post('/register',
-            jsonResponse(async (request: UserRegisterRequest) => {
-                return ok(await userRegister(request, Database.get()))
-            }))
+            route(userRegister, Database.get()))
 
         router.post('/login',
-            jsonResponse(async (request: UserLoginRequest) => {
-                return ok(await userLogin(request, Database.get()))
-            }))
+            route(
+                userLogin, Database.get()))
+
+        router.get('/',
+            route(
+                userGetMany, Database.get()))
+
+        router.get('/whoami',
+            middleware(isLoggedIn),
+            route(
+                userWhoAmI, Database.get()))
 
         router.get('/:id',
-            jsonResponse(async (request: UserGetRequest) => {
-                return ok(await userGet(request, Database.get()))
-            }))
+            route(
+                userGet, Database.get()))
 
         router.put('/:id',
             middleware(isLoggedIn),
             fields(['profilePhoto']),
-            jsonResponse(async (request: UserEditRequest) => {
-                return ok(await userEdit(request, Database.get(), Storage.get()))
-            }))
+            route(
+                userEdit, Database.get(), Storage.get()))
     }
 }

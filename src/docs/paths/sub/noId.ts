@@ -5,9 +5,8 @@ export const subNoId = {
     post: makeRoute({
         tag: 'Subscription',
         summary: 'Creates subscription, must be logged in',
-        bodyRequired: ['creatorId'],
+        bodyRequired: ['tierId'],
         body: {
-            creatorId: exId,
             tierId: exId
         },
         400: 'Missing ID',

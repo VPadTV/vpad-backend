@@ -1,4 +1,4 @@
-import { numify } from "@helpers/numify";
+import { numify } from "@plugins/numify";
 
 export const parseBody = (obj: unknown) => {
     let newObj: any;
@@ -8,32 +8,38 @@ export const parseBody = (obj: unknown) => {
         switch (obj) {
             case "undefined":
                 newObj = undefined;
-                break;
+                break
             case "true":
                 newObj = true;
-                break;
+                break
             case "false":
                 newObj = false;
-                break;
+                break
             case "null":
                 newObj = null;
-                break;
+                break
             case "":
                 newObj = undefined;
-                break;
+                break
             default:
                 const asNum = numify(obj)
                 if (asNum) {
                     newObj = asNum
-                    break;
+                    break
                 }
+                try {
+                    const asJson = JSON.parse(obj as string)
+                    newObj = asJson
+                    break
+                } catch { }
+
                 newObj = obj
         }
     } else if (typeof obj === "object") {
         if (Array.isArray(obj)) {
             newObj = [];
             for (let el of obj) {
-                newObj.push(parseBody(el));
+                newObj.push(parseBody(el))
             }
         } else {
             const bodyObj = obj as { [key: string]: unknown }
@@ -43,7 +49,7 @@ export const parseBody = (obj: unknown) => {
             }
         }
     } else {
-        newObj = obj;
+        newObj = obj
     }
-    return newObj;
+    return newObj
 }

@@ -9,7 +9,10 @@ export const postNoId = {
         contentType: ContentType.MULTIPART,
         bodyRequired: ['title', 'text', 'media', 'tags'],
         body: {
-            otherAuthorIds: [exId, exId],
+            credits: [{
+                userId: exId,
+                description: 'some description'
+            }],
             title: "some title",
             text: "some text",
             media: BodyFile,
@@ -17,6 +20,7 @@ export const postNoId = {
             nsfw: false,
             tags: 'some,tags',
             minTierId: exId,
+            seriesId: exId,
         },
         success: {
             id: exId
@@ -30,6 +34,9 @@ export const postNoId = {
             creatorId: exId,
             sortBy: 'latest | oldest | high-views | low-views',
             search: 'search terms',
+            tags: 'some,tags',
+            nsfw: 'true',
+            seriesId: exId,
             page: 1,
             size: 30,
         },
@@ -49,7 +56,15 @@ export const postNoId = {
                     nsfw: false,
                     tags: ['some', 'tags'],
                     minTierId: exId,
-                    authors: [simpleUser],
+                    author: simpleUser,
+                    credits: [{
+                        user: simpleUser,
+                        description: 'some description'
+                    }],
+                    series: {
+                        id: exId,
+                        name: 'series name',
+                    },
                     views: 1000
                 }
             }

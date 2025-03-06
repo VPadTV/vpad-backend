@@ -1,6 +1,7 @@
-import { Errors, HttpError, HttpResponse } from '@helpers/http'
+import { Json } from '@plugins/http'
 import { Response, Request } from 'express'
 import { parseBody } from "@infra/middlewares/parseBody";
+import { handleError } from './handleError';
 
 type MulterFiles = { [fieldname: string]: Express.Multer.File[] }
 type RequestFiles = { [fieldname: string]: Express.Multer.File }
@@ -12,13 +13,13 @@ const transformFiles = (multerFiles: MulterFiles) => {
     return files
 }
 
-export function jsonResponse<T, R extends HttpResponse>(fn: (request: T) => Promise<R>) {
+export function route<T>(fn: (request: T, ...args: any[]) => Promise<Json>, ...args: any[]) {
     return async (req: Request, res: Response) => {
         const body = Array.isArray(req.body) ? { data: req.body } : req.body
         const files = transformFiles(req.files as MulterFiles)
 
         try {
-            const { statusCode, data } = await fn({
+            let data = await fn({
                 headers: req.headers,
                 ...files,
                 ...parseBody({
@@ -27,15 +28,13 @@ export function jsonResponse<T, R extends HttpResponse>(fn: (request: T) => Prom
                     ...req.query,
                 }),
                 ...req.middleware,
-            })
-            return res.status(statusCode).json({ ...data, token: data.token ?? req.params?.token })
+            }, ...args)
+            if (Array.isArray(data)) data = { data }
+            return res.status(200).json({ ...data, token: data.token ?? req.params?.token })
         } catch (error) {
-            console.error(`** JSON Route **`)
             console.error(error)
-            if (error instanceof HttpError)
-                return res.status(error.status).send({ error: error.message })
-            const serverError = Errors.INTERNAL_SERVER_ERROR()
-            return res.status(serverError.status).send({ error: serverError.message })
+            const httpErr = handleError(error)
+            return res.status(httpErr.status).send({ error: httpErr.message })
         }
     }
 }

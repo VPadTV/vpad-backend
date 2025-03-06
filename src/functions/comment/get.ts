@@ -1,10 +1,9 @@
-import { Errors } from '@helpers/http'
+import { Errors } from '@plugins/http'
 import { SimpleUser } from '@infra/mappers/user'
 import { DatabaseClient } from '@infra/gateways/database'
-import { User } from '@prisma/client'
+import { HttpReq } from '@plugins/requestBody'
 
 export type CommentGetRequest = {
-    user: User
     id: string
 }
 
@@ -12,19 +11,23 @@ export type CommentGetResponse = {
     text: string
     childrenCount: number
     meta: {
+        postId: string
         user: SimpleUser
         createdAt: string
         updatedAt: string
+        postId: string;
     }
 }
 
-export async function commentGet(req: CommentGetRequest, db: DatabaseClient): Promise<CommentGetResponse> {
+export async function commentGet(req: HttpReq<CommentGetRequest>, db: DatabaseClient): Promise<CommentGetResponse> {
     const comment = await db.comment.findFirst({
         where: { id: req.id },
         select: {
+            postId: true,
             text: true,
             user: { select: SimpleUser.selector },
             createdAt: true,
+            postId: true,
             updatedAt: true,
             _count: {
                 select: { children: true }
@@ -38,9 +41,11 @@ export async function commentGet(req: CommentGetRequest, db: DatabaseClient): Pr
         text: comment.text,
         childrenCount: comment._count.children,
         meta: {
+            postId: comment.postId,
             user: comment.user,
             createdAt: comment.createdAt.toISOString(),
             updatedAt: comment.updatedAt.toISOString(),
+            postId: comment.postId
         },
     }
 }

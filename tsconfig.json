@@ -4,7 +4,7 @@
             "@docs/*": ["src/docs/*"],
             "@controllers/*": ["src/routes/*"],
             "@functions/*": ["src/functions/*"],
-            "@helpers/*": ["src/helpers/*"],
+            "@plugins/*": ["src/plugins/*"],
             "@infra/*": ["src/infra/*"],
             "@main/*": ["src/main/*"],
             "@routes/*": ["src/routes/*"],
@@ -27,7 +27,8 @@
         "emitDecoratorMetadata": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "strict": true
+        "strict": true,
+        "noImplicitAny": true,
     },
     "include": ["./src/**/*"],
     "exclude": [

@@ -1,4 +1,6 @@
 import { DatabaseClient } from '@infra/gateways/database'
+import { Errors } from '@plugins/http'
+import { HttpReq } from '@plugins/requestBody'
 import { User } from '@prisma/client'
 
 export type UserIsBannedRequest = {
@@ -9,7 +11,8 @@ export type UserIsBannedResponse = {
     banned: boolean
 }
 
-export async function userIsBanned({ user }: UserIsBannedRequest, db: DatabaseClient): Promise<UserIsBannedResponse> {
+export async function userIsBanned({ user }: HttpReq<UserIsBannedRequest>, db: DatabaseClient): Promise<UserIsBannedResponse> {
+    if (!user) throw Errors.BAD_REQUEST()
     if (user.banned) {
         if (!user.banTimeout || user.banTimeout.valueOf() < Date.now())
             return { banned: true }

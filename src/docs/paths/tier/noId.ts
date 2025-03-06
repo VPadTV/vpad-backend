@@ -6,6 +6,7 @@ export const tierNoId = {
         summary: 'Creates subscription tier, must be logged in',
         bodyRequired: ['name', 'price'],
         body: {
+            id: 'abc',
             name: 'some tier name',
             price: 1.99
         },

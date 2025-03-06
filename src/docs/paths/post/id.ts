@@ -1,7 +1,6 @@
 import { BodyFile, ContentType, makeRoute } from '@docs/helpers';
 import { exId } from '@docs/schemas/id';
 import { simpleUser } from '@docs/schemas/simpleUser';
-import { PostDeleteStatus } from '@functions/post/delete';
 
 export const postId = {
     get: makeRoute({
@@ -16,7 +15,11 @@ export const postId = {
             mediaUrl: `https://${process.env.BB_BUCKET!}.s3.backblazeb2.com/sdklawejwap.mp4`,
             thumbUrl: `https://${process.env.BB_BUCKET!}.s3.backblazeb2.com/jerkejrlkej.jpg`,
             meta: {
-                authors: [simpleUser],
+                author: simpleUser,
+                credits: [{
+                    user: simpleUser,
+                    description: 'some description'
+                }],
                 likes: 10,
                 dislikes: 20,
                 views: 40,
@@ -41,9 +44,7 @@ export const postId = {
         tag: 'Post',
         summary: 'Deletes a post from id, must be logged in',
         path: { id: exId },
-        success: {
-            status: Object.values(PostDeleteStatus).join(", ")
-        },
+        success: {},
         404: 'Provided ID didnt resolve to any post',
     })
 }

@@ -1,11 +1,10 @@
-import { PostCreateRequest, postCreate } from '@functions/post/create';
-import { PostDeleteRequest, postDelete } from '@functions/post/delete';
-import { PostEditRequest, postEdit } from '@functions/post/edit';
-import { PostGetRequest, postGet } from '@functions/post/get';
-import { PostGetManyRequest, postGetMany } from '@functions/post/getMany';
-import { PostStreamRequest, postStream } from '@functions/post/stream';
-import { ok } from '@helpers/http';
-import { middleware, jsonResponse } from '@infra/adapters';
+import { postCreate } from '@functions/post/create';
+import { postDelete } from '@functions/post/delete';
+import { postEdit } from '@functions/post/edit';
+import { postGet } from '@functions/post/get';
+import { postGetMany } from '@functions/post/getMany';
+import { postStream } from '@functions/post/stream';
+import { middleware, route } from '@infra/adapters';
 import { streamResponse } from '@infra/adapters/streamResponse';
 import { Database, Storage } from '@infra/gateways';
 import { fields } from '@infra/middlewares';
@@ -15,36 +14,36 @@ import { IRoute } from '@main/route';
 import { Router } from 'express';
 
 export class PostRoute implements IRoute {
+    prefix = '/post'
+
     register(router: Router): void {
         router.post('/',
             middleware(isLoggedIn),
             fields(['media', 'thumb']),
-            jsonResponse(async (request: PostCreateRequest) => {
-                return ok(await postCreate(request, Database.get(), Storage.get()))
-            }))
+            route(
+                postCreate, Database.get(), Storage.get()))
+
         router.get('/',
             middleware(optionalToken),
-            jsonResponse(async (request: PostGetManyRequest) => {
-                return ok(await postGetMany(request, Database.get()))
-            }))
+            route(
+                postGetMany, Database.get()))
+
         router.get('/:id',
             middleware(optionalToken),
-            jsonResponse(async (request: PostGetRequest) => {
-                return ok(await postGet(request, Database.get()))
-            }))
+            route(
+                postGet, Database.get()))
+
         router.get('/stream/:key',
-            streamResponse(async (request: PostStreamRequest) => {
-                return postStream(request, Storage.get())
-            }))
+            streamResponse(postStream, Storage.get()))
+
         router.put('/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request: PostEditRequest) => {
-                return ok(await postEdit(request, Database.get(), Storage.get()))
-            }))
+            route(
+                postEdit, Database.get(), Storage.get()))
+
         router.delete('/:id',
             middleware(isLoggedIn),
-            jsonResponse(async (request: PostDeleteRequest) => {
-                return ok(await postDelete(request, Database.get(), Storage.get()))
-            }))
+            route(
+                postDelete, Database.get(), Storage.get()))
     }
 }

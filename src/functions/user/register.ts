@@ -1,10 +1,13 @@
-import { Errors } from '@helpers/http'
-import { emailRegex, usernameRegex, passwordRegex, nicknameRegex } from '@helpers/regex'
+import { Errors } from '@plugins/http'
+import { emailRegex, usernameRegex, passwordRegex, nicknameRegex } from '@plugins/regex'
 import { JWT } from '@infra/gateways'
 import { DatabaseClient } from '@infra/gateways/database'
 import bcrypt from 'bcrypt'
+import { HttpReq } from '@plugins/requestBody'
+import { IncomingHttpHeaders } from 'http'
 
 export type UserRegisterRequest = {
+    headers: IncomingHttpHeaders
     username: string
     nickname?: string
     email: string
@@ -17,7 +20,7 @@ export type UserRegisterResponse = {
     token: string
 }
 
-export async function userRegister(req: UserRegisterRequest, db: DatabaseClient): Promise<UserRegisterResponse> {
+export async function userRegister(req: HttpReq<UserRegisterRequest>, db: DatabaseClient): Promise<UserRegisterResponse> {
     if (!req.username)
         throw Errors.MISSING_USERNAME()
     if (!req.email)
@@ -34,17 +37,20 @@ export async function userRegister(req: UserRegisterRequest, db: DatabaseClient)
     if (!passwordRegex().test(req.password))
         throw Errors.INVALID_PASSWORD()
 
+    // const stripeAccountId = await pay.createAccount(req.email)
+
     const user = await db.user.create({
         data: {
             username: req.username,
             nickname: req.nickname?.length ? req.nickname : req.username,
             email: req.email,
             about: req.about ? req.about : undefined,
-            password: await bcrypt.hash(req.password, 10)
+            password: await bcrypt.hash(req.password, 10),
+            // stripeAccountId
         }
     })
 
-    const token = JWT.newToken(user)
+    const token = JWT.newToken(user, req.headers!)
 
     return { id: user.id, token }
 }
