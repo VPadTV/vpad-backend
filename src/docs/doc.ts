@@ -32,9 +32,9 @@ export default {
     },
     servers: [
         {
-            url: 'http://localhost:3000',
-            description: 'Local server',
-        }
+            url: process.env.SWAGGER_API_URL,
+            description: process.env.SWAGGER_API_DESC,
+        },
     ],
     components: {
         securitySchemes: {
