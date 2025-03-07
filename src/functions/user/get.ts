@@ -24,6 +24,7 @@ export async function userGet(req: HttpReq<UserGetRequest>, db: DatabaseClient):
         throw Errors.NOT_FOUND()
     }
     return {
+        id: user.id,
         username: user.username,
         nickname: user.nickname,
         email: user.email,

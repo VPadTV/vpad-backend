@@ -28,13 +28,15 @@ export async function userGetMany(req: HttpReq<UserGetManyRequest>, db: Database
     if (req.sortDirection === 'latest')
         sort = 'desc'
 
-    const where: Prisma.UserWhereInput = textSearch('nickname', req.search)
+    const nicknameOr = textSearch<Prisma.UserWhereInput>('nickname', req.search)
 
     const [users, total] = await db.$transaction([
         db.user.findMany({
             skip: offset,
             take: size,
-            where,
+            where: {
+                OR: nicknameOr
+            },
             select: {
                 ...SimpleUser.selector,
             },
@@ -43,7 +45,9 @@ export async function userGetMany(req: HttpReq<UserGetManyRequest>, db: Database
             }
         }),
         db.user.count({
-            where,
+            where: {
+                OR: nicknameOr
+            },
         })
     ])
 

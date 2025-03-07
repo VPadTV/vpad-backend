@@ -15,7 +15,6 @@ export type CommentGetResponse = {
         user: SimpleUser
         createdAt: string
         updatedAt: string
-        postId: string;
     }
 }
 
@@ -27,7 +26,6 @@ export async function commentGet(req: HttpReq<CommentGetRequest>, db: DatabaseCl
             text: true,
             user: { select: SimpleUser.selector },
             createdAt: true,
-            postId: true,
             updatedAt: true,
             _count: {
                 select: { children: true }
@@ -45,7 +43,6 @@ export async function commentGet(req: HttpReq<CommentGetRequest>, db: DatabaseCl
             user: comment.user,
             createdAt: comment.createdAt.toISOString(),
             updatedAt: comment.updatedAt.toISOString(),
-            postId: comment.postId
         },
     }
 }
